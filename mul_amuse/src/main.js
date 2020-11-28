@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Antd from 'ant-design-vue';
 import App from './App';
 import 'ant-design-vue/dist/antd.css';
+import './plugins/css/publicCss.css'
 import router from './router'
 import vuetify from '@/plugins/vuetify' // path to vuetify export
 

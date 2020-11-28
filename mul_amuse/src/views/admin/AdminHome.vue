@@ -91,7 +91,6 @@ export default {
       this.openKeys = [this.$route.meta.module]
     }
     this.selectedKeys = [this.$route.path];
-    console.log(this.$route.path);
   },
   methods:{
     logout(){

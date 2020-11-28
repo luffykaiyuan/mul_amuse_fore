@@ -89,7 +89,20 @@ const route = new Router({
 })
 
 route.beforeEach((to, from, next) => {
+  let loadingBar = document.getElementById("global-loading");
+  if (!loadingBar) {
+    loadingBar = document.createElement("div");
+    loadingBar.id = "global-loading";
+    document.body.append(loadingBar);
+  } else {
+    loadingBar.style.display = 'block';
+  }
   next();
+})
+
+route.afterEach((to, from) => {
+  let loadingBar = document.getElementById("global-loading");
+  if (loadingBar) loadingBar.style.display = 'none'
 })
 
 export default route
