@@ -71,17 +71,19 @@
         </a-dropdown>
       </a-layout-header>
 
-      <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
+      <a-layout-content :style="{ margin: '24px 16px', background: '#fff'}" data-app="true">
         <router-view></router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 <script>
+import publicJs from "../../plugins/js/publicJs";
+
 export default {
   data() {
     return {
-      collapsed: false,
+      collapsed: publicJs.collapsed,
       selectedKeys: [],
       openKeys: []
     };

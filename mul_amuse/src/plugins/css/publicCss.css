@@ -18,3 +18,10 @@
     width: 100%;
   }
 }
+
+#editStyle{
+  color: green;
+}
+#deleteStyle{
+  color: red;
+}
