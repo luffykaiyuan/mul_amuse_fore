@@ -9,6 +9,7 @@ import './plugins/js/publicJs.js'
 import router from './router'
 import vuetify from '@/plugins/vuetify' // path to vuetify export
 
+
 Vue.config.productionTip = false
 
 Vue.use(Antd);

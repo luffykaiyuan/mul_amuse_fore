@@ -78,7 +78,7 @@
   </a-layout>
 </template>
 <script>
-import publicJs from "../../plugins/js/publicJs";
+import publicJs, {request} from "../../plugins/js/publicJs";
 
 export default {
   data() {
@@ -93,6 +93,15 @@ export default {
       this.openKeys = [this.$route.meta.module]
     }
     this.selectedKeys = [this.$route.path];
+
+    request({
+      url:publicJs.testGet,
+      method:'get'
+    }).then(res => {
+      console.log(res);
+    }).catch(err => {
+      console.log(err);
+    })
   },
   methods:{
     logout(){
