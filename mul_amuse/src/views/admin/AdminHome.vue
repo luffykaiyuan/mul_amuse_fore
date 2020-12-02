@@ -85,7 +85,7 @@ export default {
     return {
       collapsed: publicJs.collapsed,
       selectedKeys: [],
-      openKeys: []
+      openKeys: [],
     };
   },
   created() {
@@ -93,15 +93,6 @@ export default {
       this.openKeys = [this.$route.meta.module]
     }
     this.selectedKeys = [this.$route.path];
-
-    request({
-      url:publicJs.testGet,
-      method:'get'
-    }).then(res => {
-      console.log(res);
-    }).catch(err => {
-      console.log(err);
-    })
   },
   methods:{
     logout(){

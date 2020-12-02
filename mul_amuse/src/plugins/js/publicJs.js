@@ -1,9 +1,21 @@
-const collapsed = false;
+const collapsed = true;
 const testGet = "/store/testGet"
+const testPost = "/store/testPost"
+const urls = {
+  //StoreInfoCon
+  selectAllNormal: '/store/selectAllNormal',
+  selectAllStore: '/store/selectAllStore',
+  insertStore: '/store/insertStore',
+  updateStore: '/store/updateStore',
+  deleteStore: '/store/deleteStore',
+  loginStore: '/store/loginStore',
+}
 
 export default {
   collapsed,
-  testGet
+  testGet,
+  testPost,
+  urls
 }
 
 //1.引入axios
@@ -17,7 +29,7 @@ export function request(config){
     //1.创建axios的实例
     const instance = axios.create({
       baseURL:'http://localhost:685',
-      timeout:5000
+      timeout:5000,
     })
     //2.发送真正的请求
     instance(config)
@@ -29,4 +41,3 @@ export function request(config){
       })
   })
 }
-
