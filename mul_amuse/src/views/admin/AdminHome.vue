@@ -16,12 +16,24 @@
             </router-link>
           </a-menu-item>
         </a-sub-menu>
-        <a-menu-item key="/productList">
-          <router-link to="/productList" tag="div">
-            <a-icon type="shopping" />
-            <span>产品列表</span>
-          </router-link>
-        </a-menu-item>
+        <a-sub-menu key="产品信息">
+          <span slot="title"><a-icon type="shopping" /><span>产品信息</span></span>
+          <a-menu-item key="/productList">
+            <router-link to="/productList" tag="div">
+              <span>产品列表</span>
+            </router-link>
+          </a-menu-item>
+          <a-menu-item key="/productEdit">
+            <router-link to="/productEdit" tag="div">
+              <span>产品编辑</span>
+            </router-link>
+          </a-menu-item>
+          <a-menu-item key="/modelList">
+            <router-link to="/modelList" tag="div">
+              <span>型号列表</span>
+            </router-link>
+          </a-menu-item>
+        </a-sub-menu>
         <a-sub-menu key="用户信息">
           <span slot="title"><a-icon type="user" /><span>用户信息</span></span>
           <a-menu-item key="/userList">
@@ -96,7 +108,8 @@ export default {
   },
   methods:{
     logout(){
-      //清楚样式
+      localStorage.removeItem("userToken")
+      localStorage.removeItem("roles")
       this.$router.push("/login")
     }
   }

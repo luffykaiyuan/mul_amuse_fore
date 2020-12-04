@@ -1,16 +1,11 @@
 <template>
   <v-card>
     <v-card-title>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
+      <v-text-field v-model="storeId" append-icon="mdi-magnify" label="商家ID" single-line hide-details
+                    :autofocus="true" @click:append="searchProduct"></v-text-field>
     </v-card-title>
-    <v-data-table :headers="headers" :items="storeList" sort-by="addTime" class="elevation-1"
-                  :footer-props="{itemsPerPageText: 'per page'}">
+    <v-data-table :headers="headers" :items="productList" sort-by="addTime" class="elevation-1"
+                  :footer-props="{itemsPerPageText: 'per page'}" v-if="getTable">
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>{{collapsed?'产品列表':''}}</v-toolbar-title>
@@ -29,19 +24,72 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.storeName" label="商家名称"></v-text-field>
+                      <v-text-field v-model="editedItem.productTitle" label="产品名称"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.storeUsername" label="用户名"></v-text-field>
+                      <v-select :items="typeSelect" v-model="editedItem.productType" label="产品类型"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.storePassword" label="密码"></v-text-field>
+                      <v-select :items="sureSelect" v-model="editedItem.productFree" label="免费购"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.storeAddress" label="地址"></v-text-field>
+                      <v-select :items="saleStatusSelect" v-model="editedItem.productSaleStatus" label="销售状态"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.storePhone" label="电话"></v-text-field>
+                      <v-dialog ref="dialog" v-model="saleTimeModal" :return-value.sync="editedItem.productSaleTime" persistent width="290px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field v-model="editedItem.productSaleTime" label="开售时间" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker v-model="editedItem.productSaleTime" scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="saleTimeModal = false">
+                            Cancel
+                          </v-btn>
+                          <v-btn text color="primary" @click="$refs.dialog.save(editedItem.productSaleTime)">
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-dialog>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.productOriginalPrice" label="门市价"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.productNowPrice" label="现价"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.productVipPrice" label="会员价"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.productSaleVolume" label="销量"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.maxAppointment" label="预约人数"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-dialog ref="endDialog" v-model="endTimeModal" :return-value.sync="editedItem.productEndTime" persistent width="290px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field v-model="editedItem.productEndTime" label="停售时间" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker v-model="editedItem.productEndTime" scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="endTimeModal = false">
+                            Cancel
+                          </v-btn>
+                          <v-btn text color="primary" @click="$refs.endDialog.save(editedItem.productEndTime)">
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-dialog>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.commissionHeigh" label="高佣金"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.commissionMiddle" label="中佣金"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.commissionLow" label="低佣金"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -60,7 +108,7 @@
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
-              <v-card-title class="headline">您确定要删除此商家吗？</v-card-title>
+              <v-card-title class="headline">您确定要删除此产品吗？</v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="closeDelete">取消</v-btn>
@@ -89,47 +137,67 @@ import publicJs, {request} from "../../plugins/js/publicJs";
 export default {
   data: () => ({
     collapsed: publicJs.collapsed,
+    storeId: '',
+    getTable: false,
     editDialog: false,
-    search: '',
     dialogDelete: false,
     headers: [
-      { text: '商家名称', align: 'start', sortable: false, value: 'storeName',},
-      { text: '用户名', sortable: false, value: 'storeUsername'  },
-      { text: '密码', sortable: false, value: 'storePassword' },
-      { text: '地址', sortable: false, value: 'storeAddress' },
-      { text: '电话', value: 'storePhone' },
-      { text: '上线时间', value: 'addTime' },
-      { text: '操作', value: 'actions'},
+      { text: '产品ID', align: 'start', sortable: false, value: 'id',},
+      { text: '产品名称', align: 'start', sortable: false, value: 'productTitle',},
+      { text: '产品类型', sortable: false, value: 'productType'  },
+      { text: '是否免费', sortable: false, value: 'productFree' },
+      { text: '产品现价', sortable: false, value: 'productNowPrice' },
+      { text: '产品销量', sortable: false, value: 'productSaleVolume' },
+      { text: '添加时间', sortable: false, value: 'addTime' },
+      { text: '操作', sortable: false, value: 'actions'},
     ],
-    storeList: [],
+    productList: [],
     editedIndex: -1,
+
+    typeSelect: ['虚拟产品', '实体产品', '预约产品'],
+    sureSelect: ['是', '否'],
+    saleStatusSelect: ['销售', '预售'],
+    saleTimeModal: false,
+    endTimeModal: false,
     editedItem: {
-      storeName: '',
-      storeUsername: '',
-      storePassword: '',
-      storeAddress: '',
-      storePhone: '',
+      storeId: '',
+      productType: '',
+      productFree: '',
+      productTitle: '',
+      productSaleStatus: '',
+      productSaleTime: new Date().toISOString().substr(0, 10),
+      productOriginalPrice: 0.0,
+      productNowPrice: 0.0,
+      productVipPrice: 0.0,
+      productSaleVolume: 0,
+      maxAppointment: 0,
+      productEndTime: new Date().toISOString().substr(0, 10),
+      commissionHeigh: 0.0,
+      commissionMiddle: 0.0,
+      commissionLow: 0.0,
     },
     defaultItem: {
-      storeName: '',
-      storeUsername: '',
-      storePassword: '',
-      storeAddress: '',
-      storePhone: '',
-    },
-    storeInfo: {
-      id: '',
-      storeUsername: '用户名',
-      storePassword: '密码',
-      storeName: '名称',
-      storeAddress: '地址',
-      storePhone: '电话',
+      storeId: '',
+      productType: '',
+      productFree: '',
+      productTitle: '',
+      productSaleStatus: '',
+      productSaleTime: '',
+      productOriginalPrice: 0.0,
+      productNowPrice: 0.0,
+      productVipPrice: 0.0,
+      productSaleVolume: 0,
+      maxAppointment: 0,
+      productEndTime: '',
+      commissionHeigh: 0.0,
+      commissionMiddle: 0.0,
+      commissionLow: 0.0,
     }
   }),
 
   computed: {
     formTitle () {
-      return this.editedIndex === -1 ? '新增商家' : '编辑商家'
+      return this.editedIndex === -1 ? '新增产品' : '编辑产品'
     },
   },
 
@@ -143,36 +211,54 @@ export default {
   },
 
   created () {
-    this.initStoreList()
   },
 
   methods: {
-    initStoreList () {
-      request({
-        url:publicJs.urls.selectAllNormal,
-        method:'get',
-      }).then(res => {
-        this.storeList = res.data;
-      }).catch(err => {
-        this.$message.error("初始化错误！！")
-      })
+    searchProduct (){
+      if (this.storeId){
+        request({
+          url:publicJs.urls.selectProductByStore + "?storeId=" + this.storeId,
+          method:'get',
+        }).then(res => {
+          // if (res.data.length){
+            this.productList = res.data;
+            this.getTable = true;
+          // }else {
+          //   this.$message.warning("请确保商家ID正确！！")
+          // }
+        }).catch(err => {
+          this.$message.error("初始化错误！！")
+        })
+      } else {
+        this.getTable = false;
+        this.productList = [];
+      }
+
     },
 
     editItem (item) {
-      this.editedIndex = this.storeList.indexOf(item)
+      this.editedIndex = this.productList.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.editDialog = true
     },
 
     deleteItem (item) {
-      this.editedIndex = this.storeList.indexOf(item)
+      this.editedIndex = this.productList.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
 
     deleteItemConfirm () {
-      this.storeList.splice(this.editedIndex, 1)
-      this.closeDelete()
+      request({
+        url:publicJs.urls.deleteProduct + "?id=" + this.editedItem.id,
+        method:'get',
+      }).then(res => {
+        this.$message.success("删除成功！！")
+        this.searchProduct();
+        this.closeDelete()
+      }).catch(err => {
+        this.$message.error(res.data)
+      })
     },
 
     close () {
@@ -192,32 +278,35 @@ export default {
     },
 
     save () {
+      this.editedItem.storeId = this.storeId;
       if (this.editedIndex === -1){
+        this.editedItem.operateId = localStorage.getItem("userToken");
         request({
-          url:publicJs.urls.insertStore,
+          url:publicJs.urls.insertProduct,
           method:'post',
           data: this.editedItem
         }).then(res => {
           this.$message.success("添加成功！！")
-          this.initStoreList();
+          this.searchProduct();
           this.close()
         }).catch(err => {
           this.$message.error(res.data)
         })
       }else {
         request({
-          url:publicJs.urls.updateStore,
+          url:publicJs.urls.updateProduct,
           method:'post',
           data: this.editedItem
         }).then(res => {
           this.$message.success("编辑成功！！")
-          this.initStoreList();
+          this.searchProduct();
           this.close()
         }).catch(err => {
           this.$message.error(res.data)
         })
       }
     },
+
   },
 }
 </script>

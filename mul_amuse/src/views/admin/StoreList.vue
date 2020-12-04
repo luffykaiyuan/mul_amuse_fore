@@ -80,14 +80,14 @@ export default {
     editDialog: false,
     dialogDelete: false,
     headers: [
-      { text: '搜索ID', align: 'start', sortable: false, value: 'id',},
+      { text: '商家ID', align: 'start', sortable: false, value: 'id',},
       { text: '商家名称', align: 'start', sortable: false, value: 'storeName',},
       { text: '用户名', sortable: false, value: 'storeUsername'  },
       { text: '密码', sortable: false, value: 'storePassword' },
       { text: '地址', sortable: false, value: 'storeAddress' },
-      { text: '电话', value: 'storePhone' },
-      { text: '上线时间', value: 'addTime' },
-      { text: '操作', value: 'actions'},
+      { text: '电话', sortable: false, value: 'storePhone' },
+      { text: '上线时间', sortable: false, value: 'addTime' },
+      { text: '操作', sortable: false, value: 'actions'},
     ],
     storeList: [],
     editedIndex: -1,
@@ -104,14 +104,6 @@ export default {
       storePassword: '',
       storeAddress: '',
       storePhone: '',
-    },
-    storeInfo: {
-      id: '',
-      storeUsername: '用户名',
-      storePassword: '密码',
-      storeName: '名称',
-      storeAddress: '地址',
-      storePhone: '电话',
     }
   }),
 
@@ -159,8 +151,16 @@ export default {
     },
 
     deleteItemConfirm () {
-      this.storeList.splice(this.editedIndex, 1)
-      this.closeDelete()
+      request({
+        url:publicJs.urls.deleteStore + "?id=" + this.editedItem.id,
+        method:'get',
+      }).then(res => {
+        this.$message.success("删除成功！！")
+        this.initStoreList();
+        this.closeDelete()
+      }).catch(err => {
+        this.$message.error(res.data)
+      })
     },
 
     close () {
@@ -181,6 +181,7 @@ export default {
 
     save () {
       if (this.editedIndex === -1){
+        this.editedItem.operateId = localStorage.getItem("userToken");
         request({
           url:publicJs.urls.insertStore,
           method:'post',
