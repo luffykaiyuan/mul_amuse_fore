@@ -5,7 +5,7 @@
                     :autofocus="true" @click:append="searchProduct"></v-text-field>
     </v-card-title>
     <v-data-table :headers="headers" :items="productList" sort-by="addTime" class="elevation-1"
-                  :footer-props="{itemsPerPageText: 'per page'}" v-if="getTable">
+                  :footer-props="{itemsPerPageText: 'per page'}" v-if="getTable" :formatter="handphase">
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>{{collapsed?'产品列表':''}}</v-toolbar-title>
@@ -27,13 +27,13 @@
                       <v-text-field v-model="editedItem.productTitle" label="产品名称"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-select :items="typeSelect" v-model="editedItem.productType" label="产品类型"></v-select>
+                      <v-select :items="typeSelect" item-text="label" item-value="value" v-model="editedItem.productType" label="产品类型"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-select :items="sureSelect" v-model="editedItem.productFree" label="免费购"></v-select>
+                      <v-select :items="sureSelect" item-text="label" item-value="value"  v-model="editedItem.productFree" label="免费购"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-select :items="saleStatusSelect" v-model="editedItem.productSaleStatus" label="销售状态"></v-select>
+                      <v-select :items="saleStatusSelect" item-text="label" item-value="value"  v-model="editedItem.productSaleStatus" label="销售状态"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-dialog ref="dialog" v-model="saleTimeModal" :return-value.sync="editedItem.productSaleTime" persistent width="290px">
@@ -119,6 +119,9 @@
           </v-dialog>
         </v-toolbar>
       </template>
+      <template v-slot:items.productType="{ item }">
+        <span>hhdjfidjf</span>
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)" id="editStyle">
           mdi-pencil
@@ -137,7 +140,7 @@ import publicJs, {request} from "../../plugins/js/publicJs";
 export default {
   data: () => ({
     collapsed: publicJs.collapsed,
-    storeId: '',
+    storeId: '12de3f95d63447fe',
     getTable: false,
     editDialog: false,
     dialogDelete: false,
@@ -154,9 +157,9 @@ export default {
     productList: [],
     editedIndex: -1,
 
-    typeSelect: ['虚拟产品', '实体产品', '预约产品'],
-    sureSelect: ['是', '否'],
-    saleStatusSelect: ['销售', '预售'],
+    typeSelect: [{label:'虚拟产品', value: '0'}, {label:'实体产品', value: '1'}, {label:'预约产品', value: '2'}],
+    sureSelect: [{label:'否', value: '0'}, {label:'是', value: '1'}],
+    saleStatusSelect: [{label:'销售', value: '1'}, {label:'预售', value: '2'}],
     saleTimeModal: false,
     endTimeModal: false,
     editedItem: {
@@ -214,6 +217,15 @@ export default {
   },
 
   methods: {
+    handphase(row, column) {
+      console.log("---------------");
+      console.log(row);
+      // if (row['status_id_info']) {
+      //   if (row['status_id_info'].indexOf('schedule') != -1) {
+      //     row['status_id_info'] = this.$t(row['status_id_info']);
+      //   }
+      // }
+    },
     searchProduct (){
       if (this.storeId){
         request({

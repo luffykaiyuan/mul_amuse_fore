@@ -1,7 +1,7 @@
 <template>
   <a-layout id="layout">
     <a-layout-sider class="left-menu" v-model="collapsed" :trigger="null" collapsible>
-      <div class="logo">{{collapsed?'B站':'B站AntDesign的试用'}}</div>
+      <div class="logo">{{collapsed?'惠享':'惠享生活管理平台'}}</div>
       <a-menu theme="dark" mode="inline" :defaultOpenKeys="openKeys" :default-selected-keys="selectedKeys">
         <a-sub-menu key="商家信息">
           <span slot="title"><a-icon type="bank" /><span>商家信息</span></span>
