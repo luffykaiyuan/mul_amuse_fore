@@ -31,7 +31,7 @@ export default {
       { text: '货物数量', sortable: false, value: 'orderCount' },
       { text: '订单价格', sortable: false, value: 'orderPrice' },
       { text: '下单时间', sortable: false, value: 'addTime' },
-      { text: '状态', sortable: false, value: 'status'},
+      { text: '状态', sortable: false, value: 'statusBack'},
     ],
     orderList: [],
     editedIndex: -1,
@@ -54,6 +54,9 @@ export default {
           method:'get',
         }).then(res => {
           // if (res.data.length){
+          for (let i = 0; i < res.data.length; i++) {
+            res.data[i].statusBack = this.formatterStatus(res.data[i].status);
+          }
           this.orderList = res.data;
           this.getTable = true;
           // }else {
@@ -67,7 +70,19 @@ export default {
         this.orderList = [];
       }
     },
-
+    formatterStatus(status){
+      if (status === "1"){
+        return "已支付";
+      }else if (status === "2"){
+        return "已核销";
+      }else if (status === "3"){
+        return "已发货";
+      }else if (status === "4"){
+        return "已完成";
+      }else {
+        return "已删除"
+      }
+    },
   },
 }
 </script>

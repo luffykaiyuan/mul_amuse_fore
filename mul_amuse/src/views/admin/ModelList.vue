@@ -86,6 +86,7 @@ export default {
       { text: '型号名称', sortable: false, value: 'modelName'  },
       { text: '库存', sortable: false, value: 'modelStock' },
       { text: '价格', sortable: false, value: 'modelPrice' },
+      { text: '操作', sortable: false, value: 'actions'},
     ],
     modelList: [],
     editedIndex: -1,

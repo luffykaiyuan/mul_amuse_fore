@@ -45,6 +45,21 @@ const urls = {
   sendProduct: '/order/sendProduct',
   destoryCodeNumber: '/order/destoryCodeNumber',
   getProduct: '/order/getProduct',
+  //UserInfoCon
+  insertUser: '/user/insertUser',
+  selectAllUser: '/user/selectAllUser',
+  selectAllNormalUser: '/user/selectAllNormal',
+  selectUserSons: '/user/selectUserSons',
+  selectUerDetail: '/user/selectUerDetail',
+  selectUerByUsername: '/user/selectUerByUsername',
+  updateUser: '/user/updateUser',
+  updateUserTitle: '/user/updateUserTitle',
+  becomeTalent: '/user/becomeTalent',
+  //CommissionLogCon
+  selectUserCommissionLog: '/comLog/selectUserCommissionLog',
+  //CashoutLogCon
+  selectUserCashout: '/cashoutLog/selectUserCashout',
+  insertCashoutLog: '/cashoutLog/insertCashoutLog'
 }
 
 export default {

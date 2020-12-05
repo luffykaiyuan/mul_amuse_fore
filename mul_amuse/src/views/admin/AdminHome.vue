@@ -69,14 +69,11 @@
         />
         <a-dropdown style="float: right; margin-right: 20px;" :trigger="['click']">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-            Luffykaiyuan
+            {{adminName}}
             <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
             <a-menu-item key="0">
-              <a href="http://www.alipay.com/"><a-icon type="scissor" />修改密码</a>
-            </a-menu-item>
-            <a-menu-item key="1">
               <a @click="logout"><a-icon type="logout" />退出登录</a>
             </a-menu-item>
           </a-menu>
@@ -98,6 +95,7 @@ export default {
       collapsed: publicJs.collapsed,
       selectedKeys: [],
       openKeys: [],
+      adminName: "",
     };
   },
   created() {
@@ -105,6 +103,7 @@ export default {
       this.openKeys = [this.$route.meta.module]
     }
     this.selectedKeys = [this.$route.path];
+    this.adminName = localStorage.getItem("userToken");
   },
   methods:{
     logout(){
