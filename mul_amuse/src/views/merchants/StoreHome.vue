@@ -3,61 +3,41 @@
     <a-layout-sider class="left-menu" v-model="collapsed" :trigger="null" collapsible>
       <div class="logo">{{collapsed?'惠享':'惠享生活管理平台'}}</div>
       <a-menu theme="dark" mode="inline" :defaultOpenKeys="openKeys" :default-selected-keys="selectedKeys">
-        <a-sub-menu key="商家信息">
-          <span slot="title"><a-icon type="bank" /><span>商家信息</span></span>
-          <a-menu-item key="/storeList">
-            <router-link to="/storeList" tag="div">
-              <span>商家列表</span>
-            </router-link>
-          </a-menu-item>
-          <a-menu-item key="/storeOrder">
-            <router-link to="/storeOrder" tag="div">
-              <span>商家订单</span>
-            </router-link>
-          </a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="产品信息">
-          <span slot="title"><a-icon type="shopping" /><span>产品信息</span></span>
-          <a-menu-item key="/productList">
-            <router-link to="/productList" tag="div">
-              <span>产品列表</span>
-            </router-link>
-          </a-menu-item>
-          <a-menu-item key="/productEdit">
-            <router-link to="/productEdit" tag="div">
-              <span>产品编辑</span>
-            </router-link>
-          </a-menu-item>
-          <a-menu-item key="/modelList">
-            <router-link to="/modelList" tag="div">
-              <span>型号列表</span>
-            </router-link>
-          </a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="用户信息">
-          <span slot="title"><a-icon type="user" /><span>用户信息</span></span>
-          <a-menu-item key="/userList">
-            <router-link to="/userList" tag="div">
-              <span>用户列表</span>
-            </router-link>
-          </a-menu-item>
-          <a-menu-item key="/userOrder">
-            <router-link to="/userOrder" tag="div">
-              <span>用户订单</span>
-            </router-link>
-          </a-menu-item>
-          <a-menu-item key="/userCommission">
-            <router-link to="/userCommission" tag="div">
-              <span>佣金情况</span>
-            </router-link>
-          </a-menu-item>
-        </a-sub-menu>
-        <a-menu-item key="/supervipSet">
-          <router-link to="/supervipSet" tag="div">
-            <a-icon type="usergroup-add" />
-            <span>超级会员</span>
+        <a-menu-item key="/storeIndex">
+          <router-link to="/storeIndex" tag="div">
+            <a-icon type="home" />
+            <span>基本信息</span>
           </router-link>
         </a-menu-item>
+        <a-menu-item key="/storeSeeProduct">
+          <router-link to="/storeSeeProduct" tag="div">
+            <a-icon type="shop" />
+            <span>产品信息</span>
+          </router-link>
+        </a-menu-item>
+        <a-sub-menu key="订单信息">
+          <span slot="title"><a-icon type="shopping" /><span>订单信息</span></span>
+          <a-menu-item key="/storeAllOrder">
+            <router-link to="/storeAllOrder" tag="div">
+              <span>全部订单</span>
+            </router-link>
+          </a-menu-item>
+          <a-menu-item key="/storeRealOrder">
+            <router-link to="/storeRealOrder" tag="div">
+              <span>实物订单</span>
+            </router-link>
+          </a-menu-item>
+          <a-menu-item key="/storeNetOrder">
+            <router-link to="/storeNetOrder" tag="div">
+              <span>虚拟订单</span>
+            </router-link>
+          </a-menu-item>
+          <a-menu-item key="/storeAppointOrder">
+            <router-link to="/storeAppointOrder" tag="div">
+              <span>预约订单</span>
+            </router-link>
+          </a-menu-item>
+        </a-sub-menu>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -67,9 +47,9 @@
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="() => (collapsed = !collapsed)"
         />
-        <a-dropdown style="float: right; margin-right: 20px;" :trigger="['click']">
+        <a-dropdown style="float: right; margin-right: 20px;" :trigger="['click']" v-if="collapsed">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-            {{adminNickName}}
+            {{storeName}}
             <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
@@ -95,7 +75,7 @@ export default {
       collapsed: publicJs.collapsed,
       selectedKeys: [],
       openKeys: [],
-      adminNickName: "",
+      storeName: "",
     };
   },
   created() {
@@ -103,13 +83,13 @@ export default {
       this.openKeys = [this.$route.meta.module]
     }
     this.selectedKeys = [this.$route.path];
-    this.adminNickName = localStorage.getItem("adminNickName");
+    this.storeName = localStorage.getItem("storeName");
   },
   methods:{
     logout(){
       localStorage.removeItem("userToken")
       localStorage.removeItem("roles")
-      this.$router.push("/adminLogin")
+      this.$router.push("/storeLogin")
     }
   }
 };

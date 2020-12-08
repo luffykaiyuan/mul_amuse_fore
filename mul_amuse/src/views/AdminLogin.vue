@@ -41,6 +41,7 @@ export default {
             method:'get',
           }).then(res => {
             localStorage.setItem("userToken", res.data.id);
+            localStorage.setItem("adminNickName", res.data.adminNickName);
             localStorage.setItem("roles", "admin");
             this.$message.success("登录成功！！");
             this.$router.push("/storeList");

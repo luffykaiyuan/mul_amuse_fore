@@ -14,6 +14,13 @@ import ProductEdit from "../views/admin/ProductEdit";
 import ModelList from "../views/admin/ModelList";
 import AdminLogin from "../views/AdminLogin";
 import StoreLogin from "../views/StoreLogin";
+import StoreHome from "../views/merchants/StoreHome";
+import StoreIndex from "../views/merchants/StoreIndex";
+import StoreSeeProduct from "../views/merchants/StoreProduct";
+import StoreRealOrder from "../views/merchants/StoreRealOrder";
+import StoreNetOrder from "../views/merchants/StoreNetOrder";
+import StoreAppointOrder from "../views/merchants/StoreAppointOrder";
+import StoreAllOrder from "../views/merchants/StoreAllOrder";
 
 Vue.use(Router)
 
@@ -113,6 +120,64 @@ const route = new Router({
       ]
     },
     {
+      path: '/storeHome',
+      component: StoreHome,
+      children: [
+        {
+          path: '/storeIndex',
+          component: StoreIndex,
+          meta: {
+            requireAuth: true,
+            roles: ['developer','admin', 'store']
+          }
+        },
+        {
+          path: '/storeAllOrder',
+          component: StoreAllOrder,
+          meta: {
+            module: "订单信息",
+            requireAuth: true,
+            roles: ['developer','admin', 'store']
+          }
+        },
+        {
+          path: '/storeRealOrder',
+          component: StoreRealOrder,
+          meta: {
+            module: "订单信息",
+            requireAuth: true,
+            roles: ['developer','admin', 'store']
+          }
+        },
+        {
+          path: '/storeNetOrder',
+          component: StoreNetOrder,
+          meta: {
+            module: "订单信息",
+            requireAuth: true,
+            roles: ['developer','admin', 'store']
+          }
+        },
+        {
+          path: '/storeAppointOrder',
+          component: StoreAppointOrder,
+          meta: {
+            module: "订单信息",
+            requireAuth: true,
+            roles: ['developer','admin', 'store']
+          }
+        },
+        {
+          path: '/storeSeeProduct',
+          component: StoreSeeProduct,
+          meta: {
+            requireAuth: true,
+            roles: ['developer','admin', 'store']
+          }
+        },
+      ]
+    },
+    {
       path: '/login',
       component: Login,
       meta: {
@@ -167,10 +232,14 @@ route.beforeEach((to, from, next) => {
 
   let userToken = localStorage.getItem('userToken')
   let role = localStorage.getItem('role')
-  if (userToken) {
-    next();
+  if (to.meta.requireAuth) {
+    if (userToken) {
+      next();
+    } else {
+      next({path: '/login'})
+    }
   }else {
-    next( { path: '/login'})
+    next();
   }
   // console.log('上一个页面：', from)
   // console.log('下一个页面：', to)

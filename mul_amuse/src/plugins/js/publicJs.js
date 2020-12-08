@@ -9,6 +9,8 @@ const urls = {
   //StoreInfoCon
   selectAllNormal: '/store/selectAllNormal',
   selectAllStore: '/store/selectAllStore',
+  selectStoreByUsername: '/store/selectByUsername',
+  selectStoreById: '/store/selectById',
   insertStore: '/store/insertStore',
   updateStore: '/store/updateStore',
   deleteStore: '/store/deleteStore',
@@ -41,9 +43,14 @@ const urls = {
   selectAllNormalOrder: '/order/selectAllNormal',
   selectUserOrder: '/order/selectUserOrder',
   selectStoreOrder: '/order/selectStoreOrder',
+  selectStoreNetOrder: '/order/selectStoreNetOrder',
+  selectStoreRealOrder: '/order/selectStoreRealOrder',
+  selectStoreAppointOrder: '/order/selectStoreAppointOrder',
+  selectOrderByNum: '/order/selectOrderByNum',
   selectOrderDetail: '/order/selectOrderDetail',
   sendProduct: '/order/sendProduct',
   destoryCodeNumber: '/order/destoryCodeNumber',
+  checkTime: '/order/checkTime',
   getProduct: '/order/getProduct',
   //UserInfoCon
   insertUser: '/user/insertUser',
@@ -59,7 +66,14 @@ const urls = {
   selectUserCommissionLog: '/comLog/selectUserCommissionLog',
   //CashoutLogCon
   selectUserCashout: '/cashoutLog/selectUserCashout',
-  insertCashoutLog: '/cashoutLog/insertCashoutLog'
+  insertCashoutLog: '/cashoutLog/insertCashoutLog',
+  //ReceiveInfoCon
+  insertReceive: '/receiveInfo/insertReceive',
+  selectById: '/receiveInfo/selectById',
+  selectUserReceive: '/receiveInfo/selectUserReceive',
+  selectReceiveList: '/receiveInfo/selectReceiveList',
+  updateReceive: '/receiveInfo/updateReceive',
+  updateDefaultReceive: '/receiveInfo/updateDefaultReceive',
 }
 
 export default {
