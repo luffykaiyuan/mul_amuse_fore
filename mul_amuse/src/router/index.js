@@ -21,6 +21,14 @@ import StoreRealOrder from "../views/merchants/StoreRealOrder";
 import StoreNetOrder from "../views/merchants/StoreNetOrder";
 import StoreAppointOrder from "../views/merchants/StoreAppointOrder";
 import StoreAllOrder from "../views/merchants/StoreAllOrder";
+import Index from "../views/userTest/Index";
+import UserHome from "../views/userTest/UserHome";
+import MyInfo from "../views/userTest/MyInfo";
+import ProductDetail from "../views/userTest/ProductDetail";
+import VipZoom from "../views/userTest/VipZoom";
+import OrderSubmit from "../views/userTest/OrderSubmit";
+import MyCommission from "../views/userTest/MyCommission";
+import MyOrder from "../views/userTest/MyOrder";
 
 Vue.use(Router)
 
@@ -32,6 +40,84 @@ const route = new Router({
       meta: {
         requireAuth: false
       }
+    },
+    {
+      path: '/userHome',
+      component: UserHome,
+      children: [
+        {
+          path: '/',
+          component: Index,
+          meta: {
+            module: "首页",
+            requireAuth: false,
+            roles: ['developer','admin', 'store', 'user']
+          }
+        },
+        {
+          path: '/index',
+          component: Index,
+          meta: {
+            module: "首页",
+            requireAuth: false,
+            roles: ['developer','admin', 'store', 'user']
+          }
+        },
+        {
+          path: '/myInfo',
+          component: MyInfo,
+          meta: {
+            module: "我的信息",
+            requireAuth: false,
+            roles: ['developer','admin', 'store', 'user']
+          }
+        },
+        {
+          path: '/productDetail/:productId/',
+          component: ProductDetail,
+          meta: {
+            module: "详情",
+            requireAuth: false,
+            roles: ['developer','admin', 'store', 'user']
+          }
+        },
+        {
+          path: '/orderSubmit/:productId/',
+          component: OrderSubmit,
+          meta: {
+            module: "提交订单",
+            requireAuth: true,
+            roles: ['developer','admin', 'store', 'user']
+          }
+        },
+        {
+          path: '/myCommission/',
+          component: MyCommission,
+          meta: {
+            module: "我的佣金",
+            requireAuth: true,
+            roles: ['developer','admin', 'store', 'user']
+          }
+        },
+        {
+          path: '/myOrder/',
+          component: MyOrder,
+          meta: {
+            module: "我的订单",
+            requireAuth: true,
+            roles: ['developer','admin', 'store', 'user']
+          }
+        },
+        {
+          path: '/vipZoom',
+          component: VipZoom,
+          meta: {
+            module: "会员专区",
+            requireAuth: false,
+            roles: ['developer','admin', 'store', 'user']
+          }
+        }
+      ]
     },
     {
       path: '/adminHome',

@@ -4,8 +4,8 @@
     <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"></v-img>
 
     <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field label="账号" :rules="rules" hide-details="auto" v-model="loginInfo.adminUsername"></v-text-field>
-      <v-text-field type="password" label="密码" :rules="rules" hide-details="auto" v-model="loginInfo.adminPassword"></v-text-field>
+      <v-text-field label="账号" :rules="rules" hide-details="auto" v-model="loginInfo.userName"></v-text-field>
+      <v-text-field type="password" label="密码" :rules="rules" hide-details="auto" v-model="loginInfo.password"></v-text-field>
       <v-btn @click="login" style="float: right; margin-right: 20px;margin-top: 20px;">
         登录
       </v-btn>
@@ -24,26 +24,26 @@ export default {
     ],
     valid: true,
     loginInfo: {
-      adminUsername: '',
-      adminPassword: '',
+      userName: '',
+      password: '',
     },
   }),
   methods: {
     login(){
       request({
-        url:publicJs.urls.loginAdmin,
+        url:publicJs.urls.loginUser,
         method:'post',
         data: this.loginInfo
       }).then(res => {
-        if ("admin" === res.data){
+        if ("user" === res.data){
           request({
-            url:publicJs.urls.selectAdminByUsername + "?adminUsername=" + this.loginInfo.adminUsername,
+            url:publicJs.urls.selectUerByUsername + "?userName=" + this.loginInfo.userName,
             method:'get',
           }).then(res => {
-            localStorage.setItem("userToken", res.data.id);
-            localStorage.setItem("roles", "admin");
+            localStorage.setItem("userToken", res.data[0].id);
+            localStorage.setItem("roles", "user");
             this.$message.success("登录成功！！");
-            this.$router.push("/storeList");
+            this.$router.push("/index");
           })
         }else {
           this.$message.warning(res.data)

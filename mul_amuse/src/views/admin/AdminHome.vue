@@ -74,7 +74,7 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item key="0">
-              <a @click="logout"><a-icon type="logout" />退出登录</a>
+              <a @click="loginOut"><a-icon type="logout" />退出登录</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -106,7 +106,7 @@ export default {
     this.adminNickName = localStorage.getItem("adminNickName");
   },
   methods:{
-    logout(){
+    loginOut(){
       localStorage.removeItem("userToken")
       localStorage.removeItem("roles")
       this.$router.push("/adminLogin")

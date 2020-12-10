@@ -138,6 +138,7 @@ export default {
   data: () => ({
     collapsed: publicJs.collapsed,
     storeId: '',
+    storeName: '',
     getTable: false,
     editDialog: false,
     dialogDelete: false,
@@ -221,6 +222,7 @@ export default {
           method:'get',
         }).then(res => {
           // if (res.data.length){
+          this.storeName = res.data.storeName;
           for (let i = 0; i < res.data.length; i++) {
             res.data[i].productTypeBack = this.formatterType(res.data[i].productType);
             res.data[i].productFreeBack = this.formatterFree(res.data[i].productFree);
@@ -311,6 +313,7 @@ export default {
 
     save () {
       this.editedItem.storeId = this.storeId;
+      this.editedItem.storeName = this.storeName;
       if (this.editedIndex === -1){
         this.editedItem.operateId = localStorage.getItem("userToken");
         request({

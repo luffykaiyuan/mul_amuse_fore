@@ -1,6 +1,4 @@
 const collapsed = true;
-const testGet = "/store/testGet"
-const testPost = "/store/testPost"
 const urls = {
   //FileInfoCon
   fileUpload: '/file/fileUpload',
@@ -18,6 +16,7 @@ const urls = {
   //ProductInfoCon
   selectProductByStore: '/product/selectProductByStore',
   selectProductById: '/product/selectProductById',
+  selectIndexProduct: '/product/selectIndexProduct',
   insertProduct: '/product/insertProduct',
   updateProduct: '/product/updateProduct',
   deleteProduct: '/product/deleteProduct',
@@ -59,9 +58,11 @@ const urls = {
   selectUserSons: '/user/selectUserSons',
   selectUerDetail: '/user/selectUerDetail',
   selectUerByUsername: '/user/selectUerByUsername',
+  selectUserById: '/user/selectUserById',
   updateUser: '/user/updateUser',
   updateUserTitle: '/user/updateUserTitle',
   becomeTalent: '/user/becomeTalent',
+  loginUser: '/user/loginUser',
   //CommissionLogCon
   selectUserCommissionLog: '/comLog/selectUserCommissionLog',
   //CashoutLogCon
@@ -78,8 +79,6 @@ const urls = {
 
 export default {
   collapsed,
-  testGet,
-  testPost,
   urls
 }
 

@@ -156,14 +156,6 @@ export default {
       }
     },
 
-    getImg(id){
-      if (id){
-        return axios.defaults.baseURL + publicJs.urls.selectFile + "?id=" + id;
-      } else {
-        return "";
-      }
-    },
-
     updateProduct (){
       request({
         url:publicJs.urls.updateProduct,
@@ -228,7 +220,15 @@ export default {
     },
     openEdit(){
       this.dialogEdit = true;
-    }
+    },
+    //图片获取路径拼接
+    getImg(id){
+      if (id){
+        return axios.defaults.baseURL + publicJs.urls.selectFile + "?id=" + id;
+      } else {
+        return "";
+      }
+    },
   },
 }
 </script>
