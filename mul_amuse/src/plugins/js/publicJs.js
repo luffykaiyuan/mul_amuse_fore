@@ -23,6 +23,7 @@ const urls = {
   //ModelInfoCon
   insertModel: '/model/insertModel',
   selectModelByProduct: '/model/selectModelByProduct',
+  selectOneModel: '/model/selectOneModel',
   updateModel: '/model/updateModel',
   deleteModel: '/model/deleteModel',
   //AdminInfoCon

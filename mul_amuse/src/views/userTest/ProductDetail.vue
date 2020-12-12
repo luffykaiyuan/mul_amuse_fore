@@ -28,7 +28,7 @@
         <a-card-meta :title="productInfo.productTitle">
         </a-card-meta>
         <a-radio-group default-value="a" button-style="solid" style="margin-top: 10px;">
-          <a-radio-button v-for="item in modelList" :value="item.id" :key="item.id">
+          <a-radio-button v-for="item in modelList" :value="item.id" :key="item.id" @click="bindId(item.id)">
             {{item.modelName}}
           </a-radio-button>
         </a-radio-group>
@@ -51,12 +51,16 @@ import axios from "axios";
 
 export default {
   data: () => ({
+    userId: '',
+    storeId: '',
     productId: '',
+    modelId: '',
     productInfo: {},
     modelList: [],
     visible: false,
   }),
   created() {
+    this.userId = localStorage.getItem("userToken");
     this.productId = this.$route.params.productId;
     this.initProdect();
     this.initModel();
@@ -73,7 +77,7 @@ export default {
         res.data.productMainImg4 = this.getImg(res.data.productMainImg4);
         res.data.productMainImg5 = this.getImg(res.data.productMainImg5);
         this.productInfo = res.data;
-        console.log(this.productInfo);
+        this.storeId = res.data.storeId;
       }).catch(err => {
         this.$message.error("初始化错误！！")
       })
@@ -88,10 +92,12 @@ export default {
         this.$message.error("初始化错误！！")
       })
     },
+    bindId(id){
+      this.modelId = id;
+    },
     buyProduct(){
-      let id = localStorage.getItem("userToken");
-      if (id){
-        this.$router.push("/orderSubmit");
+      if (this.userId){
+        this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
       }else {
         this.visible = true;
       }

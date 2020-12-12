@@ -154,7 +154,7 @@
     </el-dialog>
     <a-modal v-model="receiveVisible" title="收货地址管理" centered :width="800" @ok="defaultReceive">
       <a-radio-group :default-value="defaultValue" size="large">
-        <a-radio-button :value="item.defaultStatus" v-for="item in receiveList" @click="selectAddress(item.id)">
+        <a-radio-button :value="item.defaultStatus" v-for="item in receiveList" :key="item.id" @click="selectAddress(item.id)">
           {{item.receiveName}}， {{item.receivePhone}}， {{item.receiveAddress}}
         </a-radio-button>
       </a-radio-group>

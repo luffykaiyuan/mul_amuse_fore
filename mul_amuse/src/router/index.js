@@ -29,6 +29,7 @@ import VipZoom from "../views/userTest/VipZoom";
 import OrderSubmit from "../views/userTest/OrderSubmit";
 import MyCommission from "../views/userTest/MyCommission";
 import MyOrder from "../views/userTest/MyOrder";
+import NetOrderInfo from "../views/userTest/NetOrderInfo";
 
 Vue.use(Router)
 
@@ -82,7 +83,7 @@ const route = new Router({
           }
         },
         {
-          path: '/orderSubmit/:productId/',
+          path: '/orderSubmit/:userId/:storeId/:productId/:modelId/',
           component: OrderSubmit,
           meta: {
             module: "提交订单",
@@ -262,6 +263,14 @@ const route = new Router({
           }
         },
       ]
+    },
+    {
+      path: '/netOrderInfo/:orderNumber/',
+      component: NetOrderInfo,
+      meta: {
+        requireAuth: true,
+        roles: ['developer','admin', 'store']
+      }
     },
     {
       path: '/login',
