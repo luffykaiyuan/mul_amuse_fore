@@ -30,6 +30,7 @@ import MyCommission from "../views/userTest/MyCommission";
 import MyOrder from "../views/userTest/MyOrder";
 import NetOrderInfo from "../views/userTest/NetOrderInfo";
 import SuperProduct from "../views/admin/SuperProduct";
+import MapTest from "../views/userTest/MapTest";
 
 Vue.use(Router)
 
@@ -295,6 +296,13 @@ const route = new Router({
       }
     },
     {
+      path: "/mapTest",
+      component: MapTest,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
       path: "*",
       component: Error404,
       meta: {
@@ -323,6 +331,9 @@ route.beforeEach((to, from, next) => {
     next();
   }
   if (to.fullPath === '/storeLogin') {
+    next();
+  }
+  if (to.fullPath === '/mapTest') {
     next();
   }
 
