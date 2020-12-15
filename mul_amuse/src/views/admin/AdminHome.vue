@@ -20,7 +20,12 @@
           <span slot="title"><a-icon type="shopping" /><span>产品信息</span></span>
           <a-menu-item key="/productList">
             <router-link to="/productList" tag="div">
-              <span>产品列表</span>
+              <span>首页产品</span>
+            </router-link>
+          </a-menu-item>
+          <a-menu-item key="/superProduct">
+            <router-link to="/superProduct" tag="div">
+              <span>会员产品</span>
             </router-link>
           </a-menu-item>
           <a-menu-item key="/productEdit">
@@ -52,12 +57,6 @@
             </router-link>
           </a-menu-item>
         </a-sub-menu>
-        <a-menu-item key="/supervipSet">
-          <router-link to="/supervipSet" tag="div">
-            <a-icon type="usergroup-add" />
-            <span>超级会员</span>
-          </router-link>
-        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>

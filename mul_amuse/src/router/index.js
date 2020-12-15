@@ -4,7 +4,6 @@ import AdminHome from '../views/admin/AdminHome'
 import ProductList from "../views/admin/ProductList";
 import StoreList from "../views/admin/StoreList";
 import StoreOrder from "../views/admin/StoreOrder";
-import SupervipSet from "../views/admin/SupervipSet";
 import UserCommission from "../views/admin/UserCommission";
 import UserList from "../views/admin/UserList";
 import UserOrder from "../views/admin/UserOrder";
@@ -30,6 +29,7 @@ import OrderSubmit from "../views/userTest/OrderSubmit";
 import MyCommission from "../views/userTest/MyCommission";
 import MyOrder from "../views/userTest/MyOrder";
 import NetOrderInfo from "../views/userTest/NetOrderInfo";
+import SuperProduct from "../views/admin/SuperProduct";
 
 Vue.use(Router)
 
@@ -134,6 +134,15 @@ const route = new Router({
           }
         },
         {
+          path: '/superProduct',
+          component: SuperProduct,
+          meta: {
+            module: "产品信息",
+            requireAuth: true,
+            roles: ['developer','admin', 'store']
+          }
+        },
+        {
           path: '/productEdit',
           component: ProductEdit,
           meta: {
@@ -167,14 +176,6 @@ const route = new Router({
             module: "商家信息",
             requireAuth: true,
             roles: ['developer', 'admin', 'store']
-          }
-        },
-        {
-          path: '/supervipSet',
-          component: SupervipSet,
-          meta: {
-            requireAuth: true,
-            roles: ['developer','admin']
           }
         },
         {

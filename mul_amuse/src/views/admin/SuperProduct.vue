@@ -55,9 +55,6 @@
                       <v-text-field v-model="editedItem.productOriginalPrice" label="门市价"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.productNowPrice" label="现价"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.productVipPrice" label="会员价"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
@@ -81,15 +78,6 @@
                           </v-btn>
                         </v-date-picker>
                       </v-dialog>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.commissionHeigh" label="高佣金"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.commissionMiddle" label="中佣金"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.commissionLow" label="低佣金"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -147,7 +135,6 @@ export default {
       { text: '产品名称', align: 'start', sortable: false, value: 'productTitle',},
       { text: '产品类型', sortable: false, value: 'productTypeBack'  },
       { text: '是否免费', sortable: false, value: 'productFreeBack' },
-      { text: '产品现价', sortable: false, value: 'productNowPrice' },
       { text: '产品销量', sortable: false, value: 'productSaleVolume' },
       { text: '添加时间', sortable: false, value: 'addTime' },
       { text: '操作', sortable: false, value: 'actions'},
@@ -164,37 +151,29 @@ export default {
       storeId: '',
       storeName: '',
       productType: '',
-      productFree: '0',
+      productFree: '1',
       productTitle: '',
       productSaleStatus: '',
       productSaleTime: new Date().toISOString().substr(0, 10),
       productOriginalPrice: 0.0,
-      productNowPrice: 0.0,
       productVipPrice: 0.0,
       productSaleVolume: 0,
       maxAppointment: 0,
       productEndTime: new Date().toISOString().substr(0, 10),
-      commissionHeigh: 0.0,
-      commissionMiddle: 0.0,
-      commissionLow: 0.0,
     },
     defaultItem: {
       storeId: '',
       storeName: '',
       productType: '',
-      productFree: '0',
+      productFree: '1',
       productTitle: '',
       productSaleStatus: '',
       productSaleTime: '',
       productOriginalPrice: 0.0,
-      productNowPrice: 0.0,
       productVipPrice: 0.0,
       productSaleVolume: 0,
       maxAppointment: 0,
       productEndTime: '',
-      commissionHeigh: 0.0,
-      commissionMiddle: 0.0,
-      commissionLow: 0.0,
     }
   }),
 
@@ -228,19 +207,15 @@ export default {
           this.$message.error("初始化错误！！")
         })
         request({
-          url:publicJs.urls.selectIndexProductByStore + "?storeId=" + this.storeId,
+          url:publicJs.urls.selectSuperProductByStore + "?storeId=" + this.storeId,
           method:'get',
         }).then(res => {
-          // if (res.data.length){
           for (let i = 0; i < res.data.length; i++) {
             res.data[i].productTypeBack = this.formatterType(res.data[i].productType);
             res.data[i].productFreeBack = this.formatterFree(res.data[i].productFree);
           }
             this.productList = res.data;
             this.getTable = true;
-          // }else {
-          //   this.$message.warning("请确保商家ID正确！！")
-          // }
         }).catch(err => {
           this.$message.error("初始化错误！！")
         })
@@ -322,33 +297,34 @@ export default {
 
     save () {
       this.editedItem.storeId = this.storeId;
-      this.editedItem.storeName = this.storeName;
-      if (this.editedIndex === -1){
-        this.editedItem.operateId = localStorage.getItem("userToken");
-        request({
-          url:publicJs.urls.insertProduct,
-          method:'post',
-          data: this.editedItem
-        }).then(res => {
-          this.$message.success("添加成功！！")
-          this.searchProduct();
-          this.close()
-        }).catch(err => {
-          this.$message.error(res.data)
-        })
-      }else {
-        request({
-          url:publicJs.urls.updateProduct,
-          method:'post',
-          data: this.editedItem
-        }).then(res => {
-          this.$message.success("编辑成功！！")
-          this.searchProduct();
-          this.close()
-        }).catch(err => {
-          this.$message.error(res.data)
-        })
-      }
+      this.editedItem.storeName = this.storeName
+      console.log(this.editedItem);
+      // if (this.editedIndex === -1){
+      //   this.editedItem.operateId = localStorage.getItem("userToken");
+      //   request({
+      //     url:publicJs.urls.insertProduct,
+      //     method:'post',
+      //     data: this.editedItem
+      //   }).then(res => {
+      //     this.$message.success("添加成功！！")
+      //     this.searchProduct();
+      //     this.close()
+      //   }).catch(err => {
+      //     this.$message.error(res.data)
+      //   })
+      // }else {
+      //   request({
+      //     url:publicJs.urls.updateProduct,
+      //     method:'post',
+      //     data: this.editedItem
+      //   }).then(res => {
+      //     this.$message.success("编辑成功！！")
+      //     this.searchProduct();
+      //     this.close()
+      //   }).catch(err => {
+      //     this.$message.error(res.data)
+      //   })
+      // }
     },
 
   },

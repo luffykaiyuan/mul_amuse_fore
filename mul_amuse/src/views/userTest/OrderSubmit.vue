@@ -21,7 +21,7 @@
               <el-input v-model="orderInfo.orderRemark"></el-input>
             </el-form-item>
             <el-form-item label="数量">
-              <el-input-number v-model="orderInfo.orderCount" @change="handleChange" :min="1" :max="100"></el-input-number>
+              <el-input-number v-model="orderInfo.orderCount" @change="handleChange" :min="1" :max="modelInfo.modelStock"></el-input-number>
             </el-form-item>
             <el-form-item label="总价">
               <el-input v-model="orderInfo.orderPrice" :disabled="true"></el-input>

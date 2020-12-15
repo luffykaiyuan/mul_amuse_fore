@@ -15,8 +15,11 @@ const urls = {
   loginStore: '/store/loginStore',
   //ProductInfoCon
   selectProductByStore: '/product/selectProductByStore',
+  selectIndexProductByStore: '/product/selectIndexProductByStore',
+  selectSuperProductByStore: '/product/selectSuperProductByStore',
   selectProductById: '/product/selectProductById',
   selectIndexProduct: '/product/selectIndexProduct',
+  selectSuperProduct: '/product/selectSuperProduct',
   insertProduct: '/product/insertProduct',
   updateProduct: '/product/updateProduct',
   deleteProduct: '/product/deleteProduct',
@@ -36,8 +39,9 @@ const urls = {
   selectAdminByUsername: '/admin/selectByUsername',
   selectAdminById: '/admin/selectById',
   //SupervipSetCon
-  selectSupervipSet: '/supervipSet/selectSupervipSet?id=259',
-  updateSupervipSet: '/supervipSet/updateSupervipSet',
+  selectAllSet: '/supervipSet/selectAllSet',
+  //SupervipMoreCon
+  selectAllMore: '/supervipMore/selectAllMore',
   //OrderInfoCon
   insertOrder: '/order/insertOrder',
   selectAllNormalOrder: '/order/selectAllNormal',
@@ -76,6 +80,15 @@ const urls = {
   selectReceiveList: '/receiveInfo/selectReceiveList',
   updateReceive: '/receiveInfo/updateReceive',
   updateDefaultReceive: '/receiveInfo/updateDefaultReceive',
+  //SupervipInfoCon
+  insertSuperVIP: '/supervipInfo/insertSuperVIP',
+  updateSuperVIP: '/supervipInfo/updateSuperVIP',
+  selectByUserId: '/supervipInfo/selectByUserId',
+  //SupervipInviteCon
+  selectInvite: '/supervipInvite/selectInvite',
+  insertSupervipInvite: '/supervipInvite/insertSupervipInvite',
+  updateSupervipInvite: '/supervipInvite/updateSupervipInvite',
+  becomeVip: '/supervipInvite/becomeVip',
 }
 
 export default {

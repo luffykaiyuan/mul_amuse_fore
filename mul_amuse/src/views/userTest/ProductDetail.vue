@@ -28,7 +28,7 @@
         <a-card-meta :title="productInfo.productTitle">
         </a-card-meta>
         <a-radio-group default-value="a" button-style="solid" style="margin-top: 10px;">
-          <a-radio-button v-for="item in modelList" :value="item.id" :key="item.id" @click="bindId(item.id)">
+          <a-radio-button v-for="item in modelList" :value="item.id" :key="item.id" @click="bindId(item.id)" :disabled="item.modelStock === 0">
             {{item.modelName}}
           </a-radio-button>
         </a-radio-group>
@@ -55,6 +55,7 @@ export default {
     storeId: '',
     productId: '',
     modelId: '',
+    userInfo: {},
     productInfo: {},
     modelList: [],
     visible: false,
@@ -62,10 +63,20 @@ export default {
   created() {
     this.userId = localStorage.getItem("userToken");
     this.productId = this.$route.params.productId;
+    this.initUser();
     this.initProdect();
     this.initModel();
   },
   methods: {
+    initUser(){
+      request({
+        url:publicJs.urls.selectUserById + "?id=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.userInfo = res.data;
+        this.userInfo.userTitleBack = this.formatTitle(this.userInfo.userTitle);
+      })
+    },
     initProdect(){
       request({
         url:publicJs.urls.selectProductById + "?id=" + this.productId,
@@ -96,8 +107,20 @@ export default {
       this.modelId = id;
     },
     buyProduct(){
+      if (this.modelId === ''){
+        this.$message.warning("请选择型号！！")
+        return;
+      }
       if (this.userId){
-        this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
+        if (this.productInfo.productFree === '1'){
+          if (this.userInfo.userRank === '1'){
+            this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
+          }else {
+            this.$message.warning("此产品为会员产品！！")
+          }
+        }else {
+          this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
+        }
       }else {
         this.visible = true;
       }
