@@ -2,7 +2,7 @@
   <div>
   <a-row>
     <a-col :offset="10">
-      <a-card hoverable style="width: 300px">
+      <a-card hoverable style="width: 350px">
         <a-carousel style="margin-bottom: 10px;">
           <div v-if="productInfo.productMainImg1">
             <img slot="cover" alt="example" :src="productInfo.productMainImg1" style="width: 100%; height: 300px;"/>
@@ -25,8 +25,16 @@
             <a-icon type="tag" />立即购买
           </a-button>
         </template>
-        <a-card-meta :title="productInfo.productTitle">
-        </a-card-meta>
+        <a-list item-layout="horizontal" :data-source="addressList">
+          <a-list-item slot="renderItem" slot-scope="item, index">
+            <a slot="actions" @click="navigation(item)">详情</a>
+            <a-list-item-meta :description="item.storeAddress">
+              <a slot="title" href="https://www.antdv.com/">{{ item.storeName }}</a>
+            </a-list-item-meta>
+          </a-list-item>
+        </a-list>
+        <a-divider />
+        <a-card-meta :title="productInfo.productTitle"></a-card-meta>
         <a-radio-group default-value="a" button-style="solid" style="margin-top: 10px;">
           <a-radio-button v-for="item in modelList" :value="item.id" :key="item.id" @click="bindId(item.id)" :disabled="item.modelStock === 0">
             {{item.modelName}}
@@ -37,11 +45,6 @@
       </a-card>
     </a-col>
   </a-row>
-  <a-modal v-model="visible" @ok="handleOk">
-    <p>Some contents...</p>
-    <p>Some contents...</p>
-    <p>Some contents...</p>
-  </a-modal>
   </div>
 </template>
 
@@ -58,6 +61,7 @@ export default {
     userInfo: {},
     productInfo: {},
     modelList: [],
+    addressList: [],
     visible: false,
   }),
   created() {
@@ -74,7 +78,6 @@ export default {
         method:'get',
       }).then(res => {
         this.userInfo = res.data;
-        this.userInfo.userTitleBack = this.formatTitle(this.userInfo.userTitle);
       })
     },
     initProdect(){
@@ -89,6 +92,7 @@ export default {
         res.data.productMainImg5 = this.getImg(res.data.productMainImg5);
         this.productInfo = res.data;
         this.storeId = res.data.storeId;
+        this.initStore();
       }).catch(err => {
         this.$message.error("初始化错误！！")
       })
@@ -101,6 +105,14 @@ export default {
         this.modelList = res.data;
       }).catch(err => {
         this.$message.error("初始化错误！！")
+      })
+    },
+    initStore(){
+      request({
+        url:publicJs.urls.selectAllNormalStore + "?storeId=" +this.storeId,
+        method:'get',
+      }).then(res => {
+        this.addressList = res.data;
       })
     },
     bindId(id){
@@ -136,6 +148,12 @@ export default {
       } else {
         return "";
       }
+    },
+    navigation(item){
+      var url = 'http://api.map.baidu.com/direction?origin=四川科技馆&' +
+        'destination=latlng:' + item.latitude +',' + item.longitude + '|name:' + item.storeName +
+        '&mode=driving&region=成都&output=html&src=webapp.baidu.openAPIdemo';
+      window.location = url;
     },
   },
 }

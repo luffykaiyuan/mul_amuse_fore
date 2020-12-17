@@ -10,6 +10,11 @@
               <span>商家列表</span>
             </router-link>
           </a-menu-item>
+          <a-menu-item key="/storeAddress">
+            <router-link to="/storeAddress" tag="div">
+              <span>商家地址</span>
+            </router-link>
+          </a-menu-item>
           <a-menu-item key="/storeOrder">
             <router-link to="/storeOrder" tag="div">
               <span>商家订单</span>

@@ -13,6 +13,13 @@ const urls = {
   updateStore: '/store/updateStore',
   deleteStore: '/store/deleteStore',
   loginStore: '/store/loginStore',
+  //StoreAddressCon
+  insertAddress: '/address/insertAddress',
+  selectAddressById: '/address/selectById',
+  selectAllByStoreId: '/address/selectAllByStoreId',
+  selectAllNormalStore: '/address/selectAllNormal',
+  updateAddress: '/address/updateAddress',
+  deleteAddress: '/address/deleteAddress',
   //ProductInfoCon
   selectProductByStore: '/product/selectProductByStore',
   selectIndexProductByStore: '/product/selectIndexProductByStore',

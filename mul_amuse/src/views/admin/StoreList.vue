@@ -28,9 +28,6 @@
                     <v-text-field v-model="editedItem.storePassword" label="密码"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.storeAddress" label="地址"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.storePhone" label="电话"></v-text-field>
                   </v-col>
                 </v-row>
@@ -84,7 +81,6 @@ export default {
       { text: '商家名称', align: 'start', sortable: false, value: 'storeName',},
       { text: '用户名', sortable: false, value: 'storeUsername'  },
       { text: '密码', sortable: false, value: 'storePassword' },
-      { text: '地址', sortable: false, value: 'storeAddress' },
       { text: '电话', sortable: false, value: 'storePhone' },
       { text: '上线时间', sortable: false, value: 'addTime' },
       { text: '操作', sortable: false, value: 'actions'},
@@ -95,14 +91,12 @@ export default {
       storeName: '',
       storeUsername: '',
       storePassword: '',
-      storeAddress: '',
       storePhone: '',
     },
     defaultItem: {
       storeName: '',
       storeUsername: '',
       storePassword: '',
-      storeAddress: '',
       storePhone: '',
     }
   }),

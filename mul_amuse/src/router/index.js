@@ -31,6 +31,7 @@ import MyOrder from "../views/userTest/MyOrder";
 import NetOrderInfo from "../views/userTest/NetOrderInfo";
 import SuperProduct from "../views/admin/SuperProduct";
 import MapTest from "../views/userTest/MapTest";
+import StoreAddress from "../views/admin/StoreAddress";
 
 Vue.use(Router)
 
@@ -47,15 +48,6 @@ const route = new Router({
       path: '/userHome',
       component: UserHome,
       children: [
-        {
-          path: '/',
-          component: Index,
-          meta: {
-            module: "首页",
-            requireAuth: false,
-            roles: ['developer','admin', 'store', 'user']
-          }
-        },
         {
           path: '/index',
           component: Index,
@@ -164,6 +156,15 @@ const route = new Router({
         {
           path: '/storeList',
           component: StoreList,
+          meta: {
+            module: "商家信息",
+            requireAuth: true,
+            roles: ['developer','admin']
+          }
+        },
+        {
+          path: '/storeAddress',
+          component: StoreAddress,
           meta: {
             module: "商家信息",
             requireAuth: true,
