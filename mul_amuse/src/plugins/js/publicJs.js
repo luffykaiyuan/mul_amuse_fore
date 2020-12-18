@@ -51,6 +51,7 @@ const urls = {
   selectAllMore: '/supervipMore/selectAllMore',
   //OrderInfoCon
   insertOrder: '/order/insertOrder',
+  insertFreeOrder: '/order/insertFreeOrder',
   selectAllNormalOrder: '/order/selectAllNormal',
   selectUserOrder: '/order/selectUserOrder',
   selectStoreOrder: '/order/selectStoreOrder',

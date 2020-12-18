@@ -59,6 +59,7 @@ export default {
     productId: '',
     modelId: '',
     userInfo: {},
+    superInfo: {},
     productInfo: {},
     modelList: [],
     addressList: [],
@@ -68,6 +69,7 @@ export default {
     this.userId = localStorage.getItem("userToken");
     this.productId = this.$route.params.productId;
     this.initUser();
+    this.initSuper();
     this.initProdect();
     this.initModel();
   },
@@ -78,6 +80,14 @@ export default {
         method:'get',
       }).then(res => {
         this.userInfo = res.data;
+      })
+    },
+    initSuper(){
+      request({
+        url:publicJs.urls.selectByUserId + "?userId=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.superInfo = res.data;
       })
     },
     initProdect(){
@@ -123,10 +133,18 @@ export default {
         this.$message.warning("请选择型号！！")
         return;
       }
+      //检验是否登录
       if (this.userId){
+        //校验是否为会员产品
         if (this.productInfo.productFree === '1'){
+          //校验用户是否为会员
           if (this.userInfo.userRank === '1'){
-            this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
+            //校验会员剩余次数
+            if (this.superInfo.haveNumber > 0){
+              this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
+            }else {
+              this.$message.warning("您的换购次数不足！！")
+            }
           }else {
             this.$message.warning("此产品为会员产品！！")
           }

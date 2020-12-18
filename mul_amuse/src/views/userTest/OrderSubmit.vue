@@ -12,7 +12,7 @@
             <a-descriptions-item label="型号">
               {{modelInfo.modelName}}
             </a-descriptions-item>
-            <a-descriptions-item label="单价">
+            <a-descriptions-item label="单价" v-if="this.productInfo.productFree === '0'">
               {{productInfo.productNowPrice}}
             </a-descriptions-item>
           </a-descriptions>
@@ -20,10 +20,10 @@
             <el-form-item label="备注">
               <el-input v-model="orderInfo.orderRemark"></el-input>
             </el-form-item>
-            <el-form-item label="数量">
+            <el-form-item label="数量" v-if="this.productInfo.productFree === '0'">
               <el-input-number v-model="orderInfo.orderCount" @change="handleChange" :min="1" :max="modelInfo.modelStock"></el-input-number>
             </el-form-item>
-            <el-form-item label="总价">
+            <el-form-item label="总价" v-if="this.productInfo.productFree === '0'">
               <el-input v-model="orderInfo.orderPrice" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item>
@@ -153,16 +153,29 @@ export default {
       if (this.orderInfo.productType === "1"){
         this.orderInfo.receiveId = this.defaultReceive.id;
       }
-      request({
-        url:publicJs.urls.insertOrder,
-        method:'post',
-        data: this.orderInfo
-      }).then(res => {
-        this.$message.success("下单成功！！")
-        this.$router.push("/myInfo");
-      }).catch(err => {
-        this.$message.error(err.data)
-      })
+      if (this.productInfo.productFree === "1"){
+        request({
+          url:publicJs.urls.insertFreeOrder,
+          method:'post',
+          data: this.orderInfo
+        }).then(res => {
+          this.$message.success("下单成功！！")
+          this.$router.push("/myInfo");
+        }).catch(err => {
+          this.$message.error(err.data)
+        })
+      }else {
+        request({
+          url:publicJs.urls.insertOrder,
+          method:'post',
+          data: this.orderInfo
+        }).then(res => {
+          this.$message.success("下单成功！！")
+          this.$router.push("/myInfo");
+        }).catch(err => {
+          this.$message.error(err.data)
+        })
+      }
     },
   },
 }
