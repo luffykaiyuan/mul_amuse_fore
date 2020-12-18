@@ -127,7 +127,6 @@
     created() {
       this.userId = localStorage.getItem("userToken");
       this.initUser();
-      this.initProduct();
     },
     methods: {
       initUser(){
@@ -136,6 +135,7 @@
           method:'get',
         }).then(res => {
           this.userInfo = res.data;
+          this.initProduct();
           if (this.userInfo.userRank === '0'){
             this.initInvite();
             this.initSuperSet();
@@ -181,7 +181,7 @@
       },
       initProduct(){
         request({
-          url:publicJs.urls.selectSuperProduct,
+          url:publicJs.urls.selectSuperProduct + "?userId=" + this.userInfo.id,
           method:'get',
         }).then(res => {
           for (let i = 0; i < res.data.length; i++) {
