@@ -72,7 +72,7 @@
                 <a-card hoverable>
                   <img slot="cover" alt="example" :src="item.productCoverImg" style="height: 180px; width: 300px;" v-if="item.productCoverImg"/>
                   <img slot="cover" alt="example" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1607427243890&di=a681ceadb3ccf5bcede860a78a35b5c1&imgtype=0&src=http%3A%2F%2Fsecretkeycrm.digifilm.com.cn%2Fupload%2F20180530%2Fe676f667c4cdfc7e074898adab2622f2.jpg" style="height: 180px; width: 300px;" v-else/>
-                  <template slot="actions" class="ant-card-actions">
+                  <template slot="actions" class="ant-card-actions" v-if="item.saleTime">
                     <a-row v-if="item.saleOut === '0'">
                       <a-col :span="12" :offset="12">
                         <a-button type="primary" html-type="submit" style="color: white" @click="toShop(item)">
@@ -82,6 +82,11 @@
                     </a-row>
                     <a-button type="danger"  html-type="submit" v-if="item.saleOut === '1'" @click="noStock" style="color: white">
                       <a-icon type="redo" />暂无库存
+                    </a-button>
+                  </template>
+                  <template slot="actions" class="ant-card-actions" v-else>
+                    <a-button type="dashed"  html-type="submit" loading>
+                      {{item.productSaleTime}}开售
                     </a-button>
                   </template>
                   <a-card-meta :title="item.productTitle" :description="item.storeName"></a-card-meta>
@@ -110,6 +115,7 @@
   export default {
     data: () => ({
       userId: '',
+      nowDate: '',
       userInfo: {},
       inviteInfo: {},
       superInfo: {},
@@ -126,6 +132,8 @@
     }),
     created() {
       this.userId = localStorage.getItem("userToken");
+      var myDate = new Date();
+      this.nowDate = myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
       this.initUser();
     },
     methods: {
@@ -186,6 +194,7 @@
         }).then(res => {
           for (let i = 0; i < res.data.length; i++) {
             res.data[i].productCoverImg = this.getImg(res.data[i].productCoverImg);
+            res.data[i].saleTime = this.nowDate > res.data[i].productSaleTime;
           }
           this.productList = res.data;
         })
