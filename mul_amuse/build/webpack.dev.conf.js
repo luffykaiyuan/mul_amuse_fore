@@ -22,7 +22,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
+    disableHostCheck: true,
+
     clientLogLevel: 'warning',
+
     historyApiFallback: {
       rewrites: [
         { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
@@ -63,6 +66,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.dev.assetsSubDirectory,
         ignore: ['.*']
+      },
+      {
+        from: path.resolve(__dirname, '../static/MP_verify_Px0WvHImqRhFVbFz.txt'), // static文件下的xx.txt
+        to: 'MP_verify_Px0WvHImqRhFVbFz.txt',
+        toType: 'file'
       }
     ])
   ]

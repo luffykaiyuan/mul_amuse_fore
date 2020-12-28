@@ -32,6 +32,8 @@ import NetOrderInfo from "../views/userTest/NetOrderInfo";
 import SuperProduct from "../views/admin/SuperProduct";
 import MapTest from "../views/userTest/MapTest";
 import StoreAddress from "../views/admin/StoreAddress";
+import WeChatTest from "../views/userTest/WeChatTest";
+import JumpRouter from "../views/userTest/JumpRouter";
 
 Vue.use(Router)
 
@@ -53,7 +55,8 @@ const route = new Router({
           component: Index,
           meta: {
             module: "首页",
-            requireAuth: false,
+            requireAuth: true,
+            weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }
         },
@@ -63,6 +66,7 @@ const route = new Router({
           meta: {
             module: "我的信息",
             requireAuth: false,
+            weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }
         },
@@ -72,6 +76,7 @@ const route = new Router({
           meta: {
             module: "详情",
             requireAuth: false,
+            weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }
         },
@@ -81,6 +86,7 @@ const route = new Router({
           meta: {
             module: "提交订单",
             requireAuth: true,
+            weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }
         },
@@ -90,6 +96,7 @@ const route = new Router({
           meta: {
             module: "我的佣金",
             requireAuth: true,
+            weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }
         },
@@ -99,6 +106,7 @@ const route = new Router({
           meta: {
             module: "我的订单",
             requireAuth: true,
+            weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }
         },
@@ -108,6 +116,7 @@ const route = new Router({
           meta: {
             module: "会员专区",
             requireAuth: false,
+            weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }
         }
@@ -123,6 +132,7 @@ const route = new Router({
           meta: {
             module: "产品信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer','admin', 'store']
           }
         },
@@ -132,6 +142,7 @@ const route = new Router({
           meta: {
             module: "产品信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer','admin', 'store']
           }
         },
@@ -141,6 +152,7 @@ const route = new Router({
           meta: {
             module: "产品信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer','admin']
           }
         },
@@ -150,6 +162,7 @@ const route = new Router({
           meta: {
             module: "产品信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer','admin', 'store']
           }
         },
@@ -159,6 +172,7 @@ const route = new Router({
           meta: {
             module: "商家信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer','admin']
           }
         },
@@ -168,6 +182,7 @@ const route = new Router({
           meta: {
             module: "商家信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer','admin']
           }
         },
@@ -177,6 +192,7 @@ const route = new Router({
           meta: {
             module: "商家信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer', 'admin', 'store']
           }
         },
@@ -186,6 +202,7 @@ const route = new Router({
           meta: {
             module: "用户信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer','admin']
           }
         },
@@ -195,6 +212,7 @@ const route = new Router({
           meta: {
             module: "用户信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer','admin']
           }
         },
@@ -204,6 +222,7 @@ const route = new Router({
           meta: {
             module: "用户信息",
             requireAuth: true,
+            weRequire: 'admin',
             roles: ['developer','admin', 'store']
           }
         }
@@ -218,6 +237,7 @@ const route = new Router({
           component: StoreIndex,
           meta: {
             requireAuth: true,
+            weRequire: 'store',
             roles: ['developer','admin', 'store']
           }
         },
@@ -227,6 +247,7 @@ const route = new Router({
           meta: {
             module: "订单信息",
             requireAuth: true,
+            weRequire: 'store',
             roles: ['developer','admin', 'store']
           }
         },
@@ -236,6 +257,7 @@ const route = new Router({
           meta: {
             module: "订单信息",
             requireAuth: true,
+            weRequire: 'store',
             roles: ['developer','admin', 'store']
           }
         },
@@ -245,6 +267,7 @@ const route = new Router({
           meta: {
             module: "订单信息",
             requireAuth: true,
+            weRequire: 'store',
             roles: ['developer','admin', 'store']
           }
         },
@@ -254,6 +277,7 @@ const route = new Router({
           meta: {
             module: "订单信息",
             requireAuth: true,
+            weRequire: 'store',
             roles: ['developer','admin', 'store']
           }
         },
@@ -262,6 +286,7 @@ const route = new Router({
           component: StoreSeeProduct,
           meta: {
             requireAuth: true,
+            weRequire: 'store',
             roles: ['developer','admin', 'store']
           }
         },
@@ -296,9 +321,23 @@ const route = new Router({
         requireAuth: false
       }
     },
+    // {
+    //   path: "/mapTest",
+    //   component: MapTest,
+    //   meta: {
+    //     requireAuth: false
+    //   }
+    // },
     {
-      path: "/mapTest",
-      component: MapTest,
+      path: "/weChatTest",
+      component: WeChatTest,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      path: "/jumpRouter",
+      component: JumpRouter,
       meta: {
         requireAuth: false
       }
@@ -334,17 +373,26 @@ route.beforeEach((to, from, next) => {
   if (to.fullPath === '/storeLogin') {
     next();
   }
-  if (to.fullPath === '/mapTest') {
+  // if (to.fullPath === '/weChatTest') {
+  //   next();
+  // }
+  if (to.fullPath === '/jumpRouter') {
     next();
   }
 
-  let userToken = localStorage.getItem('userToken')
-  let role = localStorage.getItem('role')
+  var openId = localStorage.getItem("openId");
   if (to.meta.requireAuth) {
-    if (userToken) {
+    if (openId) {
       next();
     } else {
-      next({path: '/login'})
+      // next({path: '/login'})
+      if (to.meta.weRequire === 'user'){
+        window.location.href = "http://huxiang.nat300.top/wxLogin/doLogin?toPage=weChatTest";
+      } else if (to.meta.weRequire === 'admin'){
+        next({path: '/adminLogin'})
+      } else {
+        next({path: '/storeLogin'})
+      }
     }
   }else {
     next();

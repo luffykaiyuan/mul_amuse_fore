@@ -97,6 +97,10 @@ const urls = {
   insertSupervipInvite: '/supervipInvite/insertSupervipInvite',
   updateSupervipInvite: '/supervipInvite/updateSupervipInvite',
   becomeVip: '/supervipInvite/becomeVip',
+  //WeChatCon
+  wxLogin: '/weChat/wxLogin',
+  //ShareCon
+  shareCreateQR: '/share/createQR'
 }
 
 export default {
@@ -107,7 +111,7 @@ export default {
 //1.引入axios
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:685';
+axios.defaults.baseURL = 'http://huxiang.nat300.top';
 axios.defaults.timeout = 5000;
 
 //通过promise 封装
