@@ -29,7 +29,7 @@
         //   console.log(res);
         // });
         request({
-          url:publicJs.urls.shareCreateQR + "?qrcodeUrl=http://huxiang.nat300.top/wxLogin/doLogin?toPage=index",
+          url:publicJs.urls.shareCreateQR + "?qrcodeUrl=" + axios.defaults.baseURL + "/wxLogin/doLogin?toPage=index",
           method:'get',
         }).then(res => {
           console.log(res);

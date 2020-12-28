@@ -33,6 +33,9 @@
                       <v-select :items="sureSelect" item-text="label" item-value="value"  v-model="editedItem.productFree" label="免费购" :disabled="true"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
+                      <v-select :items="specialSelect" item-text="label" item-value="value"  v-model="editedItem.productSpecial" label="特殊产品"></v-select>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
                       <v-select :items="saleStatusSelect" item-text="label" item-value="value"  v-model="editedItem.productSaleStatus" label="销售状态"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
@@ -156,6 +159,7 @@ export default {
     editedIndex: -1,
 
     typeSelect: [{label:'虚拟产品', value: '0'}, {label:'实体产品', value: '1'}, {label:'预约产品', value: '2'}],
+    specialSelect: [{label:'普通产品', value: '0'}, {label:'店铺推荐', value: '1'}, {label:'店铺精选', value: '2'}],
     sureSelect: [{label:'否', value: '0'}, {label:'是', value: '1'}],
     saleStatusSelect: [{label:'销售', value: '1'}, {label:'预售', value: '2'}],
     saleTimeModal: false,
@@ -165,6 +169,7 @@ export default {
       storeName: '',
       productType: '',
       productFree: '0',
+      productSpecial: '0',
       productTitle: '',
       productSaleStatus: '',
       productSaleTime: new Date().toISOString().substr(0, 10),
@@ -183,6 +188,7 @@ export default {
       storeName: '',
       productType: '',
       productFree: '0',
+      productSpecial: '0',
       productTitle: '',
       productSaleStatus: '',
       productSaleTime: '',

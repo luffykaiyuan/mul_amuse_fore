@@ -34,6 +34,7 @@ import MapTest from "../views/userTest/MapTest";
 import StoreAddress from "../views/admin/StoreAddress";
 import WeChatTest from "../views/userTest/WeChatTest";
 import JumpRouter from "../views/userTest/JumpRouter";
+import axios from "axios";
 
 Vue.use(Router)
 
@@ -382,15 +383,25 @@ route.beforeEach((to, from, next) => {
 
   var openId = localStorage.getItem("openId");
   if (to.meta.requireAuth) {
-    if (openId) {
-      next();
-    } else {
-      // next({path: '/login'})
-      if (to.meta.weRequire === 'user'){
-        window.location.href = "http://huxiang.nat300.top/wxLogin/doLogin?toPage=weChatTest";
-      } else if (to.meta.weRequire === 'admin'){
-        next({path: '/adminLogin'})
+    console.log(to);
+    if (to.meta.weRequire === 'user'){
+      if (openId) {
+        next();
       } else {
+        window.location.href = axios.defaults.baseURL + "/wxLogin/doLogin?toPage=" + to.fullPath;
+      }
+    } else if (to.meta.weRequire === 'admin'){
+      var role = localStorage.getItem("roles");
+      if (role === "admin"){
+        next();
+      }else {
+        next({path: '/adminLogin'})
+      }
+    } else {
+      var role = localStorage.getItem("roles");
+      if (role === "store"){
+        next();
+      }else {
         next({path: '/storeLogin'})
       }
     }

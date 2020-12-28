@@ -24,10 +24,10 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-select :items="sureSelect" item-text="label" item-value="value" v-model="editedItem.userRank" label="产品类型"></v-select>
+                      <v-select :items="sureSelect" item-text="label" item-value="value" v-model="editedItem.userRank" label="是否为超级会员"></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-select :items="titleSelect" item-text="label" item-value="value"  v-model="editedItem.userTitle" label="免费购"></v-select>
+                      <v-select :items="titleSelect" item-text="label" item-value="value"  v-model="editedItem.userTitle" label="用户等级"></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -69,8 +69,7 @@ export default {
       {label:'中级达人', value: '2'}, {label:'高级达人', value: '3'}],
     headers: [
       {text: '用户ID', align: 'start', sortable: false, value: 'id',},
-      {text: '用户名', align: 'start', sortable: false, value: 'userName',},
-      {text: '微信号', sortable: false, value: 'wechatNumber'},
+      {text: '微信昵称', sortable: false, value: 'nickName'},
       {text: '电话', sortable: false, value: 'userPhone'},
       {text: '超级会员', sortable: false, value: 'userRankBack'},
       {text: '达人等级', sortable: false, value: 'userTitleBack'},
