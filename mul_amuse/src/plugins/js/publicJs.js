@@ -64,6 +64,7 @@ const urls = {
   destoryCodeNumber: '/order/destoryCodeNumber',
   checkTime: '/order/checkTime',
   getProduct: '/order/getProduct',
+  checkOrder: '/order/checkOrder',
   //UserInfoCon
   insertUser: '/user/insertUser',
   selectAllUser: '/user/selectAllUser',
@@ -100,7 +101,11 @@ const urls = {
   //WeChatCon
   wxLogin: '/weChat/wxLogin',
   //ShareCon
-  shareCreateQR: '/share/createQR'
+  shareCreateQR: '/share/createQR',
+  //WxLoginCon
+  doLogin: '/wxLogin/doLogin',
+  //WeChatPay
+  orders: '/wePay/orders'
 }
 
 export default {
@@ -112,6 +117,7 @@ export default {
 import axios from 'axios'
 
 axios.defaults.baseURL = 'http://huxiang.nat300.top';
+axios.defaults.withCredentials = true;
 axios.defaults.timeout = 5000;
 
 //通过promise 封装

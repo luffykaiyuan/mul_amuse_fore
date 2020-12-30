@@ -35,6 +35,7 @@ import StoreAddress from "../views/admin/StoreAddress";
 import WeChatTest from "../views/userTest/WeChatTest";
 import JumpRouter from "../views/userTest/JumpRouter";
 import axios from "axios";
+import publicJs from "../plugins/js/publicJs";
 
 Vue.use(Router)
 
@@ -333,7 +334,8 @@ const route = new Router({
       path: "/weChatTest",
       component: WeChatTest,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
       }
     },
     {
@@ -374,13 +376,9 @@ route.beforeEach((to, from, next) => {
   if (to.fullPath === '/storeLogin') {
     next();
   }
-  // if (to.fullPath === '/weChatTest') {
-  //   next();
-  // }
   if (to.fullPath === '/jumpRouter') {
     next();
   }
-
   var openId = localStorage.getItem("openId");
   if (to.meta.requireAuth) {
     console.log(to);
@@ -388,7 +386,7 @@ route.beforeEach((to, from, next) => {
       if (openId) {
         next();
       } else {
-        window.location.href = axios.defaults.baseURL + "/wxLogin/doLogin?toPage=" + to.fullPath;
+        window.location.href = axios.defaults.baseURL + publicJs.urls.doLogin + "?toPage=" + to.fullPath.substr(1);
       }
     } else if (to.meta.weRequire === 'admin'){
       var role = localStorage.getItem("roles");
