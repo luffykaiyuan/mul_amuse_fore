@@ -67,7 +67,7 @@ const route = new Router({
           component: MyInfo,
           meta: {
             module: "我的信息",
-            requireAuth: false,
+            requireAuth: true,
             weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }
@@ -77,7 +77,7 @@ const route = new Router({
           component: ProductDetail,
           meta: {
             module: "详情",
-            requireAuth: false,
+            requireAuth: true,
             weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }
@@ -117,7 +117,7 @@ const route = new Router({
           component: VipZoom,
           meta: {
             module: "会员专区",
-            requireAuth: false,
+            requireAuth: true,
             weRequire: 'user',
             roles: ['developer','admin', 'store', 'user']
           }

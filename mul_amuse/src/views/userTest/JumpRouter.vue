@@ -20,9 +20,11 @@
         paras[temp[0]] = temp[1];
       }
       var openId = paras.openId;     //根据参数名"itemId"，获取参数值
+      var userId = paras.userId;     //根据参数名"itemId"，获取参数值
       var toPage = "/" + paras.toPage;     //根据参数名"itemId"，获取参数值
       console.log(toPage);
       localStorage.setItem("openId", openId);
+      localStorage.setItem("userToken", userId);
 
       this.$router.push(toPage);
     },

@@ -28,6 +28,7 @@
         //   console.log(res);
         // })
         this.orderInfo.openid = localStorage.getItem("openId");
+        var self = this;
         request({
           url:publicJs.urls.checkOrder,
           method:'post',
@@ -49,7 +50,7 @@
                 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
                   alert('支付成功');
                   //支付成功后跳转的页面
-                  this.$router.push("/index");
+                  self.$router.push("/index");
                 }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
                   alert('支付取消');
                 }else if(res.err_msg == "get_brand_wcpay_request:fail"){
