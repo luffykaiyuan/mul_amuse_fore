@@ -36,18 +36,112 @@ import WeChatTest from "../views/userTest/WeChatTest";
 import JumpRouter from "../views/userTest/JumpRouter";
 import axios from "axios";
 import publicJs from "../plugins/js/publicJs";
+import Home from "../views/user/Home";
+import Member from "../views/user/Member";
+import User from "../views/user/User";
+import Details from "../views/user/Details";
+import newAddress from "../views/user/newAddress";
+import Address from "../views/user/Address";
+import Box from "../views/user/Box";
+import Order from "../views/user/Order";
+import Card from "../views/user/Card";
 
 Vue.use(Router)
+
+Vue.prototype.axios = axios
 
 const route = new Router({
   routes: [
     {
-      path: '/',
+      path: '/login',
       component: Login,
       meta: {
         requireAuth: false
       }
     },
+
+    {
+      //首页
+      path: '/',
+      name: 'home',
+      component: Home,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      //会员专区
+      path: '/member',
+      name: 'Member',
+      component: Member,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      //我的页面
+      path: '/my',
+      name: 'User',
+      component: User,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      //详情页面
+      path: '/details/:id',
+      name: 'Details',
+      component: Details,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      //新增地址
+      path: '/newAddress',
+      name: 'newAddress',
+      component: newAddress,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      //地址
+      path: '/address',
+      name: 'Address',
+      component: Address,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      //地址
+      path: '/box',
+      name: 'Box',
+      component: Box,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      path: "/order",
+      name: "Order",
+      component: Order,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      // 会员卡页面
+      path: "/card",
+      name: "Card",
+      component: Card,
+      meta: {
+        requireAuth: false
+      }
+    },
+
+
     {
       path: '/userHome',
       component: UserHome,
@@ -357,16 +451,6 @@ const route = new Router({
 })
 
 route.beforeEach((to, from, next) => {
-  //跳转进度条
-  let loadingBar = document.getElementById("global-loading");
-  if (!loadingBar) {
-    loadingBar = document.createElement("div");
-    loadingBar.id = "global-loading";
-    document.body.append(loadingBar);
-  } else {
-    loadingBar.style.display = 'block';
-  }
-
   if (to.fullPath === '/login') {
     next();
   }
@@ -381,7 +465,6 @@ route.beforeEach((to, from, next) => {
   }
   var openId = localStorage.getItem("openId");
   if (to.meta.requireAuth) {
-    console.log(to);
     if (to.meta.weRequire === 'user'){
       if (openId) {
         next();
@@ -432,8 +515,7 @@ route.beforeEach((to, from, next) => {
 })
 
 route.afterEach((to, from) => {
-  let loadingBar = document.getElementById("global-loading");
-  if (loadingBar) loadingBar.style.display = 'none'
+  window.scrollTo(0, 0);
 })
 
 export default route
