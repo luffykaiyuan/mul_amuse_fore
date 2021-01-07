@@ -5,8 +5,9 @@
                     :autofocus="true" @click:append="searchDetail"></v-text-field>
     </v-card-title>
     <el-form ref="productForm" :model="productForm" label-width="80px" style="margin-top: 50px" v-if="getInfo">
-      <el-row>
-        <el-col :span="8" v-if="productForm.productSpecial !== '0'">
+      <!--限时购首屏-->
+      <el-row v-if="productForm.productSpecial === '3' && productForm.productFree === '0'">
+        <el-col :span="8">
           <el-form-item label="特殊图片">
             <el-upload
               class="avatar-uploader"
@@ -19,6 +20,69 @@
             </el-upload>
           </el-form-item>
         </el-col>
+      </el-row>
+      <!--限时购-->
+      <el-row v-if="productForm.productSpecial === '4' && productForm.productFree === '0'">
+        <el-col :span="8">
+          <el-form-item label="特殊图片">
+            <el-upload
+              class="avatar-uploader"
+              :action="imgUpload"
+              :show-file-list="false"
+              :on-success="specialSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="productSpecialImg" :src="productSpecialImg" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!--品牌推荐-->
+      <el-row v-if="productForm.productSpecial === '5' && productForm.productFree === '0'">
+        <el-col :span="8">
+          <el-form-item label="特殊图片">
+            <el-upload
+              class="avatar-uploader"
+              :action="imgUpload"
+              :show-file-list="false"
+              :on-success="specialSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="productSpecialImg" :src="productSpecialImg" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="特殊图片2">
+            <el-upload
+              class="avatar-uploader"
+              :action="imgUpload"
+              :show-file-list="false"
+              :on-success="specialSuccess2"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="productSpecialImg2" :src="productSpecialImg2" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!--会员模块-->
+      <el-row v-if="productForm.productSpecial !== '0' && productForm.productFree === '1'">
+        <el-col :span="8">
+          <el-form-item label="特殊图片">
+            <el-upload
+              class="avatar-uploader"
+              :action="imgUpload"
+              :show-file-list="false"
+              :on-success="specialSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="productSpecialImg" :src="productSpecialImg" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="8">
           <el-form-item label="封面图">
             <el-upload
@@ -123,6 +187,7 @@ export default {
     dialogEdit: false,
     imgUpload: '',
     productSpecialImg: '',
+    productSpecialImg2: '',
     productCoverImg: '',
     productMainImg1: '',
     productMainImg2: '',
@@ -153,6 +218,7 @@ export default {
           this.productForm = res.data;
           this.getInfo = true;
           this.productSpecialImg = this.getImg(res.data.productSpecialImg);
+          this.productSpecialImg2 = this.getImg(res.data.productSpecialImg2);
           this.productCoverImg = this.getImg(res.data.productCoverImg);
           this.productMainImg1 = this.getImg(res.data.productMainImg1);
           this.productMainImg2 = this.getImg(res.data.productMainImg2);
@@ -186,6 +252,11 @@ export default {
     specialSuccess(res, file) {
       this.productSpecialImg = URL.createObjectURL(file.raw);
       this.productForm.productSpecialImg = res;
+      this.updateProduct();
+    },
+    specialSuccess2(res, file) {
+      this.productSpecialImg2 = URL.createObjectURL(file.raw);
+      this.productForm.productSpecialImg2 = res;
       this.updateProduct();
     },
     coverSuccess(res, file) {

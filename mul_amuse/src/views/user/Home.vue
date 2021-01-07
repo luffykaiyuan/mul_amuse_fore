@@ -35,12 +35,12 @@
           @click="Url('/details/1')"
           width="100%"
           height="100%"
-          :src="require('@/assets/img/home/home-cover1.png')"
+          :src="specialOneBig.productSpecialImg"
         />
         <div class="home_center_footer">
           <div class="home_center_footer_left">
-            <b>贤合庄火锅</b>
-            <p class="van-ellipsis">价值 <span>360元</span>的贤合双人餐</p>
+            <b>{{specialOneBig.storeName}}</b>
+            <p class="van-ellipsis">价值 <span>{{specialOneBig.productNowPrice}}元</span>的{{specialOneBig.productTitle}}</p>
           </div>
           <van-button
             round
@@ -60,12 +60,12 @@
             width="100%"
             height="100%"
             @click="Url('/details/1')"
-            :src="require('@/assets/img/home/home-cover1.png')"
+            :src="specialOne[0].productSpecialImg"
           />
           <div class="home_center_footer">
             <div class="home_center_footer_left">
-              <b>贤合庄火锅</b>
-              <p class="van-ellipsis">价值 <span>360元</span>的贤合双人餐</p>
+              <b>{{specialOne[0].storeName}}</b>
+              <p class="van-ellipsis">价值 <span>{{specialOne[0].productNowPrice}}元</span>的{{specialOne[0].productTitle}}</p>
             </div>
             <van-button
               round
@@ -84,12 +84,12 @@
             width="100%"
             height="100%"
             @click="Url('/details/1')"
-            :src="require('@/assets/img/home/home-cover1.png')"
+            :src="specialOne[1].productSpecialImg"
           />
           <div class="home_center_footer">
             <div class="home_center_footer_left">
-              <b>贤合庄火锅</b>
-              <p class="van-ellipsis">价值 <span>360元</span>的贤合双人餐</p>
+              <b>{{specialOne[1].storeName}}</b>
+              <p class="van-ellipsis">价值 <span>{{specialOne[1].productNowPrice}}元</span>的{{specialOne[1].productTitle}}</p>
             </div>
             <van-button
               round
@@ -122,38 +122,22 @@
     <!-- 惠享优选 -->
     <section class="home_Optimization">
       <header>
-        <van-image
-          width="20"
-          height="20"
-          style="top: 7px"
-          :src="require('@/assets/img/home/home-icon-recommend.png')"
-        />
+        <van-image width="20" height="20" style="top: 7px" :src="require('@/assets/img/home/home-icon-recommend.png')"/>
         <label>惠享优选</label>
       </header>
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text=""
-          @load="onLoad"
-        >
-          <article
-            v-for="item in list"
-            :key="item[0]"
-            @click="Url('/details/1')"
-          >
-            <van-image width="100%" height="100%" :src="item.img"></van-image>
-            <label class="van-ellipsis" style="font-size: 18px"
-              >贤合庄火锅</label
-            >
+        <van-list v-model="loading" :finished="finished" finished-text="" @load="onLoad">
+          <article v-for="item in productList" :key="item[0]" @click="Url('/details/1')">
+            <van-image width="100%" height="100%" :src="item.productCoverImg"></van-image>
+            <label class="van-ellipsis" style="font-size: 18px">{{item.productTitle}}</label>
             <p class="van-multi-ellipsis--l2">
-              贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅
+              {{item.productSubtitle}}
             </p>
             <p style="display: flex; justify-content: space-between">
-              <b>￥199</b> <del>￥699</del>
-              <span>已售:699</span>
+              <b>￥{{item.productNowPrice}}</b> <del>￥{{item.productOriginalPrice}}</del>
+              <span>已售:{{item.productSaleVolume}}</span>
             </p>
-            <span class="bq">返05￥-10￥</span>
+            <span class="bq">返{{item.commissionHeigh}}￥-{{item.allCount}}￥</span>
           </article>
         </van-list>
         <van-divider v-show="finished">我是有底线的</van-divider>
@@ -172,10 +156,17 @@ import banner from "../../components/banner";
 import footer from "../../components/footer";
 import advertisement from "../../components/advertisement";
 import home_banner from "../../components/home_banner";
+import publicJs, {request} from "../../plugins/js/publicJs";
+import axios from "axios";
+
 export default {
   name: "home",
   data() {
     return {
+      productList: [],
+      specialOneBig: {},
+      specialOne: [{productSpecialImg: ''}, {productSpecialImg: ''}],
+
       time: 30 * 60 * 60 * 1000,
       bannerList: [
         {
@@ -216,7 +207,42 @@ export default {
     "v-advertisement": advertisement,
     "home-banner": home_banner,
   },
+  created() {
+    this.initProduct();
+  },
   methods: {
+    initProduct(){
+      request({
+        url:publicJs.urls.selectIndexProduct,
+        method:'get',
+      }).then(res => {
+        var specialOne = [];
+        for (let i = 0; i < res.data.length; i++) {
+          res.data[i].saleTime = this.nowDate > res.data[i].productSaleTime;
+          res.data[i].productCoverImg = this.getImg(res.data[i].productCoverImg);
+          res.data[i].allCount = res.data[i].commissionLow + res.data[i].commissionMiddle + res.data[i].commissionHeigh;
+          if (res.data[i].productSpecial === '3' && res.data[i].productSpecialStatus === '1'){
+            res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
+            this.specialOneBig = res.data[i];
+          }
+          if (res.data[i].productSpecial === '4' && res.data[i].productSpecialStatus === '1'){
+            res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
+            specialOne.push(res.data[i]);
+          }
+        }
+        this.productList = res.data;
+        this.specialOne = specialOne;
+      })
+    },
+    //图片获取路径拼接
+    getImg(id){
+      if (id){
+        return axios.defaults.baseURL + publicJs.urls.selectFile + "?id=" + id;
+      } else {
+        return "";
+      }
+    },
+
     onLoad() {
       console.log(true);
       setTimeout(() => {
@@ -256,6 +282,7 @@ export default {
 </script>
 
 <style lang='scss'>
+  @import "../../plugins/css/userScss";
 .home {
   .home_time {
     margin-top: 45px;

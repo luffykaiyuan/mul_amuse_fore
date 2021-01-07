@@ -7,82 +7,26 @@
         :style="{
           background: `url(${data_list[0].bg})`,
         }"
+        v-for="item in productList" :key="item[0]"
       >
         <div class="banner-header">
           <div class="left">
             <img :src="data_list[0].logo" alt="" />
           </div>
           <div class="middle">
-            <div class="name">{{ data_list[0].title }}</div>
-            <div class="text">{{ data_list[0].txt }}</div>
+            <div class="name">{{ item.storeName }}</div>
+            <div class="text">{{ item.productTitle }}</div>
           </div>
           <div class="right">
             <div class="btn" style="color: #b11123">立即购买</div>
           </div>
         </div>
         <div class="banner-main">
-          <div
-            class="card"
-            v-for="(item, index) in data_list[0].list"
-            :key="index"
-          >
-            <van-image width="100%" height="80px" :src="item.img"></van-image>
+          <div class="card">
+            <van-image width="100%" height="80px" :src="item.productSpecialImg"></van-image>
           </div>
-        </div>
-      </div>
-      <div
-        :class="move ? 'banner2 banner hide' : 'banner2 banner'"
-        @click="Url(data_list[1].link)"
-        :style="{ background: `url(${data_list[1].bg})` }"
-      >
-        <div class="banner-header">
-          <div class="left">
-            <img :src="data_list[1].logo" alt="" />
-          </div>
-          <div class="middle">
-            <div class="name">{{ data_list[1].title }}</div>
-            <div class="text">{{ data_list[1].txt }}</div>
-          </div>
-          <div class="right">
-            <div class="btn" style="color: #b11123">立即购买</div>
-          </div>
-        </div>
-        <div class="banner-main">
-          <div
-            @click="Url(data_list[1].link)"
-            class="card"
-            v-for="(item, index) in data_list[1].list"
-            :key="index"
-          >
-            <van-image width="100%" height="80px" :src="item.img"></van-image>
-          </div>
-        </div>
-      </div>
-      <div
-        :class="move ? 'banner3 banner hide' : 'banner3 banner'"
-        @click="Url(data_list[2].link)"
-        :style="{ background: `url(${data_list[2].bg})` }"
-      >
-        <div class="banner-header">
-          <div class="left">
-            <img :src="data_list[2].logo" alt="" />
-          </div>
-          <div class="middle">
-            <div class="name">{{ data_list[2].title }}</div>
-            <div class="text">{{ data_list[2].txt }}</div>
-          </div>
-          <div class="right">
-            <div class="btn" style="color: #b11123">立即购买</div>
-          </div>
-        </div>
-        <div class="banner-main">
-          <div
-            class="card"
-            @click="Url(data_list[2].link)"
-            v-for="(item, index) in data_list[2].list"
-            :key="index"
-          >
-            <van-image width="100%" height="80px" :src="item.img"></van-image>
+          <div class="card">
+            <van-image width="100%" height="80px" :src="item.productSpecialImg2"></van-image>
           </div>
         </div>
       </div>
@@ -90,9 +34,13 @@
   </div>
 </template>
 <script>
+import publicJs, {request} from "../plugins/js/publicJs";
+import axios from "axios";
+
 export default {
   data() {
     return {
+      productList: [],
       data_list: [
         {
           bg: require("@/assets/img/home/home-bg-recom.png"),
@@ -171,18 +119,42 @@ export default {
       touch_x: "",
     };
   },
+  created() {
+    this.initProduct();
+  },
   methods: {
+    initProduct(){
+      request({
+        url:publicJs.urls.selectIndexTwoShow,
+        method:'get',
+      }).then(res => {
+        for (let i = 0; i < res.data.length; i++) {
+          res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
+          res.data[i].productSpecialImg2 = this.getImg(res.data[i].productSpecialImg2);
+        }
+        this.productList = res.data;
+      })
+    },
+    //图片获取路径拼接
+    getImg(id){
+      if (id){
+        return axios.defaults.baseURL + publicJs.urls.selectFile + "?id=" + id;
+      } else {
+        return "";
+      }
+    },
+
     changeBannerRight() {
-      let banner_data = this.data_list.shift(0);
-      this.data_list.push(banner_data);
+      let banner_data = this.productList.shift(0);
+      this.productList.push(banner_data);
       this.move = true;
       setTimeout(() => {
         this.move = false;
       }, 500);
     },
     changeBannerLeft() {
-      let banner_data = this.data_list.pop(this.data_list.length - 1);
-      this.data_list.unshift(banner_data);
+      let banner_data = this.productList.pop(this.productList.length - 1);
+      this.productList.unshift(banner_data);
       this.move = true;
       setTimeout(() => {
         this.move = false;

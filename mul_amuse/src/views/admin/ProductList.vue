@@ -24,7 +24,10 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.productTitle" label="产品名称"></v-text-field>
+                      <v-text-field v-model="editedItem.productTitle" label="产品标题"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.productSubtitle" label="产品副标题"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-select :items="typeSelect" item-text="label" item-value="value" v-model="editedItem.productType" label="产品类型"></v-select>
@@ -147,7 +150,7 @@ export default {
     dialogDelete: false,
     headers: [
       { text: '产品ID', align: 'start', sortable: false, value: 'id',},
-      { text: '产品名称', align: 'start', sortable: false, value: 'productTitle',},
+      { text: '产品标题', align: 'start', sortable: false, value: 'productTitle',},
       { text: '产品类型', sortable: false, value: 'productTypeBack'  },
       { text: '是否免费', sortable: false, value: 'productFreeBack' },
       { text: '产品现价', sortable: false, value: 'productNowPrice' },
@@ -159,7 +162,7 @@ export default {
     editedIndex: -1,
 
     typeSelect: [{label:'虚拟产品', value: '0'}, {label:'实体产品', value: '1'}, {label:'预约产品', value: '2'}],
-    specialSelect: [{label:'普通产品', value: '0'}, {label:'店铺推荐', value: '1'}, {label:'店铺精选', value: '2'}],
+    specialSelect: [{label:'普通产品', value: '0'}, {label:'限时购首屏', value: '3'}, {label:'限时购', value: '4'}, {label:'品牌推荐', value: '5'}],
     sureSelect: [{label:'否', value: '0'}, {label:'是', value: '1'}],
     saleStatusSelect: [{label:'销售', value: '1'}, {label:'预售', value: '2'}],
     saleTimeModal: false,
@@ -171,6 +174,7 @@ export default {
       productFree: '0',
       productSpecial: '0',
       productTitle: '',
+      productSubtitle: '',
       productSaleStatus: '',
       productSaleTime: new Date().toISOString().substr(0, 10),
       productOriginalPrice: 0.0,
@@ -190,6 +194,7 @@ export default {
       productFree: '0',
       productSpecial: '0',
       productTitle: '',
+      productSubtitle: '',
       productSaleStatus: '',
       productSaleTime: '',
       productOriginalPrice: 0.0,

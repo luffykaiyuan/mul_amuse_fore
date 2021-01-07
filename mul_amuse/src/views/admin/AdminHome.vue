@@ -43,6 +43,11 @@
               <span>型号列表</span>
             </router-link>
           </a-menu-item>
+          <a-menu-item key="/timeLimit">
+            <router-link to="/timeLimit" tag="div">
+              <span>惠享限时购</span>
+            </router-link>
+          </a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="用户信息">
           <span slot="title"><a-icon type="user" /><span>用户信息</span></span>

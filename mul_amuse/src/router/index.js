@@ -45,6 +45,7 @@ import Address from "../views/user/Address";
 import Box from "../views/user/Box";
 import Order from "../views/user/Order";
 import Card from "../views/user/Card";
+import TimeLimit from "../views/admin/TimeLimit";
 
 Vue.use(Router)
 
@@ -255,6 +256,16 @@ const route = new Router({
         {
           path: '/modelList',
           component: ModelList,
+          meta: {
+            module: "产品信息",
+            requireAuth: true,
+            weRequire: 'admin',
+            roles: ['developer','admin', 'store']
+          }
+        },
+        {
+          path: '/timeLimit',
+          component: TimeLimit,
           meta: {
             module: "产品信息",
             requireAuth: true,
