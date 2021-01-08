@@ -67,7 +67,9 @@ const route = new Router({
       name: 'home',
       component: Home,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
       }
     },
     {
@@ -76,7 +78,9 @@ const route = new Router({
       name: 'Member',
       component: Member,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
       }
     },
     {
@@ -85,7 +89,9 @@ const route = new Router({
       name: 'User',
       component: User,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
       }
     },
     {
@@ -94,7 +100,9 @@ const route = new Router({
       name: 'Details',
       component: Details,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
       }
     },
     {
@@ -103,7 +111,9 @@ const route = new Router({
       name: 'newAddress',
       component: newAddress,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
       }
     },
     {
@@ -112,7 +122,9 @@ const route = new Router({
       name: 'Address',
       component: Address,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
       }
     },
     {
@@ -121,7 +133,9 @@ const route = new Router({
       name: 'Box',
       component: Box,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
       }
     },
     {
@@ -129,7 +143,9 @@ const route = new Router({
       name: "Order",
       component: Order,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
       }
     },
     {
@@ -138,7 +154,9 @@ const route = new Router({
       name: "Card",
       component: Card,
       meta: {
-        requireAuth: false
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
       }
     },
 

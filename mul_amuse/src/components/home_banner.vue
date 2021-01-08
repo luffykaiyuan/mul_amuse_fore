@@ -3,7 +3,7 @@
     <div class="banner-box">
       <div
         :class="move ? 'banner1 banner move' : 'banner1 banner'"
-        @click="Url(data_list[0].link)"
+        @click="Url(item.link)"
         :style="{
           background: `url(${data_list[0].bg})`,
         }"
@@ -129,6 +129,7 @@ export default {
         method:'get',
       }).then(res => {
         for (let i = 0; i < res.data.length; i++) {
+          res.data[i].link = "/details/" + res.data[i].id;
           res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
           res.data[i].productSpecialImg2 = this.getImg(res.data[i].productSpecialImg2);
         }

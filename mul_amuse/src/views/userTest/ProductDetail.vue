@@ -155,10 +155,6 @@ export default {
         this.visible = true;
       }
     },
-    handleOk(e) {
-      this.$router.push("/login");
-      this.visible = false;
-    },
     //图片获取路径拼接
     getImg(id){
       if (id){

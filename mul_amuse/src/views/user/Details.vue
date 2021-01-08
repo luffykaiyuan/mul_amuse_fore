@@ -15,12 +15,12 @@
     >
       <v-banner :HomeState="false" :Arr="bannerList"></v-banner>
       <div class="deatils_title">
-        <p><b>￥118</b> <del>门市价：￥259</del></p>
-        <p style="margin-top: 5px">剩余18件</p>
+        <p><b>￥{{productInfo.productNowPrice}}</b> <del>门市价：￥{{productInfo.productOriginalPrice}}</del></p>
+        <p style="margin-top: 5px">销售{{productInfo.productSaleVolume}}件</p>
       </div>
       <div class="deatils_name">
         <p>
-          <b>龙吟台五百元尊享双人套餐</b>
+          <b>{{productInfo.productTitle}}</b>
           <span @click="fxs()">
             <van-image
               width="20"
@@ -43,9 +43,9 @@
               font-size: 13px;
               border-radius: 10px;
             "
-            >佣金：05-10元</span
+            >佣金：{{productInfo.commissionHeigh}}-{{productInfo.allCount}}元</span
           >
-          <span style="color: gray; font-size: 13px">总份数:100</span>
+          <span style="color: gray; font-size: 13px">库存:{{chooseModel.modelStock}}</span>
         </p>
       </div>
       <van-dialog v-model="fx">
@@ -66,12 +66,9 @@
       <section>
         <header>规格选择</header>
         <article>
-          <van-tabs type="line" border style="width: 100%">
-            <van-tab title="258双人套餐"
-              >258双人套餐258双人套餐258双人套餐</van-tab
-            >
-            <van-tab title="258双人套餐"
-              >258双人套餐258双人套餐258双人套餐258双人套餐258双人套餐</van-tab
+          <van-tabs type="line" border style="width: 100%" @click="modelChange">
+            <van-tab :title="item.modelName" v-for="item in modelList" :key="item[0]"
+                    >{{item.modelName}}</van-tab
             >
           </van-tabs>
         </article>
@@ -80,7 +77,7 @@
       <section class="dp_info">
         <header>店铺信息</header>
         <article>
-          <li v-for="item in 3" :key="item[0]">
+          <li v-for="item in addressList" :key="item[0]">
             <div>
               <span>
                 <van-image
@@ -89,42 +86,42 @@
                   height="20"
                   :src="require('@/assets/img/details/details-icon-address.png')"
                 ></van-image>
-                <span class="custom-title">龙鳞台（太古里店）</span>
+                <span class="custom-title">{{item.storeName}}</span>
               </span>
-              <p>中国.四川.成都高新区天府- -街888号</p>
+              <p>{{item.storeAddress}}</p>
             </div>
             <van-image
               width="20"
               height="20"
-              @click="phone"
+              @click="navigation(item)"
               :src="require('@/assets/img/details/details-icon-phone.png')"
             ></van-image>
           </li>
           <!-- 更多 -->
-          <van-collapse v-model="activeName" accordion :border="false">
-            <van-collapse-item title="更多" name="1">
-              <li v-for="item in 5" :key="item[0]">
-                <div>
-                  <span>
-                    <van-image
-                      width="15"
-                      style="margin-right: 5px"
-                      height="20"
-                      :src="require('@/assets/img/details/details-icon-address.png')"
-                    ></van-image>
-                    <span class="custom-title">龙鳞台（太古里店）</span>
-                  </span>
-                  <p>中国.四川.成都高新区天府- -街888号</p>
-                </div>
-                <van-image
-                  width="20"
-                  height="20"
-                  @click="phone"
-                  :src="require('@/assets/img/details/details-icon-phone.png')"
-                ></van-image>
-              </li>
-            </van-collapse-item>
-          </van-collapse>
+<!--          <van-collapse v-model="activeName" accordion :border="false">-->
+<!--            <van-collapse-item title="更多" name="1">-->
+<!--              <li v-for="item in 5" :key="item[0]">-->
+<!--                <div>-->
+<!--                  <span>-->
+<!--                    <van-image-->
+<!--                      width="15"-->
+<!--                      style="margin-right: 5px"-->
+<!--                      height="20"-->
+<!--                      :src="require('@/assets/img/details/details-icon-address.png')"-->
+<!--                    ></van-image>-->
+<!--                    <span class="custom-title">龙鳞台（太古里店）</span>-->
+<!--                  </span>-->
+<!--                  <p>中国.四川.成都高新区天府- -街888号</p>-->
+<!--                </div>-->
+<!--                <van-image-->
+<!--                  width="20"-->
+<!--                  height="20"-->
+<!--                  @click="phone"-->
+<!--                  :src="require('@/assets/img/details/details-icon-phone.png')"-->
+<!--                ></van-image>-->
+<!--              </li>-->
+<!--            </van-collapse-item>-->
+<!--          </van-collapse>-->
         </article>
       </section>
       <!-- 详情 -->
@@ -153,6 +150,8 @@
 
 <script>
 import banner from "../../components/banner";
+import publicJs, {request} from "../../plugins/js/publicJs";
+import axios from "axios";
 export default {
   name: "deatils",
   data() {
@@ -160,16 +159,7 @@ export default {
       show: false,
       fx: false,
       activeName: "0",
-      bannerList: [
-        {
-          img: require("@/assets/img/member/member-banner-poster1.png"),
-          link: "/",
-        },
-        {
-          img: require("@/assets/img/member/member-banner-poster1.png"),
-          link: "/",
-        },
-      ],
+      bannerList: [{}],
       html: `<section data-role="outer" label="Powered by 135editor.com" style="">
     <p><strong
             style="color: rgb(51, 51, 51); font-size: 17.92px; letter-spacing: 1.5px; text-align: center; caret-color: red; -webkit-tap-highlight-color: transparent; font-family: 微软雅黑, &quot;Microsoft YaHei&quot;;"><span
@@ -467,12 +457,156 @@ export default {
         <p><br></p>
     </section>
 </section>`,
+      userId: '',
+      storeId: '',
+      productId: '',
+      modelId: '',
+      chooseModel: {},
+      userInfo: {},
+      superInfo: {},
+      productInfo: {},
+      modelList: [],
+      addressList: [],
+      visible: false,
     };
   },
   components: {
     "v-banner": banner,
   },
+  created() {
+    this.userId = localStorage.getItem("userToken");
+    // this.userId = 'e9f731b4ca2848b2';
+    this.productId = this.$route.params.id;
+    this.initUser();
+    this.initSuper();
+    this.initProdect();
+    this.initModel();
+  },
   methods: {
+    initUser(){
+      request({
+        url:publicJs.urls.selectUserById + "?id=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.userInfo = res.data;
+      })
+    },
+    initSuper(){
+      request({
+        url:publicJs.urls.selectByUserId + "?userId=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.superInfo = res.data;
+      })
+    },
+    initProdect(){
+      request({
+        url:publicJs.urls.selectProductById + "?id=" + this.productId,
+        method:'get',
+      }).then(res => {
+        var bannerList = [];
+        var banner = {};
+        banner.img = this.getImg(res.data.productMainImg1);
+        banner.link = "/";
+        bannerList.push(banner);
+        if (res.data.productMainImg2){
+          banner = {};
+          banner.img = this.getImg(res.data.productMainImg2);
+          banner.link = "/";
+          bannerList.push(banner);
+          if (res.data.productMainImg3){
+            banner = {};
+            banner.img = this.getImg(res.data.productMainImg3);
+            banner.link = "/";
+            bannerList.push(banner);
+            if (res.data.productMainImg4) {
+              banner = {};
+              banner.img = this.getImg(res.data.productMainImg4);
+              banner.link = "/";
+              bannerList.push(banner);
+              if(res.data.productMainImg5){
+                banner = {};
+                banner.img = this.getImg(res.data.productMainImg5);
+                banner.link = "/";
+                bannerList.push(banner);
+              }
+            }
+          }
+        }
+        this.bannerList = bannerList;
+        res.data.allCount = res.data.commissionLow + res.data.commissionMiddle + res.data.commissionHeigh;
+        this.productInfo = res.data;
+        this.storeId = res.data.storeId;
+        this.initStore();
+      }).catch(err => {
+        this.$message.error("初始化错误！！")
+      })
+    },
+    initModel(){
+      request({
+        url:publicJs.urls.selectModelByProduct + "?productId=" + this.productId,
+        method:'get',
+      }).then(res => {
+        this.chooseModel = res.data[0];
+        this.modelList = res.data;
+      }).catch(err => {
+        this.$message.error("初始化错误！！")
+      })
+    },
+    initStore(){
+      request({
+        url:publicJs.urls.selectAllNormalStore + "?storeId=" +this.storeId,
+        method:'get',
+      }).then(res => {
+        this.addressList = res.data;
+      })
+    },
+    buyProduct(){
+      //检验是否登录
+      if (this.userId){
+        //校验是否为会员产品
+        if (this.productInfo.productFree === '1'){
+          //校验用户是否为会员
+          if (this.userInfo.userRank === '1'){
+            //校验会员剩余次数
+            if (this.superInfo.haveNumber > 0){
+              this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
+            }else {
+              this.$message.warning("您的换购次数不足！！")
+            }
+          }else {
+            this.$message.warning("此产品为会员产品！！")
+          }
+        }else {
+          this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
+        }
+      }else {
+        this.visible = true;
+      }
+    },
+    //图片获取路径拼接
+    getImg(id){
+      if (id){
+        return axios.defaults.baseURL + publicJs.urls.selectFile + "?id=" + id;
+      } else {
+        return "";
+      }
+    },
+    navigation(item){
+      var url = 'http://api.map.baidu.com/direction?origin=四川科技馆&' +
+        'destination=latlng:' + item.latitude +',' + item.longitude + '|name:' + item.storeName +
+        '&mode=driving&region=成都&output=html&src=webapp.baidu.openAPIdemo';
+      window.location = url;
+    },
+    modelChange(name, title) {
+      for (let i = 0; i < this.modelList.length; i++) {
+        if (this.modelList[i].modelName === title){
+          this.chooseModel = this.modelList[i];
+          break;
+        }
+      }
+    },
+
     userphone() {
       this.show = true;
     },

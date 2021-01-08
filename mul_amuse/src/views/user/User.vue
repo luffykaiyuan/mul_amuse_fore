@@ -355,6 +355,7 @@ export default {
   components: {
     "v-footer": footer,
   },
+  
   methods: {
     onLoad() {
       console.log(true);

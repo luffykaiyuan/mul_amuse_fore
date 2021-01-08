@@ -33,6 +33,8 @@ const urls = {
   selectIndexOneShow: '/product/selectIndexOneShow',
   selectIndexTwo: '/product/seleselectIndexTwoctIndexOneShow',
   selectIndexTwoShow: '/product/selectIndexTwoShow',
+  selectVipOneShow: '/product/selectVipOneShow',
+  selectVipTwoShow: '/product/selectVipTwoShow',
   insertProduct: '/product/insertProduct',
   updateProduct: '/product/updateProduct',
   updateBig: '/product/updateBig',

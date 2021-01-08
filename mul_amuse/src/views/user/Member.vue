@@ -28,21 +28,19 @@
       </header>
       <article class="member_center">
         <ul>
-          <li v-for="item in 6" :key="item[0]" @click="Url('/')">
+          <li v-for="item in productOne" :key="item[0]" @click="Url('/details/' + item.id)">
             <van-image
               width="100%"
-              :src="
-                require('@/assets/img/member/member-cover2.png')
-              "
+              :src="item.productSpecialImg"
             ></van-image>
             <div class="member_center_footer">
               <div class="member_center_footer_left">
-                <label>龙拎台河鲜四人餐</label>
-                <p>价值500元尊享四人餐</p>
+                <label>{{item.productTitle}}</label>
+                <p>{{item.productSubtitle}}</p>
               </div>
               <div class="member_center_footer_right">
-                <del>￥500</del>
-                <b>￥328</b>
+                <del>￥{{item.productOriginalPrice}}</del>
+                <b>￥{{item.productVipPrice}}</b>
               </div>
             </div>
           </li>
@@ -63,22 +61,20 @@
       </header>
       <article class="member_isFrr">
         <ul>
-          <li v-for="item in 4" :key="item[0]" @click="Url('/')">
+          <li v-for="item in productTwo" :key="item[0]" @click="Url('/details/' + item.id)">
             <van-image
               width="100%"
               height="100%"
-              :src="
-                require('@/assets/img/member/member-cover1.png')
-              "
+              :src="item.productSpecialImg"
             ></van-image>
             <div class="member_isFrr_footer">
               <div class="member_isFrr_footer_one">
-                <label>龙拎台河鲜四人餐</label>
-                <del>￥328</del>
+                <label>{{item.productTitle}}</label>
+                <del>￥{{item.productOriginalPrice}}</del>
               </div>
               <div class="member_isFrr_footer_two">
                 <p class="van-ellipsis">
-                  价值500元尊享四人餐价值500元尊享四人餐
+                  {{item.productSubtitle}}
                 </p>
               </div>
             </div>
@@ -98,26 +94,25 @@
       >
         <section
           class="member_mf"
-          @click="Url('/')"
+          @click="Url('/details/' + item.id)"
           v-for="item in list"
           :key="item[0]"
         >
           <van-image
             width="100%"
             height="100%"
-            :src="require('@/assets/img/member/member-cover3.png')"
+            :src="item.productCoverImg"
           ></van-image>
           <p>
-            <span>【贤合双人餐】</span
-            >到店吃套餐，【素菜】竹荪、小木耳、香菇，【素菜】竹荪、小木耳、香菇【素菜】竹荪、小木耳、香菇。
+            <span>{{item.productTitle}}</span
+            >{{item.productSubtitle}}
           </p>
           <div class="member_mf_footer">
             <p class="member_mf_footer_left">
-              <b>￥39.3</b>
-              <del>门市价：￥198</del>
-              <span>返05￥-10￥</span>
+              <b>￥{{item.productVipPrice}}</b>
+              <del>门市价：￥{{item.productOriginalPrice}}</del>
             </p>
-            <p>销售量：689</p>
+            <p>销售量：{{item.productSaleVolume}}</p>
           </div>
         </section>
       </van-list>
@@ -132,10 +127,20 @@
 import banner from "../../components/banner";
 import footer from "../../components/footer";
 import advertisement from "../../components/advertisement";
+import publicJs, {request} from "../../plugins/js/publicJs";
+import axios from "axios";
 export default {
   name: "member",
   data() {
     return {
+      userId: '',
+      nowDate: '',
+      userInfo: {},
+      productList:[],
+      productOne:[],
+      productTwo:[],
+      flag: 0,
+
       bannerList: [
         {
           img: require("@/assets/img/member/member-banner-poster1.png"),
@@ -146,24 +151,7 @@ export default {
           link: "/",
         },
       ],
-      list: [
-        {
-          img: require("@/assets/img/home/home-cover1.png"),
-          title: "贤合庄火锅",
-          desc: "贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅",
-          price: 199,
-          noprice: 699,
-          toprice: 30,
-        },
-        {
-          img: require("@/assets/img/home/home-procover.png"),
-          title: "贤合庄火锅",
-          desc: "贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅",
-          price: 199,
-          noprice: 699,
-          toprice: 30,
-        },
-      ],
+      list: [],
       loading: false,
       finished: false,
       refreshing: false,
@@ -174,7 +162,56 @@ export default {
     "v-footer": footer,
     "v-advertisement": advertisement,
   },
+  created() {
+    this.userId = localStorage.getItem("userToken");
+    // this.userId = 'e9f731b4ca2848b2';
+    var myDate = new Date();
+    this.nowDate = myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
+    this.initUser();
+  },
   methods: {
+    initUser(){
+      request({
+        url:publicJs.urls.selectUserById + "?id=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.userInfo = res.data;
+        this.initProduct();
+      })
+    },
+    initProduct(){
+      request({
+        url:publicJs.urls.selectSuperProduct + "?userId=" + this.userInfo.id,
+        method:'get',
+      }).then(res => {
+        var vipOne = [];
+        var vipTwo = [];
+        for (let i = 0; i < res.data.length; i++) {
+          res.data[i].productCoverImg = this.getImg(res.data[i].productCoverImg);
+          res.data[i].saleTime = this.nowDate > res.data[i].productSaleTime;
+          if (res.data[i].productSpecial === '1'){
+            res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
+            vipOne.push(res.data[i]);
+          }
+          if (res.data[i].productSpecial === '2'){
+            res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
+            vipTwo.push(res.data[i]);
+          }
+        }
+        this.productList = res.data;
+        this.productOne = vipOne;
+        this.productTwo = vipTwo;
+      })
+    },
+    //图片获取路径拼接
+    getImg(id){
+      if (id){
+        return axios.defaults.baseURL + publicJs.urls.selectFile + "?id=" + id;
+      } else {
+        return "";
+      }
+    },
+
     onLoad() {
       console.log(true);
       setTimeout(() => {
@@ -183,20 +220,16 @@ export default {
           this.refreshing = false;
         }
 
-        for (let i = 0; i < 4; i++) {
-          this.list.push({
-            img: require("@/assets/img/home/home-procover.png"),
-            title: "贤合庄火锅",
-            desc:
-              "贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅",
-            price: 199,
-            noprice: 699,
-            toprice: 30,
-          });
+        var overFlag = this.flag + 4;
+        for (let i = this.flag; i < overFlag; i++, this.flag++) {
+          if (i >= this.productList.length){
+            break;
+          }
+          this.list.push(this.productList[i]);
         }
         this.loading = false;
 
-        if (this.list.length >= 10) {
+        if (this.list.length >= this.productList.length) {
           this.finished = true;
         }
       }, 1000);

@@ -26,7 +26,7 @@
           height="20"
           :src="require('@/assets/img/home/home-icon-navigation.png')"
         />
-        <span>广州市</span>
+        <span>成都市</span>
       </p>
     </div>
   </div>
@@ -47,6 +47,8 @@ export default {
     Arr: {
       type: Array,
     },
+  },
+  created() {
   },
 };
 </script>

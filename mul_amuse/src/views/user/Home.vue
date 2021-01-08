@@ -32,7 +32,7 @@
       </header>
       <article>
         <van-image
-          @click="Url('/details/1')"
+          @click="Url('/details/' + specialOneBig.id)"
           width="100%"
           height="100%"
           :src="specialOneBig.productSpecialImg"
@@ -44,7 +44,7 @@
           </div>
           <van-button
             round
-            @click="Url('/details/1')"
+            @click="Url('/details/' + specialOneBig.id)"
             size="mini"
             color="#b11123"
             style="margin: 10px 0"
@@ -59,7 +59,7 @@
           <van-image
             width="100%"
             height="100%"
-            @click="Url('/details/1')"
+            @click="Url('/details/' + specialOne[0].id)"
             :src="specialOne[0].productSpecialImg"
           />
           <div class="home_center_footer">
@@ -69,7 +69,7 @@
             </div>
             <van-button
               round
-              @click="Url('/details/1')"
+              @click="Url('/details/' + specialOne[0].id)"
               color="#b11123"
               size="mini"
               style="margin: 10px 0"
@@ -83,7 +83,7 @@
           <van-image
             width="100%"
             height="100%"
-            @click="Url('/details/1')"
+            @click="Url('/details/' + specialOne[1].id)"
             :src="specialOne[1].productSpecialImg"
           />
           <div class="home_center_footer">
@@ -93,7 +93,7 @@
             </div>
             <van-button
               round
-              @click="Url('/details/1')"
+              @click="Url('/details/' + specialOne[1].id)"
               color="#b11123"
               size="mini"
               style="margin: 10px 0"
@@ -127,7 +127,7 @@
       </header>
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" finished-text="" @load="onLoad">
-          <article v-for="item in productList" :key="item[0]" @click="Url('/details/1')">
+          <article v-for="item in list" :key="item[0]" @click="Url('/details/' + item.id)">
             <van-image width="100%" height="100%" :src="item.productCoverImg"></van-image>
             <label class="van-ellipsis" style="font-size: 18px">{{item.productTitle}}</label>
             <p class="van-multi-ellipsis--l2">
@@ -164,6 +164,7 @@ export default {
   data() {
     return {
       productList: [],
+      flag: 0,
       specialOneBig: {},
       specialOne: [{productSpecialImg: ''}, {productSpecialImg: ''}],
 
@@ -178,24 +179,7 @@ export default {
           link: "true",
         },
       ],
-      list: [
-        {
-          img: require("@/assets/img/home/home-cover1.png"),
-          title: "贤合庄火锅",
-          desc: "贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅",
-          price: 199,
-          noprice: 699,
-          toprice: 30,
-        },
-        {
-          img: require("@/assets/img/home/home-procover.png"),
-          title: "贤合庄火锅",
-          desc: "贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅",
-          price: 199,
-          noprice: 699,
-          toprice: 30,
-        },
-      ],
+      list: [],
       loading: false,
       finished: false,
       refreshing: false,
@@ -212,6 +196,7 @@ export default {
   },
   methods: {
     initProduct(){
+      this.flag = 0;
       request({
         url:publicJs.urls.selectIndexProduct,
         method:'get',
@@ -229,6 +214,7 @@ export default {
             res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
             specialOne.push(res.data[i]);
           }
+
         }
         this.productList = res.data;
         this.specialOne = specialOne;
@@ -251,20 +237,16 @@ export default {
           this.refreshing = false;
         }
 
-        for (let i = 0; i < 4; i++) {
-          this.list.push({
-            img: require("@/assets/img/home/home-procover.png"),
-            title: "贤合庄火锅",
-            desc:
-              "贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅贤合庄火锅",
-            price: 199,
-            noprice: 699,
-            toprice: 30,
-          });
+        var overFlag = this.flag + 4;
+        for (let i = this.flag; i < overFlag; i++, this.flag++) {
+          if (i >= this.productList.length){
+            break;
+          }
+          this.list.push(this.productList[i]);
         }
         this.loading = false;
 
-        if (this.list.length >= 10) {
+        if (this.list.length >= this.productList.length) {
           this.finished = true;
         }
       }, 1000);
