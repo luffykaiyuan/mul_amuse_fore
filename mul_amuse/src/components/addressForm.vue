@@ -1,4 +1,3 @@
-
 <template>
   <div class="addressForm">
     <van-form color="red">
@@ -55,7 +54,7 @@
         placeholder="请输入详细地址"
         colon
       />
-      <van-field v-model="ps" :label="psl" placeholder="请输入备注" colon />
+<!--      <van-field v-model="ps" :label="psl" placeholder="请输入备注" colon />-->
     </van-form>
   </div>
 </template>
@@ -66,7 +65,7 @@ export default {
   data() {
     return {
       name: "",
-      ps: "",
+      // ps: "",
       tel: "",
       address: "",
       areaList,
@@ -76,7 +75,7 @@ export default {
       requiredTel: true,
       requiredArea: true,
       namel: "姓" + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + "名",
-      psl: "备" + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + "注",
+      // psl: "备" + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + "注",
       showArea: false,
       value: "",
     };
@@ -105,7 +104,10 @@ export default {
         this.requiredAddress,
         this.requiredName,
         this.requiredArea,
+        this.name,
         this.tel,
+        this.value,
+        this.address,
       ]);
     },
     Focus(value) {
@@ -120,42 +122,15 @@ export default {
       }
     },
     Input(value) {
-      if (value == "name") {
-        this.$emit("childInput", [
-          this.requiredTel,
-          this.requiredArea,
-          this.requiredAddress,
-          this.tel,
-          this.name,
-        ]);
-      }
-      if (value == "tel") {
-        this.$emit("childInput", [
-          this.requiredName,
-          this.requiredArea,
-          this.requiredAddress,
-          this.tel,
-          this.tel,
-        ]);
-      }
-      if (value == "address") {
-        this.$emit("childInput", [
-          this.requiredTel,
-          this.requiredArea,
-          this.requiredName,
-          this.tel,
-          this.address,
-        ]);
-      }
-      if (value == "area") {
-        this.$emit("childInput", [
-          this.requiredTel,
-          this.requiredName,
-          this.requiredAddress,
-          this.tel,
-          this.areaList,
-        ]);
-      }
+      this.$emit("childInput", [
+        this.requiredTel,
+        this.requiredArea,
+        this.requiredAddress,
+        this.tel,
+        this.name,
+        this.value,
+        this.address,
+      ]);
     },
   },
 };

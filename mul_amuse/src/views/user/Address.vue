@@ -8,29 +8,42 @@
 </template>
 
 <script>
-import addressList from "../../components/addressList";
-export default {
-  methods: {
-    linkNewAddress() {
-      this.$router.push({ path: "/newAddress" });
+  import publicJs, {request} from "../../plugins/js/publicJs";
+
+  import addressList from "../../components/addressList";
+  export default {
+    data() {
+      return {
+        userId: '',
+        receiveList: [],
+
+      };
     },
-    Message() {
-      this.$dialog
-        .confirm({
-          message: "是否删除地址",
-        })
-        .then(() => {
-          // on confirm
-        })
-        .catch(() => {
-          // on cancel
-        });
+    created() {
+      this.userId = localStorage.getItem("userToken");
     },
-  },
-  components: {
-    "v-addressList": addressList,
-  },
-};
+    methods: {
+
+      linkNewAddress() {
+        this.$router.push({ path: "/newAddress" });
+      },
+      Message() {
+        this.$dialog
+          .confirm({
+            message: "是否删除地址",
+          })
+          .then(() => {
+            // on confirm
+          })
+          .catch(() => {
+            // on cancel
+          });
+      },
+    },
+    components: {
+      "v-addressList": addressList,
+    },
+  };
 </script>
 
 <style lang="scss">

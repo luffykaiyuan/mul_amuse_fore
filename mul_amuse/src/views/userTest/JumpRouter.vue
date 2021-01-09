@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <p>跳转中......</p>
+  <div style="padding-top: 80%;">
+    <van-loading size="30px" color="#1989fa" type="spinner" vertical>加载中...</van-loading>
   </div>
 </template>
 
@@ -26,6 +26,7 @@
       localStorage.setItem("openId", openId);
       localStorage.setItem("userToken", userId);
 
+      var toPage = toPage.replace('%2F', '/');
       this.$router.push(toPage);
     },
     methods:{

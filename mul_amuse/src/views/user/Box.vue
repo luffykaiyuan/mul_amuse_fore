@@ -8,7 +8,7 @@
       }"
     >
       <van-col span="10" offset="2">
-        <h4>我的惠享总收益：<br />￥ <span style="font-size: 35px">0</span></h4>
+        <h4>我的惠享总收益：<br />￥ <span style="font-size: 35px">{{userCommission.count}}</span></h4>
       </van-col>
       <van-col span="4" offset="8">
         <span class="box_top_sp" @click="spanMessage" style="cursor: pointer"
@@ -22,49 +22,84 @@
         background: `url(${require('@/assets/img/box/box-bg-card.png')})`,
       }"
     >
-      <van-col span="6" offset="2" class="box_body_cols">可提现<br />0</van-col>
-      <van-col span="6" offset="2" class="box_body_cols">已提现<br />0</van-col>
-      <van-col span="6" offset="2" class="box_body_cols"
-        ><span style="cursor: pointer" @click="colMessage">提现中</span
-        ><br />0</van-col
-      >
+      <van-col span="9" offset="3" class="box_body_cols">可提现<br />{{userCommission.waitWithdrawal}}</van-col>
+      <van-col span="9" offset="3" class="box_body_cols">已提现<br />{{userCommission.finishWithdrawal}}</van-col>
+<!--      <van-col span="6" offset="2" class="box_body_cols"-->
+<!--        ><span style="cursor: pointer" @click="colMessage">提现中</span-->
+<!--        ><br />0</van-col-->
+<!--      >-->
     </van-row>
     <van-row v-if="stauts === 1">
       <van-col span="24" style="margin-top: 120px">你的小伙伴呢? ...</van-col>
     </van-row>
     <van-row v-if="stauts === 2" style="font-size: 13px">
-      <van-row v-if="stauts == '2'" style="margin: 20px">
+      <van-row style="margin: 20px">
         <van-col span="8">达人性名</van-col>
         <van-col span="8">消费</van-col>
         <van-col span="8">为您带来的收益</van-col>
       </van-row>
-      <van-row v-if="stauts == '2'" style="" class="box_body_data">
-        <van-col span="8">代**</van-col>
-        <van-col span="8">￥ 888.8</van-col>
-        <van-col span="8">￥ 0</van-col>
-      </van-row>
-      <van-row v-if="stauts == '2'" style="" class="box_body_data">
-        <van-col span="8">代**</van-col>
-        <van-col span="8">￥ 888.8</van-col>
-        <van-col span="8">￥ 0</van-col>
-      </van-row>
-      <van-row v-if="stauts == '2'" style="" class="box_body_data">
-        <van-col span="8">代**</van-col>
-        <van-col span="8">￥ 888.8</van-col>
-        <van-col span="8">￥ 0</van-col>
-      </van-row>
+      <div v-for="item in teamList" :key="item[0]">
+        <van-row style="" class="box_body_data">
+          <van-col span="8">{{item.nickName}}</van-col>
+          <van-col span="8">￥ {{item.userCount}}</van-col>
+          <van-col span="8">￥ {{item.fatherSupport}}</van-col>
+        </van-row>
+      </div>
     </van-row>
   </div>
 </template>
 
 <script>
+import publicJs, {request} from "../../plugins/js/publicJs";
+
 export default {
   data() {
     return {
+      userId: '',
+      userInfo: [],
+      teamList: [],
+      userCommission: {},
       stauts: 2,
     };
   },
+  created() {
+    this.userId = localStorage.getItem("userToken");
+    this.initUser();
+    this.lookTeam();
+    this.lookCommission();
+  },
   methods: {
+    initUser(){
+      request({
+        url:publicJs.urls.selectUserById + "?id=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.userInfo = res.data;
+      })
+    },
+    lookTeam(){
+      request({
+        url:publicJs.urls.selectUserSons + "?fatherId=" +this.userId,
+        method:'get',
+      }).then(res => {
+        if (res.data.length === 0){
+          this.status = 1;
+        }else {
+          this.status = 2;
+          this.teamList = res.data;
+        }
+      })
+    },
+    lookCommission(){
+      request({
+        url:publicJs.urls.selectUserCommission + "?userId=" +this.userId,
+        method:'get',
+      }).then(res => {
+        res.data.count = res.data.waitWithdrawal + res.data.finishWithdrawal;
+        this.userCommission = res.data;
+      })
+    },
+
     spanMessage() {
       this.$dialog.alert({
         title: "收益怎么来的?",

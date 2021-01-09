@@ -29,7 +29,7 @@
               round
               width="70"
               height="70"
-              src="https://img.yzcdn.cn/vant/cat.jpeg"
+              :src="userInfo.headimgurl"
             ></van-image>
           </div>
         </van-col>
@@ -38,7 +38,7 @@
             class="van-ellipsis user_title"
             style="display: flex; justify-content: space-between"
           >
-            读书看报
+            {{userInfo.nickName}}
             <van-image
               style="margin-top: 3px"
               round
@@ -71,9 +71,22 @@
             :percentage="length"
             :show-pivot="false"
           />
-          <router-link to="/" class="router_link" style="float: left"
-            >邀请好友</router-link
-          >
+          <span @click="fxs()">
+            <van-image
+              width="20"
+              height="20"
+              style="position: relative; top: 3px; right: 5px"
+              :src="require('@/assets/img/details/details-icon-share.png')"
+            ></van-image>
+            <span>邀请</span>
+          </span>
+          <van-dialog v-model="fx">
+            <van-image
+              width="100%"
+              height="100%"
+              :src="share"
+            ></van-image>
+          </van-dialog>
         </van-col>
       </van-row>
       <van-row>
@@ -321,10 +334,17 @@
 
 <script>
 import footer from "../../components/footer";
+import publicJs, {request} from "../../plugins/js/publicJs";
+import axios from "axios";
 export default {
   name: "user",
   data() {
     return {
+      userId: '',
+      userInfo: [],
+      fx: false,
+      share: '',
+
       active: 0,
       userState: true, //会员状态
       length: 0,
@@ -355,8 +375,42 @@ export default {
   components: {
     "v-footer": footer,
   },
-  
+  created() {
+    this.userId = localStorage.getItem("userToken");
+    this.initUser();
+  },
   methods: {
+    initUser(){
+      request({
+        url:publicJs.urls.selectUserById + "?id=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.userInfo = res.data;
+      })
+    },
+    fxs() {
+      if (this.share){
+        this.fx = true;
+        this.share = this.getImg(this.share);
+      }else {
+        request({
+          url:publicJs.urls.shareCreateQR + "?qrcodeUrl=" + axios.defaults.baseURL + "/wxLogin/doShareLogin?fatherId=" + this.userId + "%26toPage=home",
+          method:'get',
+        }).then(res => {
+          this.share = this.getImg(res.data);
+          this.fx = true;
+        })
+      }
+    },
+    //图片获取路径拼接
+    getImg(id){
+      if (id){
+        return axios.defaults.baseURL + publicJs.urls.selectFile + "?id=" + id;
+      } else {
+        return "";
+      }
+    },
+
     onLoad() {
       console.log(true);
       setTimeout(() => {

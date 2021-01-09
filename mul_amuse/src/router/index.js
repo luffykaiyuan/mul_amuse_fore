@@ -73,6 +73,17 @@ const route = new Router({
       }
     },
     {
+      //首页
+      path: '/home',
+      name: 'home',
+      component: Home,
+      meta: {
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
+      }
+    },
+    {
       //会员专区
       path: '/member',
       name: 'Member',
@@ -139,7 +150,7 @@ const route = new Router({
       }
     },
     {
-      path: "/order",
+      path: "/order/:userId/:storeId/:productId/:modelId/",
       name: "Order",
       component: Order,
       meta: {
@@ -493,9 +504,10 @@ route.beforeEach((to, from, next) => {
     next();
   }
   var openId = localStorage.getItem("openId");
+  var userId = localStorage.getItem("userToken");
   if (to.meta.requireAuth) {
     if (to.meta.weRequire === 'user'){
-      if (openId) {
+      if (openId && userId) {
         next();
       } else {
         window.location.href = axios.defaults.baseURL + publicJs.urls.doLogin + "?toPage=" + to.fullPath.substr(1);

@@ -52,7 +52,7 @@
         <van-image
           width="100%"
           height="100%"
-          src="https://www.kuadh.com/usr/uploads/2020/11/2114566873.jpg"
+          :src="share"
         ></van-image>
       </van-dialog>
       <van-dialog v-model="show">
@@ -140,7 +140,7 @@
       <van-button type="default" style="witdh: 33%" @click="userphone"
         >联系客服</van-button
       >
-      <van-button type="danger" style="witdh: 33%" @click="Url('/order')"
+      <van-button type="danger" style="witdh: 33%" @click="buyProduct"
         >立即购买</van-button
       >
     </footer>
@@ -158,6 +158,8 @@ export default {
     return {
       show: false,
       fx: false,
+      share: '',
+
       activeName: "0",
       bannerList: [{}],
       html: `<section data-role="outer" label="Powered by 135editor.com" style="">
@@ -539,7 +541,7 @@ export default {
         this.storeId = res.data.storeId;
         this.initStore();
       }).catch(err => {
-        this.$message.error("初始化错误！！")
+        this.$message.error("产品初始化错误！！")
       })
     },
     initModel(){
@@ -550,7 +552,7 @@ export default {
         this.chooseModel = res.data[0];
         this.modelList = res.data;
       }).catch(err => {
-        this.$message.error("初始化错误！！")
+        this.$message.error("型号初始化错误！！")
       })
     },
     initStore(){
@@ -570,7 +572,7 @@ export default {
           if (this.userInfo.userRank === '1'){
             //校验会员剩余次数
             if (this.superInfo.haveNumber > 0){
-              this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
+              this.$router.push("/order/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.chooseModel.id + "/");
             }else {
               this.$message.warning("您的换购次数不足！！")
             }
@@ -578,7 +580,7 @@ export default {
             this.$message.warning("此产品为会员产品！！")
           }
         }else {
-          this.$router.push("/orderSubmit/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.modelId + "/");
+          this.$router.push("/order/" + this.userId + "/" + this.storeId + "/" + this.productId + "/" + this.chooseModel.id + "/");
         }
       }else {
         this.visible = true;
@@ -611,7 +613,18 @@ export default {
       this.show = true;
     },
     fxs() {
-      this.fx = true;
+      if (this.share){
+        this.fx = true;
+        this.share = this.getImg(this.share);
+      }else {
+        request({
+          url:publicJs.urls.shareCreateQR + "?qrcodeUrl=" + axios.defaults.baseURL + "/wxLogin/doShareLogin?fatherId=" + this.userId + "%26toPage=details%2F" + this.productInfo.id,
+          method:'get',
+        }).then(res => {
+          this.share = this.getImg(res.data);
+          this.fx = true;
+        })
+      }
     },
     phone() {
       window.location.href = "tel:400-0000-688";

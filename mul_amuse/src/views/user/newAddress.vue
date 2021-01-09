@@ -8,31 +8,68 @@
 
 <script>
 import addressForm from "../../components/addressForm";
+import publicJs, {request} from "../../plugins/js/publicJs";
 export default {
   data() {
-    return {};
+    return {
+      // addOrUpdate: 'add',
+      // id: '',
+      receiveForm: {
+        userId: '',
+        receiveName: '',
+        receivePhone: '',
+        receiveArea: '',
+        receiveAddress: '',
+      }
+    };
+  },
+  created() {
+    // var id = this.$route.params.id;
+    // if (id){
+    //   this.id = id;
+    //   this.receiveForm = 'update';
+    //   this.initForm(id);
+    // }
   },
   methods: {
+    // initForm(id){
+    //   request({
+    //     url:publicJs.urls.selectById + "?id=" +this.id,
+    //     method:'get',
+    //   }).then(res => {
+    //     this.receiveForm = res.data[0];
+    //   })
+    // },
     childByValue(data) {
       this.requiredTel = data[0];
       this.requiredAddress = data[1];
       this.requiredName = data[2];
       this.requiredArea = data[3];
-      this.tel = data[4];
+
+      this.receiveForm.userId = localStorage.getItem("userToken");
+      this.receiveForm.receiveName = data[4];
+      this.receiveForm.receivePhone = data[5];
+      this.receiveForm.receiveArea = data[6];
+      this.receiveForm.receiveAddress = data[7];
     },
 
     Sumbit() {
-      var result = /^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/.test(
-        this.tel
-      );
+      console.log(this.receiveForm);
       if (
         this.requiredAddress == false &&
         this.requiredName == false &&
         this.requiredArea == false &&
-        this.requiredTel == false &&
-        result
+        this.requiredTel == false
       ) {
-        this.$router.push({ path: "/Address" });
+        request({
+          url:publicJs.urls.insertReceive,
+          method:'post',
+          data: this.receiveForm,
+        }).then(res => {
+          this.$router.push({ path: "/Address" });
+        })
+      }else{
+        this.$message.warning("请确保信息完整！");
       }
     },
   },

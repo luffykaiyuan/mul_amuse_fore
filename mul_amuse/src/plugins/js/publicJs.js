@@ -87,6 +87,8 @@ const urls = {
   updateUserTitle: '/user/updateUserTitle',
   becomeTalent: '/user/becomeTalent',
   loginUser: '/user/loginUser',
+  //UserCommissionCon
+  selectUserCommission: '/userCom/selectUserCommission',
   //CommissionLogCon
   selectUserCommissionLog: '/comLog/selectUserCommissionLog',
   //CashoutLogCon

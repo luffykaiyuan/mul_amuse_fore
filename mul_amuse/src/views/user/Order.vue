@@ -1,9 +1,36 @@
 <template>
   <div class="order">
     <div class="order_body">
-      <v-addressList v-if="status === 1"></v-addressList>
+      <div class="body" v-if="status === 1 && productInfo.productType === '1'" @click="chooseReceive">
+        <div class="address_top">
+          <van-icon
+            name="cross"
+            style="float:left;"
+            class="top_img"
+          />
+        </div>
+        <div class="address_body">
+          <van-icon name="location" class="address_location" />
+          <span id="name">{{defaultReceive.receiveName}}---</span><span id="phone">{{defaultReceive.receivePhone}}</span><br />
+          <span id="area">{{defaultReceive.receiveArea}}/{{defaultReceive.receiveAddress}}</span>
+          <van-icon name="arrow" style="float: right;"/>
+        </div>
+      </div>
+      <van-popup v-model="receiveShow" position="bottom" :style="{ height: '70%' }" >
+        <van-radio-group v-model="radio">
+          <van-cell-group>
+            <van-cell :title="item.receiveName" clickable v-for="item in receiveInfo" @click="radio = item.id">
+              {{item.receiveArea}}/{{item.receiveAddress}}
+              <template #right-icon>
+                <van-radio :name="item.id" />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+        <van-button type="info" style="margin: 20px; float: right;" @click="sureRecive">确认</van-button>
+      </van-popup>
       <v-addressForm
-        v-if="status === 2"
+        v-if="status === 2 && productInfo.productType === '1'"
         v-on:childInput="childInput"
       ></v-addressForm>
       <van-row style="text-align: left; margin-top: 10px" class="shop">
@@ -18,29 +45,23 @@
             "
           >
             <img
-              src="../../assets/img/order/order-pro-cover.png"
+              :src="productInfo.productCoverImg"
               width="100%"
               height="100%"
             /></div
         ></van-col>
-        <van-col span="18"><xmp><商品名></xmp></van-col>
+        <van-col span="18"><xmp><商品名>{{productInfo.productTitle}}</xmp></van-col>
       </van-row>
       <van-row style="text-align: left" class="shop">
-        <van-col span="10">两瓶装</van-col>
+        <van-col span="10">{{modelInfo.modelName}}</van-col>
         <van-col span="14" style="text-align: right; margin-bottom: 20px"
-          >￥66.6</van-col
+          >￥{{modelInfo.modelPrice}}</van-col
         >
         <van-col span="6">购买数量</van-col>
         <van-col span="18" style="text-align: right">
-          <input
-            value="-"
-            type="button"
-            @click="reduce"
-            :disabled="reduce_btn"
-            class="btn"
-          />
-          <span class="num_span">{{ number }}</span>
-          <input value="+" type="button" @click="plus" class="btn" />
+          <input value="-" type="button" @click="reduce" :disabled="reduce_btn" class="btn"/>
+          <span class="num_span">{{ orderInfo.orderCount }}</span>
+          <input value="+" type="button" @click="plus" class="btn" :disabled="plus_btn"/>
         </van-col>
       </van-row>
       <van-row style="margin-top: 12px; margin-left: 15px">
@@ -65,13 +86,14 @@
       </p>
       <van-row class="footer">
         <van-col span="16" class="footer_num"
-          >小计:<span class="footer_money"> ￥66.66</span></van-col
+          >小计:<span class="footer_money"> ￥{{orderInfo.orderPrice}}</span></van-col
         >
         <van-col span="8" style="text-align: right"
           ><van-button
             class="wxzf_btn"
             :disabled="wxzfDisabled"
             :color="wxzfColor"
+            @click="onSubmit"
             >微信支付</van-button
           ></van-col
         >
@@ -155,40 +177,282 @@
   .van-button--disabled {
     background: #8a8a8a !important;
   }
+  .body {
+    background: #ffffff;
+    height: 95px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+  }
+  .address_top {
+    height: 20px;
+  }
+  .address_location {
+    float: left;
+    font-size: 40px;
+    line-height: 50px;
+    color: #971818;
+  }
+  .top_img {
+    color: #9e9e9e;
+    font-size: 18px;
+  }
+  .address_body {
+    text-align: left;
+    font-size: 13px;
+  }
 }
 </style>
 <script>
 import addressList from "../../components/addressList";
 import addressForm from "../../components/addressForm";
+import publicJs, {request} from "../../plugins/js/publicJs";
+import axios from "axios";
 export default {
   components: {
     "v-addressList": addressList,
     "v-addressForm": addressForm,
   },
-
+  created() {
+    this.userId = this.$route.params.userId;
+    this.storeId = this.$route.params.storeId;
+    this.productId = this.$route.params.productId;
+    this.modelId = this.$route.params.modelId;
+    this.initStore();
+    this.initProduct();
+    this.initModel();
+  },
   data() {
     return {
+      userId: '',
+      storeId: '',
+      productId: '',
+      modelId: '',
+      waitResult: false,
+
+      receiveInfo: [],
+      storeInfo: {},
+      productInfo: {},
+      modelInfo: {},
+
+      defaultReceive:{},
+      receiveVisible: false,
+
+      orderInfo: {
+        orderRemark: '',
+        orderCount: 1,
+        orderPrice: 0.0
+      },
+
       checked: false,
-      status: 2,
+      status: 1,
       wxzfDisabled: true,
       wxzfColor: "#09bb07",
       spColor: "rgb(173, 171, 171)",
       number: 1,
       reduce_btn: true,
+      plus_btn: false,
+      receiveShow: false,
+      radio: 1
     };
   },
   methods: {
-    plus() {
-      this.number += 1;
-      this.reduce_btn = false;
+    initReceive(){
+      request({
+        url:publicJs.urls.selectUserReceive + "?userId=" + this.userId,
+        method:'get',
+      }).then(res => {
+        if (res.data.length === 0){
+          this.status = 2;
+        }else {
+          this.status = 1;
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].defaultStatus === "1"){
+              this.defaultReceive = res.data[i];
+              break;
+            }
+          }
+        }
+        this.receiveInfo = res.data;
+      }).catch(err => {
+        this.$message.error("初始化错误！！")
+      })
     },
-    reduce() {
-      this.number -= 1;
-      if (this.number == 1) {
-        this.reduce_btn = true;
+    initStore(){
+      request({
+        url:publicJs.urls.selectStoreById + "?id=" + this.storeId,
+        method:'get',
+      }).then(res => {
+        this.storeInfo = res.data;
+      }).catch(err => {
+        this.$message.error("初始化错误！！")
+      })
+    },
+    initProduct(){
+      request({
+        url:publicJs.urls.selectProductById + "?id=" + this.productId,
+        method:'get',
+      }).then(res => {
+        res.data.productCoverImg = this.getImg(res.data.productCoverImg);
+        if (res.data.productType === "1"){
+          this.initReceive()
+        }
+        this.productInfo = res.data;
+      }).catch(err => {
+        this.$message.error("初始化错误！！")
+      })
+    },
+    initModel(){
+      request({
+        url:publicJs.urls.selectOneModel + "?id=" + this.modelId,
+        method:'get',
+      }).then(res => {
+        this.modelInfo = res.data;
+        res.data.modelPrice = parseFloat(res.data.modelPrice);
+        this.orderInfo.orderPrice = res.data.modelPrice;
+      }).catch(err => {
+        this.$message.error("初始化错误！！")
+      })
+    },
+
+    openReceive(){
+      this.receiveVisible = true;
+    },
+    chooseReceive(item){
+      this.defaultReceive = item;
+      this.receiveVisible = false;
+    },
+
+    handleChange(){
+    },
+    onSubmit() {
+      this.wxzfDisabled = true;
+      this.orderInfo.userId = this.userId;
+      this.orderInfo.storeId = this.storeId;
+      this.orderInfo.productId = this.productId;
+      this.orderInfo.productType = this.productInfo.productType;
+      this.orderInfo.productTitle = this.productInfo.productTitle;
+      this.orderInfo.modelId = this.modelId;
+      this.orderInfo.modelName = this.modelInfo.modelName
+      this.orderInfo.openid = localStorage.getItem("openId");
+      var self = this;
+      request({
+        url:publicJs.urls.checkOrder,
+        method:'post',
+        data: this.orderInfo
+      }).then(res => {
+        if (res.data){
+          if (this.orderInfo.productType === "1"){
+            if (this.status === 2){
+              this.defaultReceive.userId = this.userId;
+              request({
+                url:publicJs.urls.insertReceive,
+                method:'post',
+                data: this.defaultReceive,
+              }).then(res => {
+                this.orderInfo.receiveId = res.data;
+              })
+            }else {
+              this.orderInfo.receiveId = this.defaultReceive.id;
+            }
+          }
+          request({
+            url:publicJs.urls.orders,
+            method:'get',
+          }).then(res => {
+            WeixinJSBridge.invoke( 'getBrandWCPayRequest', {
+                "appId":res.data.appId,     //公众号名称,由商户传入
+                "timeStamp":res.data.timeStamp,         //时间戳,自1970年以来的秒数
+                "nonceStr":res.data.nonceStr, //随机串
+                "package":res.data.package,
+                "signType":res.data.signType,         //微信签名方式：
+                "paySign":res.data.paySign //微信签名
+              },
+              function(res){
+                if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                  //支付成功后的操作
+                  self.submitOrder();
+                }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+                  alert('支付取消');
+                }else if(res.err_msg == "get_brand_wcpay_request:fail"){
+                  alert('支付失败');
+                  WeixinJSBridge.call('closeWindow');
+                } //使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok,但并不保证它绝对可靠。
+              });
+          })
+        }else {
+          alert("库存已被清空！！！")
+        }
+      })
+    },
+    submitOrder(){
+      if (this.productInfo.productFree === "1"){
+        request({
+          url:publicJs.urls.insertFreeOrder,
+          method:'post',
+          data: this.orderInfo
+        }).then(res => {
+          this.$router.push("/home");
+          this.$message.success("下单成功！！")
+        }).catch(err => {
+          this.$message.error(err.data)
+        })
+      }else {
+        request({
+          url:publicJs.urls.insertOrder,
+          method:'post',
+          data: this.orderInfo
+        }).then(res => {
+          this.$router.push("/home");
+          this.$message.success("下单成功！！")
+        }).catch(err => {
+          this.$message.error(err.data)
+        })
       }
     },
+    //图片获取路径拼接
+    getImg(id){
+      if (id){
+        return axios.defaults.baseURL + publicJs.urls.selectFile + "?id=" + id;
+      } else {
+        return "";
+      }
+    },
+    plus() {
+      this.orderInfo.orderCount += 1;
+      this.orderInfo.orderPrice = (this.orderInfo.orderCount * parseFloat(this.modelInfo.modelPrice)).toFixed(2);
+      if (this.orderInfo.orderCount >= this.modelInfo.modelStock){
+        this.plus_btn = true;
+      }
+      this.reduce_btn = false
+    },
+    reduce() {
+      this.orderInfo.orderCount -= 1;
+      this.orderInfo.orderPrice = (this.orderInfo.orderCount * parseFloat(this.modelInfo.modelPrice)).toFixed(2);
+      if (this.orderInfo.orderCount === 1) {
+        this.reduce_btn = true;
+      }
+      this.plus_btn = false;
+    },
+    chooseReceive(){
+      this.radio = this.defaultReceive.id;
+      this.receiveShow = true;
+    },
+    sureRecive(){
+      for (let i = 0; i < this.receiveInfo.length; i++) {
+        if (this.receiveInfo[i].id === this.radio){
+          this.defaultReceive = this.receiveInfo[i];
+          this.receiveShow = false;
+          break;
+        }
+      }
+    },
+
     childInput(data) {
+      this.defaultReceive.receiveName = data[4];
+      this.defaultReceive.receivePhone = data[3];
+      this.defaultReceive.receiveArea = data[5];
+      this.defaultReceive.receiveAddress = data[6];
       var result = /^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/.test(
         data[3]
       );

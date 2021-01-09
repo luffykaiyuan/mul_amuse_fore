@@ -1,42 +1,71 @@
 <template>
   <div class="addressList">
-    <div class="body">
+    <div class="body" v-for="item in receiveList">
       <div class="address_top">
         <van-icon
           name="cross"
           style="float:left;"
           class="top_img"
-          @click="Message"
+          @click="Message(item)"
         />
-        <van-icon
-          @click="linkNewAddress"
-          name="arrow"
-          style="float: right"
-          class="top_img"
-        />
+<!--        <van-icon-->
+<!--          @click="linkNewAddress(item)"-->
+<!--          name="arrow"-->
+<!--          style="float: right"-->
+<!--          class="top_img"-->
+<!--        />-->
       </div>
       <div class="address_body">
         <van-icon name="location" class="address_location" />
-        <span id="name">吴XX</span><span id="phone">18188888888</span><br />
-        <span id="area">四川省成都市锦江区红星路一段创业园区A栋706室</span>
+        <span id="name">{{item.receiveName}}</span><span id="phone">{{item.receivePhone}}</span><br />
+        <span id="area">{{item.receiveArea}}/{{item.receiveAddress}}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import publicJs, {request} from "../plugins/js/publicJs";
+
 export default {
+  data() {
+    return {
+      userId: '',
+      receiveList: [],
+    };
+  },
+  created() {
+    this.userId = localStorage.getItem("userToken");
+    this.getReceive();
+  },
   methods: {
-    linkNewAddress() {
-      this.$router.push({ path: "/newAddress" });
+    getReceive(){
+      request({
+        url:publicJs.urls.selectReceiveList + "?userId=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.receiveList = res.data;
+      })
     },
-    Message() {
+
+    linkNewAddress(item) {
+      this.$router.push({ path: "/newAddress"});
+    },
+    Message(item) {
       this.$dialog
         .confirm({
           message: "是否删除地址",
         })
         .then(() => {
-          // on confirm
+          item.status = '0';
+          request({
+            url:publicJs.urls.updateReceive,
+            method:'post',
+            data: item,
+          }).then(res => {
+            this.$message.success("删除成功！");
+            this.getReceive();
+          })
         })
         .catch(() => {
           // on cancel
@@ -48,7 +77,7 @@ export default {
 
 <style lang="scss">
 .addressList {
-  
+
   margin-bottom: 8px;
   .top {
     background-color: #f5f5f5;
