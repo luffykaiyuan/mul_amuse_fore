@@ -120,32 +120,50 @@
     <!-- 品牌推荐结束 -->
     <v-advertisement></v-advertisement>
     <!-- 惠享优选 -->
-    <section class="home_Optimization">
+    <section>
       <header>
         <van-image width="20" height="20" style="top: 7px" :src="require('@/assets/img/home/home-icon-recommend.png')"/>
         <label>惠享优选</label>
       </header>
+    </section>
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-        <van-list v-model="loading" :finished="finished" finished-text="" @load="onLoad">
-          <article v-for="item in list" :key="item[0]" @click="Url('/details/' + item.id)">
-            <van-image width="100%" height="100%" :src="item.productCoverImg"></van-image>
-            <label class="van-ellipsis" style="font-size: 18px">{{item.productTitle}}</label>
-            <p class="van-multi-ellipsis--l2">
-              {{item.productSubtitle}}
+
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text=""
+          @load="onLoad"
+        >
+          <section
+            class="hx_recommend"
+            @click="Url('/details/' + item.id)"
+            v-for="item in list"
+            :key="item[0]"
+          >
+            <van-image
+              width="100%"
+              height="100%"
+              :src="item.productCoverImg"
+            ></van-image>
+            <p>
+            <span>{{item.productTitle}}</span
+            >{{item.productSubtitle}}
             </p>
-            <p style="display: flex; justify-content: space-between">
-              <b>￥{{item.productNowPrice}}</b> <del>￥{{item.productOriginalPrice}}</del>
-              <span>已售:{{item.productSaleVolume}}</span>
-            </p>
-            <span class="bq">返{{item.commissionHeigh}}￥-{{item.allCount}}￥</span>
-          </article>
+            <div class="hx_recommend_footer">
+              <p class="hx_recommend_footer_left">
+                <b>￥{{item.productVipPrice}}</b>
+                <del>门市价：￥{{item.productOriginalPrice}}</del>
+                <span>返{{item.commissionHeigh}}￥-{{item.allCount}}￥</span>
+              </p>
+              <p>销售量：{{item.productSaleVolume}}</p>
+            </div>
+          </section>
         </van-list>
         <van-divider v-show="finished">我是有底线的</van-divider>
 
       </van-pull-refresh>
 
       <div style="clear: both"></div>
-    </section>
     <!-- 惠享优选结束 -->
     <v-footer :active="0"></v-footer>
   </div>
@@ -331,48 +349,45 @@ export default {
     }
   }
   // 优选
-  .home_Optimization {
-    .van-list {
-      column-count: 2;
-      column-gap: 10px;
-    }
-    article {
-      background: white;
-      padding: 1%;
-      width: 100%;
-      height: 100%;
-      .bq {
-        border-radius: 5px;
-        font-size: 13px;
-        height: 20px;
-        margin-top: 5px;
-        margin-left: 5px;
-        padding: 0 2.5px;
-        background: rgb(248, 185, 11);
-        color: black;
-      }
-      label {
-        font-weight: bold;
-        font-size: 18px;
-      }
-      p {
-        font-size: 14px;
-        color: gray;
-      }
-      b {
-        color: #b11123;
-        font-size: 18px;
-      }
-      del {
-        color: gray;
-        font-size: 14px;
-        margin-top: 3px;
-      }
-      span {
-        font-size: 13px;
-        margin-top: 2px;
-      }
+  .hx_recommend {
+    p {
       text-align: left;
+      span {
+        color: rgb(139, 8, 8);
+      }
+    }
+    .hx_recommend_footer {
+      display: flex;
+      justify-content: space-between;
+      .hx_recommend_footer_left {
+        display: flex;
+        b {
+          color: rgb(173, 14, 14);
+          font-size: 18px;
+          margin-right: 5px;
+        }
+        del {
+          color: gray;
+          margin-top: 5px;
+          font-size: 13px;
+        }
+        span {
+          border-radius: 5px;
+          font-size: 13px;
+          height: 20px;
+          margin-top: 5px;
+          margin-left: 5px;
+          padding: 0 2.5px;
+          background: rgb(248, 185, 11);
+          color: black;
+        }
+        justify-content: space-between;
+      }
+    }
+  }
+  section {
+    label {
+      font-size: 17px;
     }
   }
 }
