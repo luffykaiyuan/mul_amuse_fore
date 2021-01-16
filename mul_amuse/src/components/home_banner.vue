@@ -3,19 +3,18 @@
     <div class="banner-box">
       <div
         :class="move ? 'banner1 banner move' : 'banner1 banner'"
-        @click="Url(item.link)"
+        @click="Url(productList[0].link)"
         :style="{
           background: `url(${data_list[0].bg})`,
         }"
-        v-for="item in productList" :key="item[0]"
       >
         <div class="banner-header">
           <div class="left">
             <img :src="data_list[0].logo" alt="" />
           </div>
           <div class="middle">
-            <div class="name">{{ item.storeName }}</div>
-            <div class="text">{{ item.productTitle }}</div>
+            <div class="name">{{ productList[0].storeName }}</div>
+            <div class="text">{{ productList[0].productTitle }}</div>
           </div>
           <div class="right">
             <div class="btn" style="color: #b11123">立即购买</div>
@@ -23,10 +22,62 @@
         </div>
         <div class="banner-main">
           <div class="card">
-            <van-image width="100%" height="80px" :src="item.productSpecialImg"></van-image>
+            <van-image width="100%" height="80px" :src="productList[0].productSpecialImg"></van-image>
           </div>
           <div class="card">
-            <van-image width="100%" height="80px" :src="item.productSpecialImg2"></van-image>
+            <van-image width="100%" height="80px" :src="productList[0].productSpecialImg2"></van-image>
+          </div>
+        </div>
+      </div>
+      <div
+        :class="move ? 'banner2 banner hide' : 'banner2 banner'"
+        @click="Url(productList[1].link)"
+        :style="{ background: `url(${data_list[1].bg})` }"
+      >
+        <div class="banner-header">
+          <div class="left">
+            <img :src="data_list[1].logo" alt="" />
+          </div>
+          <div class="middle">
+            <div class="name">{{ productList[1].storeName }}</div>
+            <div class="text">{{ productList[1].productTitle }}</div>
+          </div>
+          <div class="right">
+            <div class="btn" style="color: #b11123">立即购买</div>
+          </div>
+        </div>
+        <div class="banner-main">
+          <div class="card">
+            <van-image width="100%" height="80px" :src="productList[1].productSpecialImg"></van-image>
+          </div>
+          <div class="card">
+            <van-image width="100%" height="80px" :src="productList[1].productSpecialImg2"></van-image>
+          </div>
+        </div>
+      </div>
+      <div
+        :class="move ? 'banner3 banner hide' : 'banner3 banner'"
+        @click="Url(productList[2].link)"
+        :style="{ background: `url(${data_list[2].bg})` }"
+      >
+        <div class="banner-header">
+          <div class="left">
+            <img :src="data_list[2].logo" alt="" />
+          </div>
+          <div class="middle">
+            <div class="name">{{ productList[2].storeName }}</div>
+            <div class="text">{{ productList[2].productTitle }}</div>
+          </div>
+          <div class="right">
+            <div class="btn" style="color: #b11123">立即购买</div>
+          </div>
+        </div>
+        <div class="banner-main">
+          <div class="card">
+            <van-image width="100%" height="80px" :src="productList[2].productSpecialImg"></van-image>
+          </div>
+          <div class="card">
+            <van-image width="100%" height="80px" :src="productList[2].productSpecialImg2"></van-image>
           </div>
         </div>
       </div>
@@ -46,73 +97,18 @@ export default {
           bg: require("@/assets/img/home/home-bg-recom.png"),
           logo:
             "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3851876075,4035368835&fm=26&gp=0.jpg",
-          title: "贤合庄火锅",
-          txt: "价值360元的双人餐",
-          link: "/details/1",
-          list: [
-            {
-              img: require("@/assets/img/home/home-recom-cover1.png"),
-              price: "36",
-              amount: "72",
-              txt: "品牌闪购",
-            },
-            {
-              img: require("@/assets/img/home/home-recom-cover1.png"),
-              price: "36",
-              amount: "72",
-              txt: "品牌闪购",
-            },
-          ],
         },
         {
           bg:
             "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1234817799,3490569220&fm=26&gp=0.jpg",
           logo:
             "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1051452078,2851059078&fm=26&gp=0.jpg",
-          title: "嘟嘟2号小店",
-          txt: "利郎专卖",
-          link: "/details/1",
-          list: [
-            {
-              img:
-                "https://ss3.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/baike/pic/item/aa18972bd40735fa8026091694510fb30e24084e.jpg",
-              price: "36",
-              amount: "72",
-              txt: "品牌闪购",
-            },
-            {
-              img:
-                "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcdn.aixifan.com%2Fdotnet%2Fartemis%2Fu%2Fcms%2Fwww%2F201410%2F14142256g3sb.jpg&refer=http%3A%2F%2Fcdn.aixifan.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1612106123&t=86a6a8902c36c565806239c5c68f07d6",
-              price: "36",
-              amount: "72",
-              txt: "品牌闪购",
-            },
-          ],
         },
         {
           bg:
             "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2077625409,245021064&fm=26&gp=0.jpg",
           logo:
             "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3155998395,3600507640&fm=26&gp=0.jpg",
-          title: "嘟嘟3号小店",
-          txt: "361运动童装",
-          link: "/details/1",
-          list: [
-            {
-              img:
-                "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fa.vpimg2.com%2Fupload%2Fmerchandise%2Fpdcvis%2F2016%2F10%2F24%2F76%2F3bdc95bb-793c-4fe2-90e0-e70a5a07a881.jpg&refer=http%3A%2F%2Fa.vpimg2.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1612106146&t=7ef6d9bab60d6ffb607414af86c479e3",
-              price: "36",
-              amount: "72",
-              txt: "品牌闪购",
-            },
-            {
-              img:
-                "https://ss3.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/baike/pic/item/aa18972bd40735fa8026091694510fb30e24084e.jpg",
-              price: "36",
-              amount: "72",
-              txt: "品牌闪购",
-            },
-          ],
         },
       ],
       move: false,
@@ -133,6 +129,9 @@ export default {
           res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
           res.data[i].productSpecialImg2 = this.getImg(res.data[i].productSpecialImg2);
         }
+        res.data[0].classInfo = "move ? 'banner1 banner move' : 'banner1 banner'";
+        res.data[1].classInfo = "move ? 'banner2 banner hide' : 'banner2 banner'";
+        res.data[2].classInfo = "move ? 'banner3 banner hide' : 'banner3 banner'";
         this.productList = res.data;
       })
     },

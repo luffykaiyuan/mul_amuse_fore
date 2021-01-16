@@ -103,6 +103,7 @@ const urls = {
   updateDefaultReceive: '/receiveInfo/updateDefaultReceive',
   //SupervipInfoCon
   insertSuperVIP: '/supervipInfo/insertSuperVIP',
+  checkOrderVIP: '/supervipInfo/checkOrder',
   updateSuperVIP: '/supervipInfo/updateSuperVIP',
   selectByUserId: '/supervipInfo/selectByUserId',
   //SupervipInviteCon

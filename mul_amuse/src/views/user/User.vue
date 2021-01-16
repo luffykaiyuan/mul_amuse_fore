@@ -57,21 +57,22 @@
               font-size: 14px;
               color: gray;
             "
-            v-if="userState"
+            v-if="userInfo.userRank === '1'"
           >
-            会员有效期:2088-08-08 剩余次数:6
+            会员有效期:{{superInfo.endTime}} 剩余次数:{{superInfo.haveNumber}}
           </p>
-          <p style="color: gray; margin: 5px 0; font-size: 14px">
-            惠享体验卡助力进程:0/1
+          <p style="color: gray; margin: 5px 0; font-size: 14px" v-if="userInfo.userRank === '0'">
+            惠享体验卡助力进程:{{inviteInfo.haveInvite}}/3
           </p>
           <van-progress
             pivot-text="红色"
             :color="link_color"
-            stroke-width="14px"
+            stroke-width="13px"
             :percentage="length"
             :show-pivot="false"
+            v-if="userInfo.userRank === '0'"
           />
-          <span @click="fxs()">
+          <span @click="fxs()" v-if="userInfo.userTitle !== '0'">
             <van-image
               width="20"
               height="20"
@@ -110,6 +111,23 @@
           offset="2"
           class="box_body_cols_button"
           @click="Url('/box')"
+          v-if="userInfo.userTitle === '0'"
+        >
+          <van-image
+            style="margin-top: 5px; margin-right: 5px"
+            round
+            width="20"
+            height="20"
+            :src="require('@/assets/img/person/person-icon-box.png')"
+          ></van-image>
+          <p>成为达人</p>
+        </van-col>
+        <van-col
+          span="8"
+          offset="2"
+          class="box_body_cols_button"
+          @click="Url('/box')"
+          v-else
         >
           <van-image
             style="margin-top: 5px; margin-right: 5px"
@@ -132,15 +150,15 @@
             @load="onLoad"
           >
             <van-card
-              v-for="item in list"
+              v-for="item in allOrder"
               :key="item[0]"
               centered
-              desc="视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格"
-              :thumb="require('@/assets/img/person/person-pro-cover.png')"
+              :desc="item.modelName"
+              :thumb="item.productImg"
             >
               <template #title>
                 <div class="card_title">
-                  <b style="font-size: 17px">不二山房</b>
+                  <b style="font-size: 17px">{{item.productTitle}}</b>
                   <van-image
                     width="40"
                     height="30"
@@ -148,18 +166,20 @@
                     :src="
                       require('@/assets/img/person/person-icon-done.png')
                     "
+                    v-if="item.status === '4' || item.status === '2'"
                   ></van-image>
                 </div>
               </template>
               <template #num>
                 <p>
-                  订单价:<span style="font-size: 16px; color: black">328</span
+                  订单价:<span style="font-size: 16px; color: black">{{item.orderPrice}}</span
                   >元
                 </p>
               </template>
               <template #footer>
-                <van-button size="small" round>核销码</van-button>
-                <van-button size="small" round>再次购买</van-button>
+                <van-button size="small" @click="openPost(item)" v-if="item.status === '3'" round>查看单号</van-button>
+                <van-button size="small" @click="openCode(item)" round v-if="item.productType === '0' && item.status === '1'">核销码</van-button>
+                <van-button size="small" @click="finishOrder(item)" v-if="item.status !== '4' && item.status !== '2'" round>订单完成</van-button>
               </template>
             </van-card>
           </van-list>
@@ -183,34 +203,26 @@
             @load="onLoad"
           >
             <van-card
-              v-for="item in list"
+              v-for="item in payList"
               :key="item[0]"
               centered
-              desc="视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格"
-              :thumb="require('@/assets/img/person/person-pro-cover.png')"
+              :desc="item.modelName"
+              :thumb="item.productImg"
             >
               <template #title>
                 <div class="card_title">
-                  <b style="font-size: 17px">不二山房</b>
-                  <van-image
-                    width="40"
-                    height="30"
-                    style="margin-right: 20px"
-                    :src="
-                      require('@/assets/img/person/person-icon-done.png')
-                    "
-                  ></van-image>
+                  <b style="font-size: 17px">{{item.productTitle}}</b>
                 </div>
               </template>
               <template #num>
                 <p>
-                  订单价:<span style="font-size: 16px; color: black">328</span
+                  订单价:<span style="font-size: 16px; color: black">{{item.orderPrice}}</span
                   >元
                 </p>
               </template>
               <template #footer>
-                <van-button size="small" round>核销码</van-button>
-                <van-button size="small" round>再次购买</van-button>
+                <van-button size="small" @click="openCode(item)" round v-if="item.productType === '0'">核销码</van-button>
+                <van-button size="small" @click="finishOrder(item)" round>订单完成</van-button>
               </template>
             </van-card>
           </van-list>
@@ -234,34 +246,26 @@
             @load="onLoad"
           >
             <van-card
-              v-for="item in list"
+              v-for="item in apponinList"
               :key="item[0]"
               centered
-              desc="视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格"
-              :thumb="require('@/assets/img/person/person-pro-cover.png')"
+              :desc="item.modelName"
+              :thumb="item.productImg"
             >
               <template #title>
                 <div class="card_title">
-                  <b style="font-size: 17px">不二山房</b>
-                  <van-image
-                    width="40"
-                    height="30"
-                    style="margin-right: 20px"
-                    :src="
-                      require('@/assets/img/person/person-icon-done.png')
-                    "
-                  ></van-image>
+                  <b style="font-size: 17px">{{item.productTitle}}</b>
                 </div>
               </template>
               <template #num>
                 <p>
-                  订单价:<span style="font-size: 16px; color: black">328</span
+                  订单价:<span style="font-size: 16px; color: black">{{item.orderPrice}}</span
                   >元
                 </p>
               </template>
               <template #footer>
-                <van-button size="small" round>核销码</van-button>
-                <van-button size="small" round>再次购买</van-button>
+                <van-button size="small" @click="openPost(item)" round>查看单号</van-button>
+                <van-button size="small" @click="finishOrder(item)" round>订单完成</van-button>
               </template>
             </van-card>
           </van-list>
@@ -273,7 +277,7 @@
             height="50"
             :src="require('@/assets/img/person/person-icon-appointed.png')"
           ></van-image>
-          <p>已预约</p>
+          <p>已发货</p>
         </template>
       </van-tab>
       <van-tab>
@@ -285,15 +289,15 @@
             @load="onLoad"
           >
             <van-card
-              v-for="item in list"
+              v-for="item in finishList"
               :key="item[0]"
               centered
-              desc="视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格视频规格"
-              :thumb="require('@/assets/img/person/person-pro-cover.png')"
+              :desc="item.modelName"
+              :thumb="item.productImg"
             >
               <template #title>
                 <div class="card_title">
-                  <b style="font-size: 17px">不二山房</b>
+                  <b style="font-size: 17px">{{item.productTitle}}</b>
                   <van-image
                     width="40"
                     height="30"
@@ -306,14 +310,13 @@
               </template>
               <template #num>
                 <p>
-                  订单价:<span style="font-size: 16px; color: black">328</span
+                  订单价:<span style="font-size: 16px; color: black">{{item.orderPrice}}</span
                   >元
                 </p>
               </template>
-              <template #footer>
-                <van-button size="small" round>核销码</van-button>
-                <van-button size="small" round>再次购买</van-button>
-              </template>
+<!--              <template #footer>-->
+<!--                <van-button size="small" @click="Url('/details/' + item.id)" round>再次购买</van-button>-->
+<!--              </template>-->
             </van-card>
           </van-list>
           <van-divider v-show="finished">我是有底线的</van-divider>
@@ -328,6 +331,14 @@
         </template>
       </van-tab>
     </van-tabs>
+    <van-dialog v-model="orderVisible" title="预约订单" show-cancel-button>
+      <van-image width="100" height="100" :src="codeImg" />
+<!--      <van-image  width="50" height="50" src="https://img.yzcdn.cn/vant/apple-3.jpg" />-->
+      <van-cell title="核销码" :value="codeNumber"/>
+    </van-dialog>
+    <van-dialog v-model="postVisible" title="实物订单" show-cancel-button>
+      <van-cell title="快递单号" :value="postNumber"/>
+    </van-dialog>
     <v-footer :active="2"></v-footer>
   </div>
 </template>
@@ -336,19 +347,32 @@
 import footer from "../../components/footer";
 import publicJs, {request} from "../../plugins/js/publicJs";
 import axios from "axios";
+import { Dialog } from 'vant';
+
 export default {
   name: "user",
   data() {
     return {
       userId: '',
       userInfo: [],
+      superInfo: [],
+      inviteInfo: [],
+      allOrder: [],
+      payList: [],
+      apponinList: [],
+      finishList: [],
       fx: false,
+      orderVisible: false,
+      postVisible: false,
       share: '',
+      codeImg: '',
+      codeNumber: '',
+      postNumber: '',
 
       active: 0,
       userState: true, //会员状态
       length: 0,
-      link_color: "white", //#cb0e0e 进度条颜色
+      link_color: "#ee0a24", //#cb0e0e 进度条颜色
       list: [
         {
           img: require("@/assets/img/home/home-cover1.png"),
@@ -386,8 +410,108 @@ export default {
         method:'get',
       }).then(res => {
         this.userInfo = res.data;
+        if (this.userInfo.userRank === '0'){
+          this.initInvite();
+        } else if (this.userInfo.userRank === '1'){
+          this.initSuper();
+        }else {
+        }
+        this.initOrder();
       })
     },
+    initOrder(){
+      this.payList = [];
+      this.apponinList = [];
+      this.finishList = [];
+      request({
+        url:publicJs.urls.selectUserOrder + "?userId=" +this.userId,
+        method:'get',
+      }).then(res => {
+        for (let i = 0; i < res.data.length; i++) {
+          res.data[i].productImg = this.getImg(res.data[i].productImg);
+          if (res.data[i].status === "1"){
+            this.payList.push(res.data[i]);
+          }else if(res.data[i].status === "3"){
+            this.apponinList.push(res.data[i]);
+          }else {
+            this.finishList.push(res.data[i]);
+          }
+        }
+        this.allOrder = res.data;
+      })
+    },
+    //初始化邀请
+    initInvite(){
+      request({
+        url:publicJs.urls.selectInvite + "?userId=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.inviteInfo = res.data;
+        this.length = parseInt(res.data.haveInvite / 3 * 100) ;
+      })
+    },
+    //初始化话会员信息
+    initSuper(){
+      request({
+        url:publicJs.urls.selectByUserId + "?userId=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.superInfo = res.data;
+      })
+    },
+    //购买会员卡
+    initSuperSet(){
+      request({
+        url:publicJs.urls.selectAllSet,
+        method:'get',
+      }).then(res => {
+        this.supersetInfo = res.data;
+      })
+    },
+    //加量包购买
+    initSuperMore(){
+      request({
+        url:publicJs.urls.selectAllMore,
+        method:'get',
+      }).then(res => {
+        this.moreInfo = res.data;
+      })
+    },
+
+    //核销码
+    openCode(item){
+      this.codeImg = this.getImg(item.qrcodeImg);
+      this.codeNumber = item.qrcodeNumber;
+      this.orderVisible = true;
+    },
+    //快递单号
+    openPost(item){
+      this.postNumber = item.postNumber;
+      this.postVisible = true;
+    },
+    //完成订单
+    finishOrder(item){
+      Dialog.confirm({
+        title: '订单确认',
+        message: '是否确认订单已经完成？',
+      })
+        .then(() => {
+          request({
+            url:publicJs.urls.getProduct,
+            method:'post',
+            data: item
+          }).then(res => {
+            this.$message.success("确认成功！！");
+            this.initOrder();
+          }).catch(err => {
+            this.$message.error(res.data)
+          })
+        })
+        .catch(() => {
+          // on cancel
+        });
+    },
+
     fxs() {
       if (this.share){
         this.fx = true;
