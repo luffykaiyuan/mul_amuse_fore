@@ -46,6 +46,7 @@ import Box from "../views/user/Box";
 import Order from "../views/user/Order";
 import Card from "../views/user/Card";
 import TimeLimit from "../views/admin/TimeLimit";
+import Register from "../views/user/Register";
 
 Vue.use(Router)
 
@@ -170,7 +171,17 @@ const route = new Router({
         roles: ['developer','admin', 'store', 'user']
       }
     },
-
+    {
+      //用户注册页面
+      path: "/register",
+      name: "Register",
+      component: Register,
+      meta: {
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user']
+      }
+    },
 
     {
       path: '/userHome',
