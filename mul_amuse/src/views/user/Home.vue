@@ -201,6 +201,7 @@ export default {
       loading: false,
       finished: false,
       refreshing: false,
+      storeName: ''
     };
   },
   components: {

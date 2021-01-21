@@ -110,7 +110,7 @@
           span="8"
           offset="2"
           class="box_body_cols_button"
-          @click="Url('/box')"
+          @click="Url('/register')"
           v-if="userInfo.userTitle === '0'"
         >
           <van-image
@@ -339,6 +339,15 @@
     <van-dialog v-model="postVisible" title="实物订单" show-cancel-button>
       <van-cell title="快递单号" :value="postNumber"/>
     </van-dialog>
+<!--    <van-dialog v-model="mailVisible" title="成为达人" :before-close="onBeforeClose" show-cancel-button>-->
+<!--      <van-field v-model="aliyunMessageVo.phone" type="tel" :rules="[{ pattern, message: '请输入正确的手机号码' }]"-->
+<!--        label="手机号码" colon placeholder="请输入手机号码"/>-->
+<!--      <van-field v-model="aliyunMessageVo.verifyNumber" center clearable label="短信验证码" placeholder="请输入验证码">-->
+<!--        <template #button>-->
+<!--          <van-button size="small" @click="sendMessage" :disabled="sendFinish" type="primary">发送验证码</van-button>-->
+<!--        </template>-->
+<!--      </van-field>-->
+<!--    </van-dialog>-->
     <v-footer :active="2"></v-footer>
   </div>
 </template>
@@ -364,10 +373,20 @@ export default {
       fx: false,
       orderVisible: false,
       postVisible: false,
+      mailVisible: false,
       share: '',
       codeImg: '',
       codeNumber: '',
       postNumber: '',
+
+      // aliyunMessageVo:{
+      //   phone: '',
+      //   nodeNumber: '',
+      //   verifyNumber: ''
+      // },
+
+      userPhone: '',
+      mailNumber: '',
 
       active: 0,
       userState: true, //会员状态
@@ -394,6 +413,7 @@ export default {
       loading: false,
       finished: false,
       refreshing: false,
+      sendFinish: false,
     };
   },
   components: {
@@ -511,6 +531,68 @@ export default {
           // on cancel
         });
     },
+    // //成为达人
+    // openTalent(){
+    //   this.aliyunMessageVo.phone = '';
+    //   this.aliyunMessageVo.verifyNumber = '';
+    //   this.mailVisible = true;
+    //   this.sendFinish = false;
+    // },
+    // sendMessage(){
+    //   this.sendFinish = true;
+    //   if (!this.aliyunMessageVo.phone){
+    //     this.$message.error("请输入手机号！！");
+    //     this.sendFinish = false;
+    //     return;
+    //   }
+    //   if (!this.aliyunMessageVo.nodeNumber){
+    //     request({
+    //       url:publicJs.urls.sendMessage,
+    //       method:'post',
+    //       data: this.aliyunMessageVo
+    //     }).then(res => {
+    //       this.aliyunMessageVo.nodeNumber = res.data;
+    //     }).catch(err => {
+    //       this.$message.error(res.data)
+    //     })
+    //   }
+    // },
+    // onBeforeClose(action, done){
+    //   if (action === 'confirm') {
+    //     if (this.aliyunMessageVo.nodeNumber.toString() === this.aliyunMessageVo.verifyNumber){
+    //       request({
+    //         url:publicJs.urls.blindPhone + "?verifyNumber=" + this.aliyunMessageVo.verifyNumber,
+    //         method:'get',
+    //       }).then(res => {
+    //         if (res.data){
+    //           this.userInfo.userPhone = this.aliyunMessageVo.phone;
+    //           this.userInfo.userTitle = "1";
+    //           request({
+    //             url:publicJs.urls.updateUser,
+    //             method:'post',
+    //             data: this.userInfo
+    //           }).then(res => {
+    //             this.$message.success("绑定成功！！");
+    //             this.initUser();
+    //             done();
+    //           }).catch(err => {
+    //             this.$message.error("验证码错误！！");
+    //           })
+    //         }else {
+    //           this.$message.error("验证码错误！！");
+    //           done(false);
+    //         }
+    //       }).catch(err => {
+    //         this.$message.error(res.data)
+    //       })
+    //     }else {
+    //       this.$message.error("验证码错误！！");
+    //       done(false);
+    //     }
+    //   } else {
+    //     done();
+    //   }
+    // },
 
     fxs() {
       if (this.share){

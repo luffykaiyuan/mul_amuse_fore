@@ -5,9 +5,9 @@
                     :autofocus="true" @click:append="searchDetail"></v-text-field>
     </v-card-title>
     <el-form ref="productForm" :model="productForm" label-width="80px" style="margin-top: 50px" v-if="getInfo">
-      <!--限时购首屏-->
-      <el-row v-if="productForm.productSpecial === '3' && productForm.productFree === '0'">
-        <el-col :span="8">
+      <el-row>
+        <!--限时购首屏-->
+        <el-col :span="8" v-if="productForm.productSpecial === '3' && productForm.productFree === '0'">
           <el-form-item label="特殊图片">
             <el-upload
               class="avatar-uploader"
@@ -20,10 +20,8 @@
             </el-upload>
           </el-form-item>
         </el-col>
-      </el-row>
-      <!--限时购-->
-      <el-row v-if="productForm.productSpecial === '4' && productForm.productFree === '0'">
-        <el-col :span="8">
+        <!--限时购-->
+        <el-col :span="8" v-if="productForm.productSpecial === '4' && productForm.productFree === '0'">
           <el-form-item label="特殊图片">
             <el-upload
               class="avatar-uploader"
@@ -36,10 +34,8 @@
             </el-upload>
           </el-form-item>
         </el-col>
-      </el-row>
-      <!--品牌推荐-->
-      <el-row v-if="productForm.productSpecial === '5' && productForm.productFree === '0'">
-        <el-col :span="8">
+        <!--品牌推荐-->
+        <el-col :span="8" v-if="productForm.productSpecial === '5' && productForm.productFree === '0'">
           <el-form-item label="特殊图片">
             <el-upload
               class="avatar-uploader"
@@ -52,7 +48,7 @@
             </el-upload>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" v-if="productForm.productSpecial === '5' && productForm.productFree === '0'">
           <el-form-item label="特殊图片2">
             <el-upload
               class="avatar-uploader"
@@ -65,10 +61,8 @@
             </el-upload>
           </el-form-item>
         </el-col>
-      </el-row>
-      <!--会员模块-->
-      <el-row v-if="productForm.productSpecial !== '0' && productForm.productFree === '1'">
-        <el-col :span="8">
+        <!--会员模块-->
+        <el-col :span="8" v-if="productForm.productSpecial !== '0' && productForm.productFree === '1'">
           <el-form-item label="特殊图片">
             <el-upload
               class="avatar-uploader"
@@ -77,6 +71,19 @@
               :on-success="specialSuccess"
               :before-upload="beforeAvatarUpload">
               <img v-if="productSpecialImg" :src="productSpecialImg" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="分享图片">
+            <el-upload
+              class="avatar-uploader"
+              :action="imgUpload"
+              :show-file-list="false"
+              :on-success="shareSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="productShareImg" :src="productShareImg" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -166,10 +173,10 @@
     <el-button style="float: right; margin-right: 30px; color: white;" type="primary" icon="el-icon-edit"
                v-if="getInfo" @click="openEdit">编辑详情</el-button>
     <el-dialog title="编辑详情" :visible.sync="dialogEdit" width="80%">
-      <span>这是一段信息</span>
+      <el-input type="textarea" :rows="10" placeholder="请输入内容" v-model="input"></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogEdit = false">取 消</el-button>
-        <el-button type="primary" @click="dialogEdit = false">确 定</el-button>
+        <el-button type="primary" @click="savaDetail">确 定</el-button>
       </span>
     </el-dialog>
   </v-card>
@@ -183,12 +190,14 @@ export default {
   data: () => ({
     collapsed: publicJs.collapsed,
     productId: '',
+    input: '',
     getInfo: false,
     dialogEdit: false,
     imgUpload: '',
     productSpecialImg: '',
     productSpecialImg2: '',
     productCoverImg: '',
+    productShareImg: '',
     productMainImg1: '',
     productMainImg2: '',
     productMainImg3: '',
@@ -220,6 +229,7 @@ export default {
           this.productSpecialImg = this.getImg(res.data.productSpecialImg);
           this.productSpecialImg2 = this.getImg(res.data.productSpecialImg2);
           this.productCoverImg = this.getImg(res.data.productCoverImg);
+          this.productShareImg = this.getImg(res.data.productShareImg);
           this.productMainImg1 = this.getImg(res.data.productMainImg1);
           this.productMainImg2 = this.getImg(res.data.productMainImg2);
           this.productMainImg3 = this.getImg(res.data.productMainImg3);
@@ -262,6 +272,11 @@ export default {
     coverSuccess(res, file) {
       this.productCoverImg = URL.createObjectURL(file.raw);
       this.productForm.productCoverImg = res;
+      this.updateProduct();
+    },
+    shareSuccess(res, file) {
+      this.productShareImg = URL.createObjectURL(file.raw);
+      this.productForm.productShareImg = res;
       this.updateProduct();
     },
     main1Success(res, file) {
@@ -311,6 +326,20 @@ export default {
     },
     openEdit(){
       this.dialogEdit = true;
+      this.input = this.productForm.productDetail;
+    },
+    savaDetail(){
+      this.productForm.productDetail = this.input;
+      request({
+        url:publicJs.urls.updateProduct,
+        method:'post',
+        data: this.productForm
+      }).then(res => {
+        this.$message.success("编辑成功！！")
+        this.dialogEdit = false;
+      }).catch(err => {
+        this.$message.error(res.data)
+      })
     },
     //图片获取路径拼接
     getImg(id){

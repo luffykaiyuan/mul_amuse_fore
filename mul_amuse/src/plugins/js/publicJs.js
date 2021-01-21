@@ -115,10 +115,14 @@ const urls = {
   wxLogin: '/weChat/wxLogin',
   //ShareCon
   shareCreateQR: '/share/createQR',
+  createProductQR: '/share/createProductQR',
   //WxLoginCon
   doLogin: '/wxLogin/doLogin',
   //WeChatPay
-  orders: '/wePay/orders'
+  orders: '/wePay/orders',
+  //SendMessageCon
+  sendMessage: '/aliMessage/sendMessage',
+  blindPhone: '/aliMessage/blindPhone',
 }
 
 export default {
