@@ -57,8 +57,8 @@
         <van-col span="14" style="text-align: right; margin-bottom: 20px"
           >￥{{modelInfo.modelPrice}}</van-col
         >
-        <van-col span="6">购买数量</van-col>
-        <van-col span="18" style="text-align: right">
+        <van-col span="6" v-if="productInfo.productFree === '0'">购买数量</van-col>
+        <van-col span="18" style="text-align: right" v-if="productInfo.productFree === '0'">
           <input value="-" type="button" @click="reduce" :disabled="reduce_btn" class="btn"/>
           <span class="num_span">{{ orderInfo.orderCount }}</span>
           <input value="+" type="button" @click="plus" class="btn" :disabled="plus_btn"/>
@@ -85,20 +85,26 @@
         />购买即为认同产品使用规则,无正当理由不可退改,如遇使用问题可咨询客服
       </p>
       <van-row class="footer">
-        <van-col span="16" class="footer_num"
-          >小计:<span class="footer_money"> ￥{{orderInfo.orderPrice}}</span></van-col
-        >
+        <van-col span="16" class="footer_num" v-if="productInfo.productFree === '0'">
+          小计:<span class="footer_money"> ￥{{orderInfo.orderPrice}}</span>
+        </van-col>
+        <van-col span="16" class="footer_num" v-else>
+          小计:<span class="footer_money"> ￥<del>{{orderInfo.orderPrice}}</del></span>
+        </van-col>
         <van-col span="8" style="text-align: right"
           ><van-button
             class="wxzf_btn"
             :disabled="wxzfDisabled"
             :color="wxzfColor"
-            @click="onSubmit"
+            @click="sselectSubmit"
             >微信支付</van-button
           ></van-col
         >
       </van-row>
     </div>
+    <van-dialog v-model="vipVisible" show-cancel-button title="温馨提示"
+                message="会员产品为免费兑换产品，兑换后不得退换，您确定要消耗一次次数兑换此产品吗？" @confirm="onSubmit">
+    </van-dialog>
   </div>
 </template>
 <style lang="scss">
@@ -253,6 +259,7 @@ export default {
       reduce_btn: true,
       plus_btn: false,
       receiveShow: false,
+      vipVisible: false,
       radio: 1
     };
   },
@@ -325,6 +332,13 @@ export default {
     },
 
     handleChange(){
+    },
+    sselectSubmit(){
+      if (this.productInfo.productFree === '1'){
+        this.vipVisible = true;
+      }else {
+        this.onSubmit();
+      }
     },
     onSubmit() {
       this.wxzfDisabled = true;
@@ -401,7 +415,7 @@ export default {
     },
     submitOrder(){
       request({
-        url:publicJs.urls.insertFreeOrder,
+        url:publicJs.urls.insertOrder,
         method:'post',
         data: this.orderInfo
       }).then(res => {

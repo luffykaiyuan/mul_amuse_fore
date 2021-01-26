@@ -18,10 +18,11 @@
           width="100%"
           height="100%"
           :src="item.imgAddress"
+          @click="weChatPay(item)"
         ></van-image>
-        <van-button color="#1f1f1f" round @click="weChatPay(item)"
-          >立即购买</van-button
-        >
+<!--        <van-button color="#1f1f1f" round @click="weChatPay(item)"-->
+<!--          >立即购买</van-button-->
+<!--        >-->
       </div>
     </section>
   </div>

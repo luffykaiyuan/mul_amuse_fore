@@ -70,6 +70,7 @@ const urls = {
   selectStoreAppointOrder: '/order/selectStoreAppointOrder',
   selectOrderByNum: '/order/selectOrderByNum',
   selectOrderDetail: '/order/selectOrderDetail',
+  updateOrder: '/order/updateOrder',
   sendProduct: '/order/sendProduct',
   destoryCodeNumber: '/order/destoryCodeNumber',
   checkTime: '/order/checkTime',

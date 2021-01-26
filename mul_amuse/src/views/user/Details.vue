@@ -15,7 +15,7 @@
     >
       <v-banner :HomeState="false" :Arr="bannerList"></v-banner>
       <div class="deatils_title">
-        <p><b>￥{{productInfo.productNowPrice}}</b> <del>门市价：￥{{productInfo.productOriginalPrice}}</del></p>
+        <p><b>￥{{chooseModel.modelPrice}}</b> <del>门市价：￥{{productInfo.productOriginalPrice}}</del></p>
         <p style="margin-top: 5px">销售{{productInfo.productSaleVolume}}件</p>
       </div>
       <div class="deatils_name">
@@ -48,7 +48,7 @@
           <span style="color: gray; font-size: 13px">库存:{{chooseModel.modelStock}}</span>
         </p>
       </div>
-      <van-dialog v-model="fx">
+      <van-dialog v-model="fx" show-cancel-button confirm-button-text="保存分享图片" @confirm="saveShare">
         <van-image
           width="100%"
           height="100%"
@@ -68,7 +68,7 @@
         <article>
           <van-tabs type="line" border style="width: 100%" @click="modelChange">
             <van-tab :title="item.modelName" v-for="item in modelList" :key="item[0]"
-                    >{{item.modelName}}</van-tab
+                    >{{item.modelDetail}}</van-tab
             >
           </van-tabs>
         </article>
@@ -98,30 +98,30 @@
             ></van-image>
           </li>
           <!-- 更多 -->
-<!--          <van-collapse v-model="activeName" accordion :border="false">-->
-<!--            <van-collapse-item title="更多" name="1">-->
-<!--              <li v-for="item in 5" :key="item[0]">-->
-<!--                <div>-->
-<!--                  <span>-->
-<!--                    <van-image-->
-<!--                      width="15"-->
-<!--                      style="margin-right: 5px"-->
-<!--                      height="20"-->
-<!--                      :src="require('@/assets/img/details/details-icon-address.png')"-->
-<!--                    ></van-image>-->
-<!--                    <span class="custom-title">龙鳞台（太古里店）</span>-->
-<!--                  </span>-->
-<!--                  <p>中国.四川.成都高新区天府- -街888号</p>-->
-<!--                </div>-->
-<!--                <van-image-->
-<!--                  width="20"-->
-<!--                  height="20"-->
-<!--                  @click="phone"-->
-<!--                  :src="require('@/assets/img/details/details-icon-phone.png')"-->
-<!--                ></van-image>-->
-<!--              </li>-->
-<!--            </van-collapse-item>-->
-<!--          </van-collapse>-->
+          <van-collapse v-model="activeName" accordion :border="false" v-if="showAddress">
+            <van-collapse-item title="更多" name="1">
+              <li v-for="item in moreAddressList" :key="item[0]">
+                <div>
+                  <span>
+                    <van-image
+                      width="15"
+                      style="margin-right: 5px"
+                      height="20"
+                      :src="require('@/assets/img/details/details-icon-address.png')"
+                    ></van-image>
+                    <span class="custom-title">{{item.storeName}}</span>
+                  </span>
+                  <p>{{item.storeAddress}}</p>
+                </div>
+                <van-image
+                  width="20"
+                  height="20"
+                  @click="navigation(item)"
+                  :src="require('@/assets/img/details/details-icon-phone.png')"
+                ></van-image>
+              </li>
+            </van-collapse-item>
+          </van-collapse>
         </article>
       </section>
       <!-- 详情 -->
@@ -173,7 +173,9 @@ export default {
       productInfo: {},
       modelList: [],
       addressList: [],
+      moreAddressList: [],
       visible: false,
+      showAddress: false,
     };
   },
   components: {
@@ -265,7 +267,18 @@ export default {
         url:publicJs.urls.selectAllNormalStore + "?storeId=" +this.storeId,
         method:'get',
       }).then(res => {
-        this.addressList = res.data;
+        var addressList = [];
+        var moreAddressList = [];
+        for (let i = 0; i < res.data.length; i++) {
+          if (i < 3){
+            addressList.push(res.data[i]);
+          }else {
+            moreAddressList.push(res.data[i]);
+            this.showAddress = true;
+          }
+        }
+        this.addressList = addressList;
+        this.moreAddressList = moreAddressList;
       })
     },
     buyProduct(){
@@ -313,7 +326,13 @@ export default {
         }
       }
     },
-
+    //保存分享截图
+    saveShare(){
+      var alink = document.createElement("a");
+      alink.href = this.share;
+      alink.download = "picture"; //图片名
+      alink.click();
+    },
     userphone() {
       this.show = true;
     },

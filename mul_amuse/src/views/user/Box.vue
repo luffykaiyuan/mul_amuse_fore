@@ -10,6 +10,11 @@
       <van-col span="10" offset="2">
         <h4>我的惠享总收益：<br />￥ <span style="font-size: 35px">{{userCommission.count}}</span></h4>
       </van-col>
+      <van-col span="5" offset="7">
+        <span class="box_top_sp" @click="qrCodeShow" style="cursor: pointer; font-size: 15px;"
+        >佣金提现</span
+        >
+    </van-col>
       <van-col span="4" offset="8">
         <span class="box_top_sp" @click="spanMessage" style="cursor: pointer"
           >收益怎么来</span
@@ -46,6 +51,9 @@
         </van-row>
       </div>
     </van-row>
+    <van-dialog v-model="show" title="佣金金额大于50元，联系客服即可提现" show-cancel-button>
+      <img style="height: 50px; width: 50px;" src="https://img.yzcdn.cn/vant/apple-3.jpg" />
+    </van-dialog>
   </div>
 </template>
 
@@ -60,6 +68,7 @@ export default {
       teamList: [],
       userCommission: {},
       stauts: 2,
+      show: false,
     };
   },
   created() {
@@ -105,6 +114,9 @@ export default {
         title: "收益怎么来的?",
         message: "收益通过....",
       });
+    },
+    qrCodeShow() {
+      this.show = true;
     },
     colMessage() {
       this.$dialog.alert({

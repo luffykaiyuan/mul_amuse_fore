@@ -10,12 +10,30 @@
         <v-toolbar flat>
           <v-toolbar-title>{{collapsed?'订单列表':''}}</v-toolbar-title>
           <v-spacer></v-spacer>
-        </v-toolbar>
+          <v-dialog v-model="editDialog" max-width="500px">
+            <v-card>
+              <v-card-title class="headline">您确定要完成订单号为：{{editedItem.orderNumber}}吗？</v-card-title>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">取消</v-btn>
+                <v-btn color="blue darken-1" text @click="save">确认</v-btn>
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>        </v-toolbar>
       </template>
       <template v-slot:item.statusBack="{ item }">
         <v-chip :style="getColor(item.statusBack)" dark>
           {{ item.statusBack }}
         </v-chip>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-btn class="ma-2" @click="editItem(item)" v-if="item.status !== '4' && item.status !== '2'">
+          完成
+          <v-icon  id="editStyle" class="mr-2">
+            mdi-checkbox-marked-circle
+          </v-icon>
+        </v-btn>
       </template>
     </v-data-table>
   </v-card>
@@ -29,6 +47,8 @@ export default {
     collapsed: publicJs.collapsed,
     storeId: '',
     orderNumber: '',
+    editDialog: false,
+    statusSelect: [{label:'已完成', value: '4'}],
     headers: [
       { text: '订单号', align: 'start', sortable: false, value: 'orderNumber',},
       { text: '产品名称', align: 'start', sortable: false, value: 'productTitle',},
@@ -37,13 +57,16 @@ export default {
       { text: '订单价格', sortable: false, value: 'orderPrice' },
       { text: '下单时间', sortable: false, value: 'addTime' },
       { text: '状态', sortable: false, value: 'statusBack'},
+      { text: '操作', sortable: false, value: 'actions'},
     ],
     orderList: [],
     orderListBack: [],
-    editedIndex: -1,
+    editedItem: {},
   }),
 
   computed: {
+    formTitle () {
+    },
   },
 
   watch: {
@@ -96,6 +119,30 @@ export default {
       else if (statusBack === "已核销") return 'background: blue'
       else if (statusBack === "已发货") return 'background: yellow'
       else if (statusBack === "已完成") return 'background: green'
+    },
+
+    editItem (item) {
+      this.editedItem = Object.assign({}, item)
+      this.editDialog = true
+    },
+
+    close(){
+      this.editDialog = false
+    },
+
+    save () {
+      this.editedItem.status = '4';
+      request({
+        url:publicJs.urls.updateOrder,
+        method:'post',
+        data: this.editedItem
+      }).then(res => {
+        this.$message.success("编辑成功！！")
+        this.initList();
+        this.close()
+      }).catch(err => {
+        this.$message.error(res.data)
+      })
     },
   },
 }

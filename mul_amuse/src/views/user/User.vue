@@ -81,12 +81,14 @@
             ></van-image>
             <span>邀请</span>
           </span>
-          <van-dialog v-model="fx">
-            <van-image
-              width="100%"
-              height="100%"
-              :src="share"
-            ></van-image>
+          <van-dialog v-model="fx" show-cancel-button confirm-button-text="保存分享图片" @confirm="saveShare">
+            <div ref="imageDom">
+              <van-image
+                width="100%"
+                height="100%"
+                :src="share"
+              ></van-image>
+            </div>
           </van-dialog>
         </van-col>
       </van-row>
@@ -531,6 +533,14 @@ export default {
           // on cancel
         });
     },
+    //保存分享截图
+    saveShare(){
+      var alink = document.createElement("a");
+      alink.href = this.share;
+      alink.download = "picture"; //图片名
+      alink.click();
+    },
+
     // //成为达人
     // openTalent(){
     //   this.aliyunMessageVo.phone = '';

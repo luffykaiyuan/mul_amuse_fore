@@ -26,7 +26,7 @@
             :required="requiredSmscode"
             @blur="Changebutton">
             <template #button>
-              <van-button v-if="!showCutDownTime" size="small" type="primary" @click="sendSMSCode" native-type="button">发送验证码</van-button>
+              <van-button v-if="!showCutDownTime" size="small" type="info" style="color: white;" @click="sendSMSCode" native-type="button">发送验证码</van-button>
               <van-button v-if="showCutDownTime" size="small" type="primary" native-type="button">{{cutDownTime}}s后再试</van-button>
             </template>
           </van-field>
@@ -38,7 +38,7 @@
       </div>
 
       <div style="margin-top: 50px">
-        <van-button round block type="info" native-type="submit" :disabled="confirmDisable">确认并绑定</van-button>
+        <van-button round block type="info" native-type="submit" style="color: white;" :disabled="confirmDisable">确认并绑定</van-button>
       </div>
 
     </van-form>

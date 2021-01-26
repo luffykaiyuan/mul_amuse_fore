@@ -444,6 +444,7 @@ const route = new Router({
       component: NetOrderInfo,
       meta: {
         requireAuth: true,
+        weRequire: 'store',
         roles: ['developer','admin', 'store']
       }
     },
@@ -475,14 +476,14 @@ const route = new Router({
     //     requireAuth: false
     //   }
     // },
-    {
-      path: "/weChatTest",
-      component: WeChatTest,
-      meta: {
-        requireAuth: true,
-        weRequire: 'user',
-      }
-    },
+    // {
+    //   path: "/weChatTest",
+    //   component: WeChatTest,
+    //   meta: {
+    //     requireAuth: true,
+    //     weRequire: 'user',
+    //   }
+    // },
     {
       path: "/jumpRouter",
       component: JumpRouter,
@@ -516,21 +517,27 @@ route.beforeEach((to, from, next) => {
   }
   var openId = localStorage.getItem("openId");
   var userId = localStorage.getItem("userToken");
+  //界面是否需要登录
   if (to.meta.requireAuth) {
+    //是否为用户界面
     if (to.meta.weRequire === 'user'){
       if (openId && userId) {
         next();
       } else {
         window.location.href = axios.defaults.baseURL + publicJs.urls.doLogin + "?toPage=" + to.fullPath.substr(1);
       }
-    } else if (to.meta.weRequire === 'admin'){
+    }
+    //是否为管理员界面
+    else if (to.meta.weRequire === 'admin'){
       var role = localStorage.getItem("roles");
       if (role === "admin"){
         next();
       }else {
         next({path: '/adminLogin'})
       }
-    } else {
+    }
+    //商家界面
+    else {
       var role = localStorage.getItem("roles");
       if (role === "store"){
         next();

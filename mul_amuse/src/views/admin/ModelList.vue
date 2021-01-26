@@ -27,6 +27,9 @@
                       <v-text-field v-model="editedItem.modelName" label="型号名称"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.modelDetail" label="型号详细"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.modelStock" label="库存"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
@@ -84,6 +87,7 @@ export default {
     dialogDelete: false,
     headers: [
       { text: '型号名称', sortable: false, value: 'modelName'  },
+      { text: '详细', sortable: false, value: 'modelDetail'  },
       { text: '库存', sortable: false, value: 'modelStock' },
       { text: '价格', sortable: false, value: 'modelPrice' },
       { text: '操作', sortable: false, value: 'actions'},
@@ -93,12 +97,14 @@ export default {
     editedItem: {
       productId: '',
       modelName: '',
+      modelDetail: '',
       modelStock: 0,
       modelPrice: 0.0,
     },
     defaultItem: {
       productId: '',
       modelName: '',
+      modelDetail: '',
       modelStock: 0,
       modelPrice: 0.0,
     }
