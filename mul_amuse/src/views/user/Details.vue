@@ -78,7 +78,7 @@
         <header>店铺信息</header>
         <article>
           <li v-for="item in addressList" :key="item[0]">
-            <div>
+            <div @click="navigation(item)">
               <span>
                 <van-image
                   width="15"
@@ -93,7 +93,7 @@
             <van-image
               width="20"
               height="20"
-              @click="navigation(item)"
+              @click="phone"
               :src="require('@/assets/img/details/details-icon-phone.png')"
             ></van-image>
           </li>
@@ -116,7 +116,7 @@
                 <van-image
                   width="20"
                   height="20"
-                  @click="navigation(item)"
+                  @click="phone"
                   :src="require('@/assets/img/details/details-icon-phone.png')"
                 ></van-image>
               </li>
@@ -176,6 +176,7 @@ export default {
       moreAddressList: [],
       visible: false,
       showAddress: false,
+      storePhone:'',
     };
   },
   components: {
@@ -189,6 +190,7 @@ export default {
     this.initSuper();
     this.initProdect();
     this.initModel();
+    this.initStorePhone();
   },
   methods: {
     initUser(){
@@ -247,6 +249,7 @@ export default {
         this.html = res.data.productDetail;
         this.storeId = res.data.storeId;
         this.initStore();
+        this.initStorePhone();
       }).catch(err => {
         this.$message.error("产品初始化错误！！")
       })
@@ -279,6 +282,14 @@ export default {
         }
         this.addressList = addressList;
         this.moreAddressList = moreAddressList;
+      })
+    },
+    initStorePhone(){
+      request({
+        url:publicJs.urls.selectStoreById + "?id=" + this.storeId,
+        method:'get',
+      }).then(res => {
+        this.storePhone = res.data[0].storePhone;
       })
     },
     buyProduct(){
@@ -352,7 +363,7 @@ export default {
       }
     },
     phone() {
-      window.location.href = "tel:400-0000-688";
+      window.location.href = "tel:" + this.storePhone;
     },
   },
   mounted() {},
