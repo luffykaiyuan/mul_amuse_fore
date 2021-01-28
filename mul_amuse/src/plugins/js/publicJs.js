@@ -107,6 +107,7 @@ const urls = {
   checkOrderVIP: '/supervipInfo/checkOrder',
   updateSuperVIP: '/supervipInfo/updateSuperVIP',
   selectByUserId: '/supervipInfo/selectByUserId',
+  overVip: '/supervipInfo/overVip',
   //SupervipInviteCon
   selectInvite: '/supervipInvite/selectInvite',
   insertSupervipInvite: '/supervipInvite/insertSupervipInvite',

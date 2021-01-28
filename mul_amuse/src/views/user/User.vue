@@ -64,6 +64,19 @@
           <p style="color: gray; margin: 5px 0; font-size: 14px" v-if="userInfo.userRank === '0'">
             惠享体验卡助力进程:{{inviteInfo.haveInvite}}/3
           </p>
+          <p
+            class="van-ellipsis"
+            style="
+              display: flex;
+              margin-top: 5px;
+              justify-content: space-between;
+              font-size: 14px;
+              color: gray;
+            "
+            v-if="userInfo.userRank === '2'"
+          >
+            很遗憾，您的会员已过期...
+          </p>
           <van-progress
             pivot-text="红色"
             :color="link_color"
@@ -441,6 +454,15 @@ export default {
         this.initOrder();
       })
     },
+    overVip(){
+      request({
+        url:publicJs.urls.overVip + "?userId=" + this.userId,
+        method:'get',
+      }).then(res => {
+      }).catch(err => {
+        this.$message.error(res.data)
+      })
+    },
     initOrder(){
       this.payList = [];
       this.apponinList = [];
@@ -474,11 +496,26 @@ export default {
     },
     //初始化话会员信息
     initSuper(){
+      var date = new Date();
       request({
         url:publicJs.urls.selectByUserId + "?userId=" +this.userId,
         method:'get',
       }).then(res => {
-        this.superInfo = res.data;
+        var startTime = new Date(Date.parse(res.data.endTime));
+        if (startTime < date){
+          this.userInfo.userRank = '2';
+          request({
+            url:publicJs.urls.updateUser,
+            method:'post',
+            data: this.userInfo
+          }).then(res => {
+            this.overVip();
+          }).catch(err => {
+            this.$message.error(res.data)
+          })
+        }else {
+          this.superInfo = res.data;
+        }
       })
     },
     //购买会员卡

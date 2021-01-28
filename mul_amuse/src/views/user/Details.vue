@@ -187,7 +187,6 @@ export default {
     // this.userId = 'e9f731b4ca2848b2';
     this.productId = this.$route.params.id;
     this.initUser();
-    this.initSuper();
     this.initProdect();
     this.initModel();
     this.initStorePhone();
@@ -199,14 +198,39 @@ export default {
         method:'get',
       }).then(res => {
         this.userInfo = res.data;
+        this.initSuper();
       })
     },
     initSuper(){
+      var date = new Date();
       request({
         url:publicJs.urls.selectByUserId + "?userId=" +this.userId,
         method:'get',
       }).then(res => {
         this.superInfo = res.data;
+        var startTime = new Date(Date.parse(res.data.endTime));
+        if (startTime < date){
+          this.userInfo.userRank = '2';
+          this.superInfo.haveNumber = 0;
+          request({
+            url:publicJs.urls.updateUser,
+            method:'post',
+            data: this.userInfo
+          }).then(res => {
+            this.overVip();
+          }).catch(err => {
+            this.$message.error(res.data)
+          })
+        }
+      })
+    },
+    overVip(){
+      request({
+        url:publicJs.urls.overVip + "?userId=" + this.userId,
+        method:'get',
+      }).then(res => {
+      }).catch(err => {
+        this.$message.error(res.data)
       })
     },
     initProdect(){
