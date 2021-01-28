@@ -395,6 +395,34 @@ export default {
 </script>
 
 <style lang='scss'>
+* {
+  margin: 0;
+  padding: 0;
+}
+.van-icon{
+  user-select: none;
+}
+#app {
+  font-family: Noto Sans SC;
+  text-align: center;
+  color: #2c3e50;
+  background: #f5f5f5;
+}
+section {
+  padding: 3% 3%;
+  margin: 10px 0;
+  background: white;
+  header {
+    margin: 5px 0;
+    width: 100%;
+    display: flex;
+    label {
+      margin-left: 5px;
+      font-size: 20px;
+    }
+  }
+}
+
 .deatils {
   footer {
     .van-button {
@@ -411,6 +439,11 @@ export default {
     text-align: left;
   }
   .shop_details {
+    section {
+      padding: 0% 0%;
+      margin: 10px 0;
+      background: none;
+    }
     img {
       width: 100%;
     }

@@ -85,11 +85,11 @@
             :show-pivot="false"
             v-if="userInfo.userRank === '0'"
           />
-          <span @click="fxs()" v-if="userInfo.userTitle !== '0'">
+          <span @click="fxs()" v-if="userInfo.userTitle !== '0'" class="router_link">
             <van-image
               width="20"
               height="20"
-              style="position: relative; top: 3px; right: 5px"
+              style="position: relative;"
               :src="require('@/assets/img/details/details-icon-share.png')"
             ></van-image>
             <span>邀请</span>
