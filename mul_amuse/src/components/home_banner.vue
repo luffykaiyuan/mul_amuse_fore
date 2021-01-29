@@ -146,7 +146,9 @@ export default {
 
     changeBannerRight() {
       let banner_data = this.productList.shift(0);
+      let banner_data_ori = this.data_list.shift(0);
       this.productList.push(banner_data);
+      this.data_list.push(banner_data_ori);
       this.move = true;
       setTimeout(() => {
         this.move = false;
@@ -154,7 +156,9 @@ export default {
     },
     changeBannerLeft() {
       let banner_data = this.productList.pop(this.productList.length - 1);
+      let banner_data_ori = this.data_list.pop(this.data_list.length - 1);
       this.productList.unshift(banner_data);
+      this.data_list.unshift(banner_data_ori);
       this.move = true;
       setTimeout(() => {
         this.move = false;

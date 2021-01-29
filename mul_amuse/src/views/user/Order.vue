@@ -50,7 +50,7 @@
               height="100%"
             /></div
         ></van-col>
-        <van-col span="18"><xmp><商品名>{{productInfo.productTitle}}</xmp></van-col>
+        <van-col span="18"><xmp>{{productInfo.productTitle}}</xmp></van-col>
       </van-row>
       <van-row style="text-align: left" class="shop">
         <van-col span="10">{{modelInfo.modelName}}</van-col>
