@@ -129,6 +129,7 @@
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
 
         <van-list
+          v-if="productList.length > 0"
           v-model="loading"
           :finished="finished"
           finished-text=""
@@ -256,10 +257,12 @@ export default {
           this.refreshing = false;
         }
 
-        var overFlag = this.flag + 4;
+        const overFlag = this.flag + 4;
         for (let i = this.flag; i < overFlag; i++, this.flag++) {
-          if (i >= this.productList.length){
-            break;
+          if(this.productList) {
+            if (i >= this.productList.length) {
+              break;
+            }
           }
           this.list.push(this.productList[i]);
         }

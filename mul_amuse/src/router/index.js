@@ -1,5 +1,7 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+//import Vue from 'vue'
+const Vue = require('vue');
+//import Router from 'vue-router'
+const Router =  require('vue-router');
 import AdminHome from '../views/admin/AdminHome'
 import ProductList from "../views/admin/ProductList";
 import StoreList from "../views/admin/StoreList";
@@ -48,7 +50,7 @@ import Card from "../views/user/Card";
 import TimeLimit from "../views/admin/TimeLimit";
 import Register from "../views/user/Register";
 
-Vue.use(Router)
+//Vue.use(Router)
 
 Vue.prototype.axios = axios
 

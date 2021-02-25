@@ -135,9 +135,9 @@ export default {
 //1.引入axios
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://huxiang.nat300.top';
+axios.defaults.baseURL = 'http://huixiang-life.com:685';
 axios.defaults.withCredentials = true;
-axios.defaults.timeout = 5000;
+axios.defaults.timeout = 30000;
 
 //通过promise 封装
 export function request(config){
