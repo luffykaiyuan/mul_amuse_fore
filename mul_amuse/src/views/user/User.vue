@@ -346,7 +346,8 @@
         </template>
       </van-tab>
     </van-tabs>
-    <van-dialog v-model="orderVisible" title="预约订单" show-cancel-button>
+    <van-dialog v-model="orderVisible" title="订单" show-cancel-button>
+      <van-cell title="订单号：" :value="orderNumber"/>
       <van-image width="100" height="100" :src="codeImg" />
 <!--      <van-image  width="50" height="50" src="https://img.yzcdn.cn/vant/apple-3.jpg" />-->
       <van-cell title="核销码" :value="codeNumber"/>
@@ -393,6 +394,7 @@ export default {
       codeImg: '',
       codeNumber: '',
       postNumber: '',
+      orderNumber:'',
 
       // aliyunMessageVo:{
       //   phone: '',
@@ -542,6 +544,7 @@ export default {
       this.codeImg = this.getImg(item.qrcodeImg);
       this.codeNumber = item.qrcodeNumber;
       this.orderVisible = true;
+      this.orderNumber = item.orderNumber;
     },
     //快递单号
     openPost(item){

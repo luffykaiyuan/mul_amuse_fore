@@ -87,6 +87,7 @@
     <v-advertisement></v-advertisement>
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list
+        v-if="productList.length > 0"
         v-model="loading"
         :finished="finished"
         finished-text=""

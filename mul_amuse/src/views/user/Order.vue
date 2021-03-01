@@ -111,6 +111,7 @@
 .order {
   position: relative;
   text-align: left;
+  overflow-wrap: break-word;
   .btn {
     font-size: 22px;
     background: rgb(238, 236, 236);

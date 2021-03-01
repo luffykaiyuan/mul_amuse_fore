@@ -94,21 +94,16 @@ export default {
       productList: [],
       data_list: [
         {
-          bg: require("@/assets/img/home/home-bg-recom.png"),
-          logo:
-            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3851876075,4035368835&fm=26&gp=0.jpg",
+          bg: require("@/assets/img/home/home-bg-recom1.png"),
+          logo: require("@/assets/img/home/headpic.jpg"),
         },
         {
-          bg:
-            "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1234817799,3490569220&fm=26&gp=0.jpg",
-          logo:
-            "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1051452078,2851059078&fm=26&gp=0.jpg",
+          bg: require("@/assets/img/home/home-bg-recom2.png"),
+          logo: require("@/assets/img/home/headpic.jpg"),
         },
         {
-          bg:
-            "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2077625409,245021064&fm=26&gp=0.jpg",
-          logo:
-            "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3155998395,3600507640&fm=26&gp=0.jpg",
+          bg: require("@/assets/img/home/home-bg-recom3.png"),
+          logo: require("@/assets/img/home/headpic.jpg"),
         },
       ],
       move: false,
