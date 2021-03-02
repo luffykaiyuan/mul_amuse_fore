@@ -8,7 +8,7 @@
       }"
     >
       <van-col span="10" offset="2">
-        <h4>我的惠享总收益：<br />￥ <span style="font-size: 35px">{{userCommission.count}}</span></h4>
+        <h4>我的惠享总收益：<br />￥ <span style="font-size: 35px;color:white">{{userCommission.count}}</span></h4>
       </van-col>
       <van-col span="5" offset="7">
         <span class="box_top_sp" @click="qrCodeShow" style="cursor: pointer; font-size: 15px;"
@@ -51,8 +51,12 @@
         </van-row>
       </div>
     </van-row>
-    <van-dialog v-model="show" title="佣金金额大于50元，联系客服即可提现" show-cancel-button>
-      <img style="height: 50px; width: 50px;" src="https://img.yzcdn.cn/vant/apple-3.jpg" />
+    <van-dialog v-model="show" title="佣金金额大于50元，联系客服进行提现" show-cancel-button>
+      <van-image
+        width="100%"
+        height="100%"
+        :src="require('@/assets/img/details/qrcode.jpg')"
+      ></van-image>
     </van-dialog>
   </div>
 </template>

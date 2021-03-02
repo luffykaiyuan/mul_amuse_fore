@@ -22,7 +22,7 @@
       <van-image
         width="100%"
         height="100%"
-        src="https://www.kuadh.com/usr/uploads/2020/11/2114566873.jpg"
+        :src="require('@/assets/img/details/qrcode.jpg')"
       ></van-image>
     </van-dialog>
   </div>
