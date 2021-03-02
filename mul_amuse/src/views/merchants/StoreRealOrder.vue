@@ -10,7 +10,7 @@
         <v-toolbar flat>
           <v-toolbar-title>{{collapsed?'订单列表':''}}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-dialog v-model="editDialog" max-width="500px">
+          <v-dialog v-model="editDialog" max-width="1500px">
             <v-card>
               <v-card-title>
                 <span class="headline">{{ formTitle }}</span>
@@ -85,7 +85,8 @@ export default {
       { text: '数量', sortable: false, value: 'orderCount'  },
       { text: '收货人姓名', sortable: false, value: 'receiveName'  },
       { text: '收货人电话', sortable: false, value: 'receivePhone'  },
-      { text: '收货地址', sortable: false, value: 'receiveAddress'  },
+      { text: '收货地址', sortable: false, value: 'receiveArea'  },
+      { text: '详细地址', sortable: false, value: 'receiveAddress'  },
       { text: '价格', sortable: false, value: 'orderPrice' },
       { text: '备注', sortable: false, value: 'orderRemark' },
       { text: '下单时间', sortable: false, value: 'addTime' },

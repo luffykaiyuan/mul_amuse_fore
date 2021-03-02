@@ -374,7 +374,6 @@ export default {
     fxs() {
       if (this.share){
         this.fx = true;
-        this.share = this.getImg(this.share);
       }else {
         request({
           url:publicJs.urls.createProductQR + "?qrcodeUrl=" + axios.defaults.baseURL + "/wxLogin/doShareLogin?fatherId=" + this.userId + "%26toPage=details%2F" + this.productInfo.id
