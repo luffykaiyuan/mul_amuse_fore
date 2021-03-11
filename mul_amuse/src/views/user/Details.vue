@@ -55,7 +55,7 @@
           :src="share"
         ></van-image>
       </van-dialog>
-      <van-dialog v-model="show">
+      <van-dialog v-model="show" :lock-scroll="lockscroll">
         <van-image
           width="100%"
           height="100%"
@@ -177,6 +177,7 @@ export default {
       visible: false,
       showAddress: false,
       storePhone:'',
+      lockscroll:false,
     };
   },
   components: {
@@ -461,6 +462,7 @@ section {
       background: #ffc341;
       display: flex;
       justify-content: space-between;
+      /*border-radius:10px;*/
       p {
         display: flex;
         justify-content: space-between;

@@ -11,14 +11,13 @@
       <van-swipe-item
         v-for="item in Arr"
         :key="item[0]"
-        @click="Url(item.link)"
         :class="{ StateHover: !HomeState }"
       >
         <van-image width="100%" height="100%" :src="item.img" />
       </van-swipe-item>
     </van-swipe>
     <!-- 定位 -->
-    <div class="Gps" v-if="HomeState">
+<!--    <div class="Gps" v-if="HomeState">
       <p>
         <van-image
           width="20"
@@ -28,7 +27,7 @@
         />
         <span>成都市</span>
       </p>
-    </div>
+    </div>-->
   </div>
 </template>
 

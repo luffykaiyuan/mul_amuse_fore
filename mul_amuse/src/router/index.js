@@ -72,7 +72,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:true,
       }
     },
     {
@@ -83,7 +84,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:true,
       }
     },
     {
@@ -94,7 +96,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:true,
       }
     },
     {
@@ -105,7 +108,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:false,
       }
     },
     {
@@ -116,7 +120,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:false,
       }
     },
     {
@@ -127,7 +132,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:false,
       }
     },
     {
@@ -138,7 +144,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:false,
       }
     },
     {
@@ -149,7 +156,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:false,
       }
     },
     {
@@ -159,7 +167,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:false,
       }
     },
     {
@@ -170,7 +179,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:true,
       }
     },
     {
@@ -181,7 +191,8 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'user',
-        roles: ['developer','admin', 'store', 'user']
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:false,
       }
     },
 
@@ -272,7 +283,8 @@ const route = new Router({
             module: "产品信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -282,7 +294,8 @@ const route = new Router({
             module: "产品信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -292,7 +305,8 @@ const route = new Router({
             module: "产品信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin']
+            roles: ['developer','admin'],
+            keepAlive:false,
           }
         },
         {
@@ -302,7 +316,8 @@ const route = new Router({
             module: "产品信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -312,7 +327,8 @@ const route = new Router({
             module: "产品信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -322,7 +338,8 @@ const route = new Router({
             module: "商家信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin']
+            roles: ['developer','admin'],
+            keepAlive:false,
           }
         },
         {
@@ -332,7 +349,8 @@ const route = new Router({
             module: "商家信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin']
+            roles: ['developer','admin'],
+            keepAlive:false,
           }
         },
         {
@@ -342,7 +360,8 @@ const route = new Router({
             module: "商家信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer', 'admin', 'store']
+            roles: ['developer', 'admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -352,7 +371,8 @@ const route = new Router({
             module: "用户信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin']
+            roles: ['developer','admin'],
+            keepAlive:false,
           }
         },
         {
@@ -362,7 +382,8 @@ const route = new Router({
             module: "用户信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin']
+            roles: ['developer','admin'],
+            keepAlive:false,
           }
         },
         {
@@ -372,7 +393,8 @@ const route = new Router({
             module: "用户信息",
             requireAuth: true,
             weRequire: 'admin',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         }
       ]
@@ -387,7 +409,8 @@ const route = new Router({
           meta: {
             requireAuth: true,
             weRequire: 'store',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -397,7 +420,8 @@ const route = new Router({
             module: "订单信息",
             requireAuth: true,
             weRequire: 'store',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -407,7 +431,8 @@ const route = new Router({
             module: "订单信息",
             requireAuth: true,
             weRequire: 'store',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -417,7 +442,8 @@ const route = new Router({
             module: "订单信息",
             requireAuth: true,
             weRequire: 'store',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -427,7 +453,8 @@ const route = new Router({
             module: "订单信息",
             requireAuth: true,
             weRequire: 'store',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
         {
@@ -436,7 +463,8 @@ const route = new Router({
           meta: {
             requireAuth: true,
             weRequire: 'store',
-            roles: ['developer','admin', 'store']
+            roles: ['developer','admin', 'store'],
+            keepAlive:false,
           }
         },
       ]
@@ -447,28 +475,32 @@ const route = new Router({
       meta: {
         requireAuth: true,
         weRequire: 'store',
-        roles: ['developer','admin', 'store']
+        roles: ['developer','admin', 'store'],
+        keepAlive:false,
       }
     },
     {
       path: '/login',
       component: Login,
       meta: {
-        requireAuth: false
+        requireAuth: false,
+        keepAlive:false,
       }
     },
     {
       path: '/adminLogin',
       component: AdminLogin,
       meta: {
-        requireAuth: false
+        requireAuth: false,
+        keepAlive:false,
       }
     },
     {
       path: '/storeLogin',
       component: StoreLogin,
       meta: {
-        requireAuth: false
+        requireAuth: false,
+        keepAlive:false,
       }
     },
     // {
@@ -490,14 +522,16 @@ const route = new Router({
       path: "/jumpRouter",
       component: JumpRouter,
       meta: {
-        requireAuth: false
+        requireAuth: false,
+        keepAlive:false,
       }
     },
     {
       path: "*",
       component: Error404,
       meta: {
-        requireAuth: false
+        requireAuth: false,
+        keepAlive:false,
       }
     }
   ],

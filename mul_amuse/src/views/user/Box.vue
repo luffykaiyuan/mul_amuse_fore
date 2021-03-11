@@ -39,13 +39,13 @@
     </van-row>
     <van-row v-if="stauts === 2" style="font-size: 13px">
       <van-row style="margin: 20px">
-        <van-col span="8">达人性名</van-col>
+        <van-col span="8">达人姓名</van-col>
         <van-col span="8">消费</van-col>
         <van-col span="8">为您带来的收益</van-col>
       </van-row>
       <div v-for="item in teamList" :key="item[0]">
         <van-row style="" class="box_body_data">
-          <van-col span="8">{{item.nickName}}</van-col>
+          <van-col span="8">{{item.nickName|ellipsis}}</van-col>
           <van-col span="8">￥ {{item.userCount}}</van-col>
           <van-col span="8">￥ {{item.fatherSupport}}</van-col>
         </van-row>
@@ -65,6 +65,16 @@
 import publicJs, {request} from "../../plugins/js/publicJs";
 
 export default {
+  filters: {
+    ellipsis (value) {
+      if (!value) return ''
+      if (value.length > 8) {
+        return value.slice(0,8) + '...'
+      }
+      return value
+    }
+  },
+
   data() {
     return {
       userId: '',

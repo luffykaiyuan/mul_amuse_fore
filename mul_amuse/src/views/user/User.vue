@@ -193,6 +193,7 @@
               </template>
               <template #footer>
                 <van-button size="small" @click="openPost(item)" v-if="item.status === '3'" round>查看单号</van-button>
+                <van-button size="small" @click="openAppoint(item)" v-if="item.productType === '2' && item.status === '1'" round>查看订单</van-button>
                 <van-button size="small" @click="openCode(item)" round v-if="item.productType === '0' && item.status === '1'">核销码</van-button>
                 <van-button size="small" @click="finishOrder(item)" v-if="item.status !== '4' && item.status !== '2'" round>订单完成</van-button>
               </template>
@@ -346,14 +347,18 @@
         </template>
       </van-tab>
     </van-tabs>
-    <van-dialog v-model="orderVisible" title="订单" show-cancel-button>
+    <van-dialog v-model="orderVisible" title="订单" show-cancel-button :lock-scroll="lockscroll">
       <van-cell title="订单号：" :value="orderNumber"/>
       <van-image width="100" height="100" :src="codeImg" />
 <!--      <van-image  width="50" height="50" src="https://img.yzcdn.cn/vant/apple-3.jpg" />-->
       <van-cell title="核销码" :value="codeNumber"/>
     </van-dialog>
-    <van-dialog v-model="postVisible" title="实物订单" show-cancel-button>
+    <van-dialog v-model="postVisible" title="实物订单" show-cancel-button :lock-scroll="lockscroll">
+      <van-cell title="订单号：" :value="orderNumber"/>
       <van-cell title="快递单号" :value="postNumber"/>
+    </van-dialog>
+    <van-dialog v-model="appointVisible" title="预约订单" show-cancel-button :lock-scroll="lockscroll">
+      <van-cell title="订单号：" :value="orderNumber"/>
     </van-dialog>
 <!--    <van-dialog v-model="mailVisible" title="成为达人" :before-close="onBeforeClose" show-cancel-button>-->
 <!--      <van-field v-model="aliyunMessageVo.phone" type="tel" :rules="[{ pattern, message: '请输入正确的手机号码' }]"-->
@@ -364,7 +369,7 @@
 <!--        </template>-->
 <!--      </van-field>-->
 <!--    </van-dialog>-->
-    <v-footer :active="2"></v-footer>
+    <v-footer :active="2" v-if="undestroy"></v-footer>
   </div>
 </template>
 
@@ -390,11 +395,13 @@ export default {
       orderVisible: false,
       postVisible: false,
       mailVisible: false,
+      appointVisible:false,
       share: '',
       codeImg: '',
       codeNumber: '',
       postNumber: '',
       orderNumber:'',
+      lockscroll:false,
 
       // aliyunMessageVo:{
       //   phone: '',
@@ -431,11 +438,20 @@ export default {
       finished: false,
       refreshing: false,
       sendFinish: false,
+      undestroy:true,
     };
   },
   components: {
     "v-footer": footer,
   },
+
+  activated() {
+    this.undestroy = true
+  },
+  deactivated() {
+    this.undestroy = false;
+  },
+
   created() {
     this.userId = localStorage.getItem("userToken");
     this.initUser();
@@ -550,6 +566,11 @@ export default {
     openPost(item){
       this.postNumber = item.postNumber;
       this.postVisible = true;
+      this.orderNumber = item.orderNumber;
+    },
+    openAppoint(item){
+      this.appointVisible = true;
+      this.orderNumber = item.orderNumber;
     },
     //完成订单
     finishOrder(item){

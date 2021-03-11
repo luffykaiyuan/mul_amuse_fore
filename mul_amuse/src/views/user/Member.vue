@@ -113,14 +113,14 @@
               <b>￥{{item.productVipPrice}}</b>
               <del>门市价：￥{{item.productOriginalPrice}}</del>
             </p>
-            <p>销售量：{{item.productSaleVolume}}</p>
+            <p>已兑：{{item.productSaleVolume}}</p>
           </div>
         </section>
       </van-list>
       <van-divider v-show="finished">我是有底线的</van-divider>
     </van-pull-refresh>
 
-    <v-footer :active="1"></v-footer>
+    <v-footer :active="active" v-if="undestroy"></v-footer>
   </div>
 </template>
 
@@ -156,6 +156,8 @@ export default {
       loading: false,
       finished: false,
       refreshing: false,
+      active:1,
+      undestroy:true,
     };
   },
   components: {
@@ -163,6 +165,14 @@ export default {
     "v-footer": footer,
     "v-advertisement": advertisement,
   },
+
+  activated() {
+    this.undestroy = true
+  },
+  deactivated() {
+    this.undestroy = false;
+  },
+
   created() {
     this.userId = localStorage.getItem("userToken");
     // this.userId = 'e9f731b4ca2848b2';

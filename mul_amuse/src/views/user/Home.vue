@@ -13,7 +13,7 @@
     <section class="home_time">
       <header>
         <van-image
-          style="top: 5px"
+          style="top: 2px;"
           width="20"
           height="20"
           :src="require('@/assets/img/home/home-icon-crown.png')"
@@ -40,7 +40,7 @@
         <div class="home_center_footer">
           <div class="home_center_footer_left">
             <b>{{specialOneBig.storeName}}</b>
-            <p class="van-ellipsis">价值 <span>{{specialOneBig.productNowPrice}}元</span>的{{specialOneBig.productTitle}}</p>
+            <p class="van-ellipsis">{{specialOneBig.productSubtitle}}</p>
           </div>
           <van-button
             round
@@ -65,7 +65,7 @@
           <div class="home_center_footer">
             <div class="home_center_footer_left">
               <b>{{specialOne[0].storeName}}</b>
-              <p class="van-ellipsis">价值 <span>{{specialOne[0].productNowPrice}}元</span>的{{specialOne[0].productTitle}}</p>
+              <p class="van-ellipsis">{{specialOne[0].productSubtitle|ellipsis}}</p>
             </div>
             <van-button
               round
@@ -89,7 +89,7 @@
           <div class="home_center_footer">
             <div class="home_center_footer_left">
               <b>{{specialOne[1].storeName}}</b>
-              <p class="van-ellipsis">价值 <span>{{specialOne[1].productNowPrice}}元</span>的{{specialOne[1].productTitle}}</p>
+              <p class="van-ellipsis">{{specialOne[1].productSubtitle|ellipsis}}</p>
             </div>
             <van-button
               round
@@ -105,7 +105,7 @@
     </main>
     <!-- 优惠限时购结束 -->
     <!-- 品牌推荐 -->
-    <section class="home_recommend">
+<!--    <section class="home_recommend">
       <header>
         <van-image
           width="20"
@@ -116,16 +116,16 @@
         <label>品牌推荐</label>
       </header>
       <home-banner></home-banner>
-    </section>
+    </section>-->
     <!-- 品牌推荐结束 -->
     <v-advertisement></v-advertisement>
     <!-- 惠享优选 -->
-    <section>
+<!--    <section>
       <header>
         <van-image width="20" height="20" style="top: 7px" :src="require('@/assets/img/home/home-icon-recommend.png')"/>
         <label>惠享优选</label>
       </header>
-    </section>
+    </section>-->
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
 
         <van-list
@@ -166,7 +166,7 @@
 
       <div style="clear: both"></div>
     <!-- 惠享优选结束 -->
-    <v-footer :active="0"></v-footer>
+    <v-footer :active="active" v-if="undestroy"></v-footer>
   </div>
 </template>
 
@@ -180,6 +180,15 @@ import axios from "axios";
 
 export default {
   name: "home",
+  filters: {
+    ellipsis (value) {
+      if (!value) return ''
+      if (value.length > 14) {
+        return value.slice(0,14) + '...'
+      }
+      return value
+    }
+  },
   data() {
     return {
       productList: [],
@@ -194,7 +203,7 @@ export default {
           link: "true",
         },
         {
-          img: require("@/assets/img/home/home-banner-poster1.png"),
+          img: require("@/assets/img/home/home-banner-poster2.png"),
           link: "true",
         },
       ],
@@ -202,7 +211,10 @@ export default {
       loading: false,
       finished: false,
       refreshing: false,
-      storeName: ''
+      storeName: '',
+      scrollY:0,
+      active:0,
+      undestroy:true,
     };
   },
   components: {
@@ -211,6 +223,26 @@ export default {
     "v-advertisement": advertisement,
     "home-banner": home_banner,
   },
+  //记录离开时的位置
+  beforeRouteLeave (to, from, next) {
+    //保存滚动条的scrollTop值
+    this.scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+    sessionStorage.setItem('scroll',this.scrollY)
+    next()
+  },
+  //设置滚动条位置
+  activated() {
+    this.undestroy = true;
+    console.log(this.activeicon)
+    this.activeicon = 0;
+    this.scrollY = sessionStorage.getItem('scroll');
+    document.documentElement.scrollTop = this.scrollY;
+
+  },
+  deactivated() {
+    this.undestroy = false;
+  },
+
   created() {
     this.initProduct();
   },
@@ -238,6 +270,7 @@ export default {
         }
         this.productList = res.data;
         this.specialOne = specialOne;
+        console.log(this.specialOneBig);
       })
     },
     //图片获取路径拼接
@@ -289,7 +322,7 @@ export default {
   @import "../../plugins/css/userScss";
 .home {
   .home_time {
-    margin-top: 45px;
+    margin-top: 0px;
     .desc_time {
       margin-left: 10px;
       margin-top: 5px;

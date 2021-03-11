@@ -18,7 +18,7 @@
       </van-swipe-item>
     </van-swipe>
     <!-- 广告位结束 -->
-    <van-dialog v-model="ShowState">
+    <van-dialog v-model="ShowState" :lock-scroll="lockscroll">
       <van-image
         width="100%"
         height="100%"
@@ -38,11 +38,12 @@ export default {
           img: require("@/assets/img/home/home-poster1.png"),
           link: false,
         },
-        {
+       /* {
           img: require("@/assets/img/home/home-poster1.png"),
           link: "/details/1",
-        },
+        },*/
       ],
+      lockscroll:false,
     };
   },
   methods: {
