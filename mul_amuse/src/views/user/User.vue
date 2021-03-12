@@ -62,7 +62,7 @@
             会员有效期:{{superInfo.endTime}} 剩余次数:{{superInfo.haveNumber}}
           </p>
           <p style="color: gray; margin: 5px 0; font-size: 14px" v-if="userInfo.userRank === '0'">
-            惠享体验卡助力进程:{{inviteInfo.haveInvite}}/3
+            惠享体验卡助力进程:{{inviteInfo.haveInvite}}/1
           </p>
           <p
             class="van-ellipsis"
@@ -509,7 +509,7 @@ export default {
         method:'get',
       }).then(res => {
         this.inviteInfo = res.data;
-        this.length = parseInt(res.data.haveInvite / 3 * 100) ;
+        this.length = parseInt(res.data.haveInvite / 1 * 100) ;
       })
     },
     //初始化话会员信息
@@ -670,7 +670,7 @@ export default {
         this.fx = true;
       }else {
         request({
-          url:publicJs.urls.shareCreateQR + "?qrcodeUrl=" + axios.defaults.baseURL + "/wxLogin/doShareLogin?fatherId=" + this.userId + "%26toPage=home",
+          url:publicJs.urls.shareCreateQR + "?qrcodeUrl=" + axios.defaults.baseURL + "/wxLogin/doShareLogin?fatherId=" + this.userId + "%26toPage=register",
           method:'get',
         }).then(res => {
           this.share = this.getImg(res.data);
