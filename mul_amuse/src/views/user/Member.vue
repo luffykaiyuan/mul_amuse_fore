@@ -21,7 +21,6 @@
         <van-image
           width="25"
           height="25"
-          style="top: 3px"
           :src="require('@/assets/img/member/member-icon-v.png')"
         />
         <label>会员享用</label>
@@ -53,7 +52,6 @@
       <header>
         <van-image
           width="25"
-          style="top: 3px"
           height="25"
           :src="require('@/assets/img/member/member-icon-free.png')"
         />

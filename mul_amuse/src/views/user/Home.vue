@@ -196,7 +196,7 @@ export default {
       specialOneBig: {},
       specialOne: [{productSpecialImg: ''}, {productSpecialImg: ''}],
 
-      time: 30 * 60 * 60 * 1000,
+      time: 0,
       bannerList: [
         {
           img: require("@/assets/img/home/home-banner-poster1.png"),
@@ -204,7 +204,7 @@ export default {
         },
         {
           img: require("@/assets/img/home/home-banner-poster2.png"),
-          link: "true",
+          link: "/my",
         },
       ],
       list: [],
@@ -215,6 +215,7 @@ export default {
       scrollY:0,
       active:0,
       undestroy:true,
+      specialOneBigEndTime:'',
     };
   },
   components: {
@@ -233,7 +234,6 @@ export default {
   //设置滚动条位置
   activated() {
     this.undestroy = true;
-    console.log(this.activeicon)
     this.activeicon = 0;
     this.scrollY = sessionStorage.getItem('scroll');
     document.documentElement.scrollTop = this.scrollY;
@@ -261,6 +261,8 @@ export default {
           if (res.data[i].productSpecial === '3' && res.data[i].productSpecialStatus === '1'){
             res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
             this.specialOneBig = res.data[i];
+            this.specialOneBigEndTime = this.specialOneBig.productEndTime;
+            this.difference();
           }
           if (res.data[i].productSpecial === '4' && res.data[i].productSpecialStatus === '1'){
             res.data[i].productSpecialImg = this.getImg(res.data[i].productSpecialImg);
@@ -270,7 +272,6 @@ export default {
         }
         this.productList = res.data;
         this.specialOne = specialOne;
-        console.log(this.specialOneBig);
       })
     },
     //图片获取路径拼接
@@ -313,6 +314,13 @@ export default {
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       this.onLoad();
+    },
+
+    difference(){
+      const beginTime = new Date();
+      const endTime = new Date(this.specialOneBigEndTime).getTime()
+      const differ = endTime - beginTime;
+      this.time = differ;
     },
   },
 };

@@ -13,8 +13,10 @@
         background: `url(${require('@/assets/img/member/member-bg-top.png')})`,
       }"
     >
-      <v-banner :HomeState="false" :Arr="bannerList"></v-banner>
-      <div class="deatils_title">
+      <v-banner :HomeState="true" :Arr="bannerList"></v-banner>
+
+      <!--原始详情页头部-->
+<!--      <div class="deatils_title">
         <p><b>￥{{chooseModel.modelPrice}}</b> <del>门市价：￥{{productInfo.productOriginalPrice}}</del></p>
         <p style="margin-top: 5px">销售{{productInfo.productSaleVolume}}件</p>
       </div>
@@ -47,7 +49,52 @@
           >
           <span style="color: gray; font-size: 13px">库存:{{chooseModel.modelStock}}</span>
         </p>
-      </div>
+      </div>-->
+
+      <section style="margin: -5px;width: 100%">
+        <div class="deatils_name">
+          <div style="position: relative;display: flex;justify-content: space-between;height: 30px;">
+            <p>
+              <b>{{productInfo.productTitle}}</b>
+            </p>
+            <p style="margin-top: 5px;color:#971818; ">销售{{productInfo.productSaleVolume}}件</p>
+          </div>
+          <p style="color: gray; font-size: 11px; margin: 5px 0 10px 0">
+            温馨提示:会员兑换，不退不换，逾期作废
+          </p>
+          <div style="width: 100%;
+              margin: 0 auto;
+              position: relative;
+              top: -5px;
+              display: flex;
+              justify-content: space-between;">
+            <p><b style="font-size: 23px;color: #971818;">￥{{chooseModel.modelPrice}}</b> <del style="font-size: 13px;margin-top: 10px;margin-left: 5px">门市价：￥{{productInfo.productOriginalPrice}}</del></p>
+            <span @click="fxs()">
+              <van-image
+                width="20"
+                height="20"
+                style="position: relative; top: 3px; right: 5px"
+                :src="require('@/assets/img/details/details-icon-share.png')"
+              ></van-image>
+              <span>分享</span>
+            </span>
+          </div>
+          <p>
+            <span
+              style="
+                background: #971818;
+                color: white;
+                padding: 2px 5px;
+                font-size: 13px;
+                border-radius: 10px;
+              "
+            >佣金：{{productInfo.commissionHeigh}}-{{productInfo.allCount}}元</span
+            >
+            <span style="color: gray; font-size: 13px">库存:{{chooseModel.modelStock}}</span>
+          </p>
+        </div>
+      </section>
+
       <van-dialog v-model="fx" show-cancel-button confirm-button-text="保存分享图片" @confirm="saveShare">
         <van-image
           width="100%"
@@ -349,9 +396,11 @@ export default {
       }
     },
     navigation(item){
-      var url = 'http://api.map.baidu.com/direction?origin=四川科技馆&' +
+      /*var url = 'http://api.map.baidu.com/direction?origin=四川科技馆&' +
         'destination=latlng:' + item.latitude +',' + item.longitude + '|name:' + item.storeName +
-        '&mode=driving&region=成都&output=html&src=webapp.baidu.openAPIdemo';
+        '&mode=driving&region=成都&output=html&src=webapp.baidu.openAPIdemo';*/
+      //var url ='http://api.map.baidu.com/geocoder?location=' + item.latitude + ',' + item.longitude + '&coord_type=gcj02&output=html&src=webapp.baidu.openAPIdemo'
+      var url ='http://api.map.baidu.com/marker?location=' + item.latitude +',' + item.longitude + '&title=店铺位置&content='+ item.storeAddress +'&output=html&src=webapp.baidu.openAPIdemo';
       window.location = url;
     },
     modelChange(name, title) {
@@ -480,7 +529,7 @@ section {
       }
     }
     .deatils_name {
-      width: 90%;
+      width: 100%;
       margin: 0 auto;
       p {
         b {
