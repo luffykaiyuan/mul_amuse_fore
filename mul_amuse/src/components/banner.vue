@@ -11,6 +11,7 @@
       <van-swipe-item
         v-for="item in Arr"
         :key="item[0]"
+        @click="Url(item.link)"
         :class="{ StateHover: !HomeState }"
       >
         <van-image width="100%" height="100%" :src="item.img" />

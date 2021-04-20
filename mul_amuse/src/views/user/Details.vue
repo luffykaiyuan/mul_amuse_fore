@@ -87,7 +87,7 @@
                 padding: 2px 5px;
                 font-size: 13px;
                 border-radius: 10px;
-              "
+              " v-if="userInfo.userTitle !== '0'"
             >佣金：{{productInfo.commissionHeigh}}-{{productInfo.allCount}}元</span
             >
             <span style="color: gray; font-size: 13px">库存:{{chooseModel.modelStock}}</span>
@@ -95,13 +95,21 @@
         </div>
       </section>
 
-      <van-dialog v-model="fx" show-cancel-button confirm-button-text="保存分享图片" @confirm="saveShare">
+      <van-dialog v-if="userType === 0" v-model="fx" show-cancel-button confirm-button-text="保存分享图片" @confirm="saveShare">
         <van-image
           width="100%"
           height="100%"
           :src="share"
         ></van-image>
       </van-dialog>
+      <van-dialog v-if="userType === 1" v-model="fx" confirm-button-text="长按图片保存至本地">
+          <van-image
+            width="100%"
+            height="100%"
+            :src="share"
+          ></van-image>
+      </van-dialog>
+
       <van-dialog v-model="show" :lock-scroll="lockscroll">
         <van-image
           width="100%"
@@ -225,6 +233,9 @@ export default {
       showAddress: false,
       storePhone:'',
       lockscroll:false,
+
+      //用户类型 0为ios、1为Android
+      userType:0,
     };
   },
   components: {
@@ -238,6 +249,7 @@ export default {
     this.initProdect();
     this.initModel();
     this.initStorePhone();
+    this.initUserType();
   },
   methods: {
     initUser(){
@@ -437,6 +449,17 @@ export default {
     },
     phone() {
       window.location.href = "tel:" + this.storePhone;
+    },
+    initUserType(){
+      //android终端
+      const isAndroid = navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1;
+      //ios终端
+      const isiOS = navigator.userAgent.indexOf('iPhone') > -1;
+      if (isiOS){
+        this.userType = 0;
+      }else if (isAndroid){
+        this.userType = 1;
+      }
     },
   },
   mounted() {},

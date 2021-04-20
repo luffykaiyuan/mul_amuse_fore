@@ -94,7 +94,7 @@
             ></van-image>
             <span>邀请</span>
           </span>
-          <van-dialog v-model="fx" show-cancel-button confirm-button-text="保存分享图片" @confirm="saveShare">
+          <van-dialog v-if="userType === 0" v-model="fx" show-cancel-button confirm-button-text="保存分享图片" @confirm="saveShare">
             <div ref="imageDom">
               <van-image
                 width="100%"
@@ -103,6 +103,16 @@
               ></van-image>
             </div>
           </van-dialog>
+          <van-dialog v-if="userType === 1" v-model="fx" confirm-button-text="长按图片保存至本地">
+            <div ref="imageDom">
+              <van-image
+                width="100%"
+                height="100%"
+                :src="share"
+              ></van-image>
+            </div>
+          </van-dialog>
+
         </van-col>
       </van-row>
       <van-row>
@@ -439,6 +449,9 @@ export default {
       refreshing: false,
       sendFinish: false,
       undestroy:true,
+
+      //用户类型 0为ios、1为Android
+      userType:0,
     };
   },
   components: {
@@ -455,6 +468,7 @@ export default {
   created() {
     this.userId = localStorage.getItem("userToken");
     this.initUser();
+    this.initUserType();
   },
   methods: {
     initUser(){
@@ -499,7 +513,19 @@ export default {
             this.finishList.push(res.data[i]);
           }
         }
+        this.payList.sort(function (a, b){
+          return b.addTime > a.addTime ? 1 : -1;
+        })
+        this.apponinList.sort(function (a, b){
+          return b.addTime > a.addTime ? 1 : -1;
+        })
+        this.finishList.sort(function (a, b){
+          return b.addTime > a.addTime ? 1 : -1;
+        })
         this.allOrder = res.data;
+        this.allOrder.sort(function (a, b){
+          return b.addTime > a.addTime ? 1 : -1;
+        })
       })
     },
     //初始化邀请
@@ -720,6 +746,17 @@ export default {
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       this.onLoad();
+    },
+    initUserType(){
+      //android终端
+      const isAndroid = navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1;
+      //ios终端
+      const isiOS = navigator.userAgent.indexOf('iPhone') > -1;
+      if (isiOS){
+        this.userType = 0;
+      }else if (isAndroid){
+        this.userType = 1;
+      }
     },
   },
   mounted() {},

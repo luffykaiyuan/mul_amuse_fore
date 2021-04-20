@@ -154,7 +154,7 @@
               <p class="hx_recommend_footer_left">
                 <b>￥{{item.productVipPrice}}</b>
                 <del>门市价：￥{{item.productOriginalPrice}}</del>
-                <span>返{{item.commissionHeigh}}￥-{{item.allCount}}￥</span>
+                <span v-if="userInfo.userTitle !== '0'">返{{item.commissionHeigh}}￥-{{item.allCount}}￥</span>
               </p>
               <p>销售量：{{item.productSaleVolume}}</p>
             </div>
@@ -183,8 +183,8 @@ export default {
   filters: {
     ellipsis (value) {
       if (!value) return ''
-      if (value.length > 14) {
-        return value.slice(0,14) + '...'
+      if (value.length > 12) {
+        return value.slice(0,12) + '...'
       }
       return value
     }
@@ -200,11 +200,19 @@ export default {
       bannerList: [
         {
           img: require("@/assets/img/home/home-banner-poster1.png"),
-          link: "true",
+          link: "/details/c5a01211d32e4c75",
         },
         {
           img: require("@/assets/img/home/home-banner-poster2.png"),
           link: "/my",
+        },
+        {
+          img: require("@/assets/img/home/home-banner-poster3.png"),
+          link: "/details/828d6dfee3ff4083",
+        },
+        {
+          img: require("@/assets/img/home/home-banner-poster4.png"),
+          link: "/details/c0afaa0654ae4f5a",
         },
       ],
       list: [],
@@ -216,6 +224,8 @@ export default {
       active:0,
       undestroy:true,
       specialOneBigEndTime:'',
+      userId: '',
+      userInfo: [],
     };
   },
   components: {
@@ -234,7 +244,6 @@ export default {
   //设置滚动条位置
   activated() {
     this.undestroy = true;
-    this.activeicon = 0;
     this.scrollY = sessionStorage.getItem('scroll');
     document.documentElement.scrollTop = this.scrollY;
 
@@ -245,6 +254,8 @@ export default {
 
   created() {
     this.initProduct();
+    this.userId = localStorage.getItem("userToken");
+    this.initUser();
   },
   methods: {
     initProduct(){
@@ -271,7 +282,18 @@ export default {
 
         }
         this.productList = res.data;
+        this.productList.sort(function (a, b){
+          return b.addTime > a.addTime ? 1 : -1;
+        })
         this.specialOne = specialOne;
+      })
+    },
+    initUser(){
+      request({
+        url:publicJs.urls.selectUserById + "?id=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.userInfo = res.data;
       })
     },
     //图片获取路径拼接
@@ -319,8 +341,7 @@ export default {
     difference(){
       const beginTime = new Date();
       const endTime = new Date(this.specialOneBigEndTime).getTime()
-      const differ = endTime - beginTime;
-      this.time = differ;
+      this.time = endTime - beginTime;;
     },
   },
 };

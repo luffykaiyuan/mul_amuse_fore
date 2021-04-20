@@ -143,11 +143,11 @@ export default {
       bannerList: [
         {
           img: require("@/assets/img/member/member-banner-poster1.png"),
-          link: "/",
+          link: "/my",
         },
         {
           img: require("@/assets/img/member/member-banner-poster1.png"),
-          link: "/",
+          link: "/my",
         },
       ],
       list: [],
