@@ -49,6 +49,7 @@ import Order from "../views/user/Order";
 import Card from "../views/user/Card";
 import TimeLimit from "../views/admin/TimeLimit";
 import Register from "../views/user/Register";
+import Cdkey from "../views/user/Cdkey";
 
 //Vue.use(Router)
 
@@ -188,6 +189,18 @@ const route = new Router({
       path: "/register",
       name: "Register",
       component: Register,
+      meta: {
+        requireAuth: true,
+        weRequire: 'user',
+        roles: ['developer','admin', 'store', 'user'],
+        keepAlive:false,
+      }
+    },
+    {
+      //兑换码页面
+      path: "/cdkey",
+      name: "Cdkey",
+      component: Cdkey,
       meta: {
         requireAuth: true,
         weRequire: 'user',

@@ -9,7 +9,7 @@
             label="手机号"
             placeholder="请输入手机号"
             name="tel"
-            :rules="[{  pattern , message: '请输入正确的手机号码' }]"
+            :rules="[{  pattern: /^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/ , message: '请输入正确的手机号码' }]"
             :required="requiredTel"
             @blur="Changebutton"
           />
@@ -22,7 +22,7 @@
             label="验证码"
             name="smscode"
             placeholder="请输入短信验证码"
-            :rules="[{ smspattern , required: true, message: '请填写正确的短信验证码' }]"
+            :rules="[{ pattern: /\d{6}/ , required: true, message: '请填写正确的短信验证码' }]"
             :required="requiredSmscode"
             @blur="Changebutton">
             <template #button>
@@ -61,8 +61,6 @@ export default {
       requiredSmscode:true,
       showCutDownTime:false,
       cutDownTime:'',
-      pattern:/^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/,
-      smspattern:/\d{6}/,
       confirmDisable:true,
 
       aliyunMessageVo:{

@@ -7,7 +7,7 @@
  !-->
 <template>
   <div class="banner_onents">
-    <van-swipe class="my-swipe" :autoplay="6000" indicator-color="white">
+    <van-swipe class="my-swipe" :autoplay="2586" indicator-color="white">
       <van-swipe-item
         v-for="item in Arr"
         :key="item[0]"
