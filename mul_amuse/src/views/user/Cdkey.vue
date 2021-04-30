@@ -65,6 +65,7 @@ export default {
         this.$toast({
           type:"fail",
           message:'你当前已是会员，无法完成兑换',
+          duration:2586,
           onClose:()=>{
             this.$router.push('/')
           }
@@ -74,6 +75,7 @@ export default {
         this.$toast({
           type:"fail",
           message:'请先进行手机号绑定成为达人后再兑换',
+          duration:2586,
           onClose:()=>{
             this.$router.push('/')
           }
@@ -82,7 +84,7 @@ export default {
     },
     onSubmit(){
       if(this.cdkey){
-        this.cdkey.toLowerCase()
+        this.cdkey = this.cdkey.toLowerCase()
         console.log('cdkey:' + this.cdkey)
         console.log('userId:' + this.userId)
         this.$toast({
