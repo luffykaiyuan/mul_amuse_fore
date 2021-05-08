@@ -40,6 +40,8 @@ export default {
       userInfo: [],
       userId:'',
       cdkey :'',
+      vipForm :{},
+      sdkInfo: {}
     }
   },
   created() {
@@ -87,6 +89,57 @@ export default {
         this.cdkey = this.cdkey.toLowerCase()
         console.log('cdkey:' + this.cdkey)
         console.log('userId:' + this.userId)
+
+        request({
+          url:publicJs.urls.selectBySdk + "?sdkNumber=" +this.cdkey,
+          method:'get',
+        }).then(res => {
+          //校验sdk是否正确和是否被使用
+          if (res.data && res.data.status === '0'){
+            this.sdkInfo = res.data;
+            //计算时间
+            let startDate = new Date();
+            let endDate = new Date();
+            endDate.setDate(startDate.getDate() + 7);
+            var y = endDate.getFullYear();
+            var m = (endDate.getMonth() < 10 ? "0" + (endDate.getMonth() + 1).toString() : endDate.getMonth() + 1);
+            var d = (endDate.getDate() < 10 ? "0" + endDate.getDate() : endDate.getDate());
+            //设置对象
+            this.vipForm.userId = this.userId;
+            this.vipForm.haveNumber = 1;
+            this.vipForm.endTime = y + "-" + m + "-" + d;
+            //不是会员的话插入1次会员
+            if (this.userInfo.userRank === '0'){
+              request({
+                url: publicJs.urls.insertSuperVIP,
+                method: 'post',
+                data: this.vipForm
+              }).then(res => {
+                this.$message.success("恭喜您成为超级会员！！");
+              }).catch(err => {
+                this.$message.error(res.data)
+              })
+              //消除Skd
+              this.sdkInfo.userId = this.userInfo.id;
+              this.sdkInfo.status = '0';
+              request({
+                url: publicJs.urls.updateSdk,
+                method: 'post',
+                data: this.sdkInfo
+              }).then(res => {
+              }).catch(err => {
+                this.$message.error(res.data)
+              })
+            }else {
+              //已经是会员或者过去了无效使用这里处理
+              return;
+            }
+          }else {
+            return;
+          }
+        })
+
+
         this.$toast({
           type:"success",
           message:'谢谢你泰罗',
