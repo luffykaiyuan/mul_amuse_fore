@@ -125,6 +125,9 @@ const urls = {
   //SendMessageCon
   sendMessage: '/aliMessage/sendMessage',
   blindPhone: '/aliMessage/blindPhone',
+  //SDK
+  selectBySdk:'/sdkInfo/selectBySdk',
+  updateSdk:'/sdkInfo/updateSdk',
 }
 
 export default {

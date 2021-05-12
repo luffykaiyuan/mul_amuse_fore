@@ -60,6 +60,17 @@ export default {
       }).then(res => {
         this.userInfo = res.data;
         this.VerifyUserStatus();
+        if (this.userInfo.userRank !== '0'){
+          this.initSuper();
+        }
+      })
+    },
+    initSuper(){
+      request({
+        url:publicJs.urls.selectByUserId + "?userId=" +this.userId,
+        method:'get',
+      }).then(res => {
+        this.vipForm = res.data;
       })
     },
     VerifyUserStatus(){
@@ -87,15 +98,12 @@ export default {
     onSubmit(){
       if(this.cdkey){
         this.cdkey = this.cdkey.toLowerCase()
-        console.log('cdkey:' + this.cdkey)
-        console.log('userId:' + this.userId)
-
         request({
           url:publicJs.urls.selectBySdk + "?sdkNumber=" +this.cdkey,
           method:'get',
         }).then(res => {
           //校验sdk是否正确和是否被使用
-          if (res.data && res.data.status === '0'){
+          if (res.data && res.data.status === '1'){
             this.sdkInfo = res.data;
             //计算时间
             let startDate = new Date();
@@ -115,11 +123,18 @@ export default {
                 method: 'post',
                 data: this.vipForm
               }).then(res => {
-                this.$message.success("恭喜您成为超级会员！！");
+                this.$toast({
+                  type:"success",
+                  message:'谢谢你泰罗',
+                  onClose:()=>{
+                    this.$router.push('/member')
+                  }
+                })
+                //this.$message.success("恭喜您成为超级会员！！");
               }).catch(err => {
                 this.$message.error(res.data)
               })
-              //消除Skd
+              //消除Sdk
               this.sdkInfo.userId = this.userInfo.id;
               this.sdkInfo.status = '0';
               request({
@@ -130,25 +145,60 @@ export default {
               }).catch(err => {
                 this.$message.error(res.data)
               })
-            }else {
-              //已经是会员或者过去了无效使用这里处理
-              return;
+
+              //更新用户rank
+              this.userInfo.userRank = '1';
+              this.updateUser(this.userInfo)
+            } else if (this.userInfo.userRank === '2'){
+              //会员过期状态的用户 更新会员数据
+              request({
+                url: publicJs.urls.updateSuperVIP,
+                method: 'post',
+                data: this.vipForm
+              }).then(res => {
+                this.$toast({
+                  type:"success",
+                  message:'谢谢你泰罗',
+                  onClose:()=>{
+                    this.$router.push('/member')
+                  }
+                })
+              }).catch(err => {
+                this.$message.error(res.data)
+              })
+              //消除Sdk
+              this.sdkInfo.userId = this.userInfo.id;
+              this.sdkInfo.status = '0';
+              request({
+                url: publicJs.urls.updateSdk,
+                method: 'post',
+                data: this.sdkInfo
+              }).then(res => {
+              }).catch(err => {
+                this.$message.error(res.data)
+              })
+
+              //更新用户rank
+              this.userInfo.userRank = '1';
+              this.updateUser(this.userInfo)
             }
           }else {
             return;
           }
         })
-
-
-        this.$toast({
-          type:"success",
-          message:'谢谢你泰罗',
-          onClose:()=>{
-            this.$router.push('/member')
-          }
-        })
       }
     },
+    updateUser(userInfo){
+      request({
+        url: publicJs.urls.updateUser,
+        method: 'post',
+        data: userInfo
+      }).then(res => {
+        //this.initUser();
+      }).catch(err => {
+        this.$message.error(res.data)
+      })
+    }
   },
 }
 </script>

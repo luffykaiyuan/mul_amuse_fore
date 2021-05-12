@@ -208,6 +208,9 @@ export default {
           }
         }
         this.productList = res.data;
+        this.productList.sort(function (a, b){
+          return b.addTime > a.addTime ? 1 : -1;
+        })
         this.productOne = vipOne;
         this.productTwo = vipTwo;
       })

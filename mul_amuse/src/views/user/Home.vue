@@ -253,6 +253,12 @@ export default {
   },
 
   created() {
+    this.$toast.loading({
+      message: '加载中...',
+      forbidClick: true,
+      duration:0,
+      overlay:true,
+    })
     this.initProduct();
     this.userId = localStorage.getItem("userToken");
     this.initUser();
@@ -286,6 +292,7 @@ export default {
           return b.addTime > a.addTime ? 1 : -1;
         })
         this.specialOne = specialOne;
+        this.$toast.clear()
       })
     },
     initUser(){
