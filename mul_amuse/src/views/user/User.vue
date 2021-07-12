@@ -182,7 +182,7 @@
               :thumb="item.productImg"
             >
               <template #title>
-                <div class="card_title">
+                <div class="card_title" @click="toDetail(item.productId)">
                   <b style="font-size: 17px">{{item.productTitle}}</b>
                   <van-image
                     width="40"
@@ -452,6 +452,8 @@ export default {
 
       //用户类型 0为ios、1为Android
       userType:0,
+
+      productInfo: {},
     };
   },
   components: {
@@ -757,6 +759,21 @@ export default {
       }else if (isAndroid){
         this.userType = 1;
       }
+    },
+    toDetail(productId){
+      request({
+        url:publicJs.urls.selectProductById + "?id=" + productId,
+        method:'get',
+      }).then(res => {
+        this.productInfo = res.data;
+        if (this.productInfo.status === '1'){
+          this.$router.push('/details/' + productId)
+        }else {
+          this.$message.error("该商品已下架！")
+        }
+      }).catch(err => {
+        this.$message.error("初始化错误！！")
+      })
     },
   },
   mounted() {},

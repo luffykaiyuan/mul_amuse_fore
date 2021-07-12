@@ -70,8 +70,15 @@ export default {
           this.initInvite();
           this.initSuperSet();
         } else if (this.userInfo.userRank === '1'){
-          this.initSuper();
-          this.initSuperMore();
+          this.$toast({
+            type:"fail",
+            message:'这儿是成为新会员的地方，你已是会员，\n 再见！',
+            onClose:()=>{
+              this.$router.push('/member')
+            }
+          })
+          //this.initSuper();
+          //this.initSuperMore();
         }else {
           this.initSuperSet();
         }
@@ -102,6 +109,7 @@ export default {
           res.data[i].imgAddress = this.getImg(res.data[i].imgAddress);
         }
         this.supersetInfo = res.data;
+        console.log(this.supersetInfo)
       })
     },
     getImg(id){
@@ -116,7 +124,11 @@ export default {
         url:publicJs.urls.selectAllMore,
         method:'get',
       }).then(res => {
+        for (let i = 0; i < res.data.length; i++) {
+          res.data[i].imgAddress = this.getImg(res.data[i].imgAddress);
+        }
         this.moreInfo = res.data;
+        console.log(this.moreInfo)
       })
     },
 

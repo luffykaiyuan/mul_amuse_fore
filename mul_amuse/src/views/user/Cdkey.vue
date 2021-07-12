@@ -158,7 +158,7 @@ export default {
               }).then(res => {
                 this.$toast({
                   type:"success",
-                  message:'谢谢你泰罗',
+                  message:'兑换成功！\n 快去使用吧！',
                   onClose:()=>{
                     this.$router.push('/member')
                   }

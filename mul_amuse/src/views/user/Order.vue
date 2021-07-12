@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div class="order">
     <div class="order_body">
       <div class="body" v-if="status === 1 && productInfo.productType === '1'" @click="chooseReceive">
@@ -9,10 +9,16 @@
             class="top_img"
           />
         </div>
-        <div class="address_body">
+        <div class="address_body" v-if="defaultReceive.receiveName">
           <van-icon name="location" class="address_location" />
           <span id="name">{{defaultReceive.receiveName}}---</span><span id="phone">{{defaultReceive.receivePhone}}</span><br />
           <span id="area">{{defaultReceive.receiveArea}}/{{defaultReceive.receiveAddress}}</span>
+          <van-icon name="arrow" style="float: right;"/>
+        </div>
+        <div class="address_body" v-if="!defaultReceive.receiveName">
+          <van-icon name="location" class="address_location" />
+          <br>
+          <span>请选择收货地址!!!</span>
           <van-icon name="arrow" style="float: right;"/>
         </div>
       </div>
@@ -657,7 +663,7 @@ export default {
         this.spColor = "rgb(173, 171, 171)";
       }
       if (this.status == 2) {
-        if (this.addressForm && this.checked) {
+        if (this.addressForm && this.checked && this.defaultReceive) {
           this.wxzfDisabled = false;
         } else {
           this.wxzfDisabled = true;

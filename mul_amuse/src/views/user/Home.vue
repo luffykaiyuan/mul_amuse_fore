@@ -36,7 +36,12 @@
           width="100%"
           height="100%"
           :src="specialOneBig.productSpecialImg"
-        />
+          @load="loadImage"
+        >
+          <template v-slot:loading>
+            <van-loading size="20" />
+          </template>
+        </van-image>
         <div class="home_center_footer">
           <div class="home_center_footer_left">
             <b>{{specialOneBig.storeName}}</b>
@@ -61,7 +66,11 @@
             height="100%"
             @click="Url('/details/' + specialOne[0].id)"
             :src="specialOne[0].productSpecialImg"
-          />
+          >
+            <template v-slot:loading>
+              <van-loading size="20" />
+            </template>
+          </van-image>
           <div class="home_center_footer">
             <div class="home_center_footer_left">
               <b>{{specialOne[0].storeName}}</b>
@@ -85,7 +94,11 @@
             height="100%"
             @click="Url('/details/' + specialOne[1].id)"
             :src="specialOne[1].productSpecialImg"
-          />
+          >
+            <template v-slot:loading>
+              <van-loading size="20" />
+            </template>
+          </van-image>
           <div class="home_center_footer">
             <div class="home_center_footer_left">
               <b>{{specialOne[1].storeName}}</b>
@@ -208,11 +221,7 @@ export default {
         },
         {
           img: require("@/assets/img/home/home-banner-poster3.png"),
-          link: "/details/828d6dfee3ff4083",
-        },
-        {
-          img: require("@/assets/img/home/home-banner-poster4.png"),
-          link: "/details/c0afaa0654ae4f5a",
+          link: "/details/4faa6dff873948af",
         },
       ],
       list: [],
@@ -226,6 +235,7 @@ export default {
       specialOneBigEndTime:'',
       userId: '',
       userInfo: [],
+      show:false,
     };
   },
   components: {
@@ -252,13 +262,15 @@ export default {
     this.undestroy = false;
   },
 
-  created() {
+  beforeCreate() {
     this.$toast.loading({
-      message: '加载中...',
       forbidClick: true,
       duration:0,
       overlay:true,
+      icon: require("@/assets/img/home/loading.gif"),
     })
+  },
+  created() {
     this.initProduct();
     this.userId = localStorage.getItem("userToken");
     this.initUser();
@@ -292,7 +304,7 @@ export default {
           return b.addTime > a.addTime ? 1 : -1;
         })
         this.specialOne = specialOne;
-        this.$toast.clear()
+        //this.$toast.clear()
       })
     },
     initUser(){
@@ -344,11 +356,13 @@ export default {
       this.loading = true;
       this.onLoad();
     },
-
     difference(){
       const beginTime = new Date();
       const endTime = new Date(this.specialOneBigEndTime).getTime()
       this.time = endTime - beginTime;;
+    },
+    loadImage(){
+      this.$toast.clear()
     },
   },
 };
@@ -464,4 +478,17 @@ export default {
     }
   }
 }
+  .van-overlay{
+    background:rgba(255,255,255,1);
+  }
+  .van-icon__image{
+    height: 200px;
+    width: 300px;
+  }
+  .van-toast{
+    top: 40%;
+    height: 300px;
+    width: 500px;
+    background:rgba(0,0,0,0);
+  }
 </style>
